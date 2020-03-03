@@ -1,0 +1,28 @@
+Data extraction and processing
+------------------------------
+Pro-leave: 
+-------------
+1 = https://petition.parliament.uk/petitions/201145: We must leave the EU completely in March 2019 - No transition period, No delay
+2 = https://petition.parliament.uk/petitions/213782: Ensure that the U.K. leaves the EU Single Market & Customs Union.
+3 = https://petition.parliament.uk/petitions/211905: Ensure the UK leaves all EU defence rules, policies and structures on 29/03/19.
+
+pro-remain
+------------
+1 = https://petition.parliament.uk/petitions/205169: Parliament's vote on the Brexit deal must include an option to remain in the EU.
+2 = https://petition.parliament.uk/petitions/200427: Don't leave the EU
+3 = https://petition.parliament.uk/petitions/241584: Revoke Article 50 and remain in the EU.
+
+
+
+need age table 3hrs
+jobs table-3hrs
+
+report
+---------
+2 days
+
+analyse
+-------------
+describe and visualize 
+
+

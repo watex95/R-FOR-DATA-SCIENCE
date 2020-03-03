@@ -1,0 +1,7 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<oracle.dbtools.crest.model.design.relational.RelationalDesign>
+   <object objectType="Table" objectID="383109CF-01C6-5F09-AAC4-F3F9F017DD90" name="CAR" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="6D2366A6-C2B0-6783-CE35-1206C0A5DFF6" propertySourceId="" propertyTargetId=""/>
+   <object objectType="Table" objectID="2EF5B1A0-F1AF-9AFA-B0F6-7290B4B7A8B4" name="DRIVER" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="6D2366A6-C2B0-6783-CE35-1206C0A5DFF6" propertySourceId="" propertyTargetId=""/>
+   <object objectType="Table" objectID="0AA2CEC4-42FA-4FA2-57FF-14C7F9A3FF86" name="F_TRANSPORT" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="6D2366A6-C2B0-6783-CE35-1206C0A5DFF6" propertySourceId="" propertyTargetId=""/>
+   <object objectType="Table" objectID="C2DDAB2F-BEC4-9114-D7E7-7878DF8104D5" name="INSURANCE" seqName="seg_0" propertyClassName="oracle.dbtools.crest.model.design.relational.Table" propertyParentId="6D2366A6-C2B0-6783-CE35-1206C0A5DFF6" propertySourceId="" propertyTargetId=""/>
+</oracle.dbtools.crest.model.design.relational.RelationalDesign>

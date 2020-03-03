@@ -1,0 +1,581 @@
+---
+title: "Homwork 3"
+author: "Hamed"
+date: "2/18/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+# Performance measurement, Imbalance correction and Imputing missing values
+
+### 1.	Load the Wisconsin breast cancer dataset from blackboard
+
+```{r ,warning=FALSE, echo=FALSE}
+suppressWarnings(library(tidyverse))
+suppressWarnings(library(caret))
+suppressWarnings(library(rpart.plot))
+suppressWarnings(library(randomForest))
+suppressWarnings(library(e1071))
+suppressWarnings(library(ROCR))
+suppressWarnings(library(pROC))
+suppressWarnings(library(RCurl))
+suppressWarnings(library(gbm))
+```
+
+
+```{r ,warning=FALSE}
+breast_cancer<-read.csv('WisconsinBreastCancer.csv',header = T)
+head(breast_cancer)
+```
+### 2. How many missing data points are there? 
+
+```{r ,warning=FALSE}
+sum(is.na(breast_cancer)) #no missing values
+
+```
+
+### In which columns are they missing?
+
+```{r ,warning=FALSE}
+colnames(breast_cancer)[colSums(is.na(breast_cancer)) > 0]
+
+```
+
+
+### 3. Impute for the first column with missing values using the mean and round to an integer
+
+```{r ,warning=FALSE}
+breast_cancer[,1][is.na(breast_cancer[,1])]= round(mean(breast_cancer[,1], na.rm=TRUE),digits = 0)
+sum(is.na(breast_cancer[,1]))
+```
+
+
+
+### 5. Impute for the third column with missing values using a regression to predict the third column based on uniformity_of_cell_shape, marginal_adhesion and normal_nucleoli.  Round to integers.
+
+```{r ,warning=FALSE}
+
+#create an indicator variable
+
+Ind<-function(t)
+{
+x=dim(length(t))
+x[which(!is.na(t))]=1
+x[which(is.na(t))]=0
+return(x)
+
+}
+#create additional variable I
+breast_cancer$I<-Ind(breast_cancer[,3])
+breast_cancer
+
+#Fit a simple linear between the y and x
+attach(breast_cancer)
+lm(breast_cancer[,3]~uniformity_of_cell_shape+marginal_adhesion+normal_nucleoli,data=breast_cancer)
+
+#Impute missing value with the model output
+
+for(i in 1:nrow(breast_cancer))
+{
+      if(breast_cancer$I==0)
+      {
+        breast_cancer[,3][i]=mymodel$coefficients[1]+ 
+          mymodel$coefficients[2]*breast_cancer$uniformity_of_cell_shape[i]+
+          mymodel$coefficients[3]*breast_cancer$marginal_adhesion[i]+
+          mymodel$coefficients[4]*breast_cancer$normal_nucleoli[i]
+        
+      }
+
+}
+
+sum(is.na(breast_cancer[,3]))
+
+```
+
+
+### 6. Build a decision tree model to predict class using 80% training data and five fold cross validation with three repeats.  Hint: Use  method =" rpart" in caret
+
+```{r ,warning=FALSE}
+# Split the data into training and test set
+library(tidyverse)
+library(rpart)
+library(dplyr)
+
+set.seed(123)
+
+training.samples<-breast_cancer$classes%>%
+  createDataPartition(p=0.8,list=FALSE)
+
+train.data<-breast_cancer[training.samples,]
+test.data<-breast_cancer[-training.samples,]
+
+# Fit the model on the training set
+set.seed(123)
+model_tree <- train(classes ~., data = train.data, method = "rpart",
+  trControl = trainControl("cv", number = 5),
+  tuneLength = 3
+)
+model_tree
+```
+
+
+```{r ,warning=FALSE}
+
+#visulize the decision tree
+prp(model_tree$finalModel, box.palette = "Reds", tweak = 1.2)
+
+```
+
+### 7. Show the accuracy results for each resample (fold) in the training data
+
+```{r ,warning=FALSE}
+model_tree$results
+# Plot model accuracy vs different values of cp (complexity parameter)
+plot(model_tree)
+
+```
+
+### 8. Do the following performance measures for the test dataset
+
+- (a).Compute all the accuracy measures (Accuracy, sensitivity, specificity etc)
+
+```{r ,warning=FALSE}
+
+# Make predictions on the test data
+predicted.classes=model_tree%>% predict(test.data)
+# Compute model accuracy rate on test data
+mean(predicted.classes == test.data$classes)
+
+#calculate sensitivity
+
+sensitivity(predicted.classes,test.data$classes)
+
+
+#calculate specificity
+specificity(predicted.classes,test.data$classes)
+
+```
+
+
+- (b).Plot the ROC curve
+
+```{r ,warning=FALSE}
+library(ROCR)
+pred <- prediction(predict(model_tree, type = "prob")[, 2],train.data$classes)
+plot(performance(pred, "tpr", "fpr"))
+abline(0, 1, lty = 2)
+
+```
+
+- (c).Plot the lift curve
+
+```{r ,warning=FALSE}
+
+perf <- performance(pred,"lift","rpp")
+plot(perf, main="lift curve", colorize=T)
+
+```
+
+- (d).Compute the AUC
+
+```{r ,warning=FALSE}
+
+auc = performance(pred, 'auc')
+slot(auc, 'y.values')
+
+```
+
+
+
+### 9. Is the cancer data imbalanced by the class feature? What is the percentage of the majority class and the percentage of the minority class?
+
+```{r ,warning=FALSE}
+
+table(breast_cancer$classes) #calculates the class frequencies
+tablature <- as.matrix(prop.table(table(breast_cancer$classes)) * 100)
+tablature #gets the percentage: hence class "B" is the majority while class "M" is the minority
+
+```
+
+### 10.	Now re-build the decision tree model above after correcting for imbalance using SMOTE.
+
+```{r ,warning=FALSE}
+# initialize imbalanced data
+imbal_train=train.data
+imbal_test=test.data
+
+# Set up control function for training
+ctrl <- trainControl(method = "repeatedcv",
+                     number = 5,
+                     repeats = 3,
+                     classProbs = TRUE)
+
+```
+
+Build smote model
+
+```{r,warning=FALSE}
+
+ctrl$sampling <- "smote"
+
+smote_fit <- train(classes ~ .,
+                   data = imbal_train,
+                   method = "gbm",
+                   verbose = FALSE,
+                   metric = "ROC",
+                   trControl = ctrl)
+smote_fit
+```
+
+
+
+### 11.	Did any of the accuracy measures improve? If so, which ones?
+```{r ,warning=FALSE}
+model_list <- list(original = model_tree,
+                      SMOTE = smote_fit)
+
+#First Build custom AUC function to extract AUC from the caret model object
+test_roc <- function(model, data) {
+  roc(data$classes,
+      predict(model, data, type = "prob")[, "M"])
+}
+
+# Get the AUC for the original model with the original dataset.
+model_tree %>%
+  test_roc(data = test.data)%>%auc()
+
+# Get the AUC for the SMOTE model with the Imbalanced dataset.
+smote_fit %>%
+  test_roc(data = imbal_test)%>%auc()
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# DATA WRANGLING
+### 1.	Install and load the library nycflights13
+```{r ,warning=FALSE,echo=FALSE}
+library(tidyverse)
+library(nycflights13)
+```
+
+
+### 2.	Load the datasets/tables flights and airlines
+
+```{r ,warning=FALSE}
+airlines_data<-airlines
+airports_data<-airports
+flights_data<-flights
+planes_data<-planes
+weather_data<-weather
+
+head(airports_data)
+
+```
+
+
+```{r ,warning=FALSE}
+head(airlines_data)
+```
+
+
+```{r ,warning=FALSE}
+head(weather_data)
+```
+
+
+```{r ,warning=FALSE}
+head(planes_data)
+```
+
+
+```{r ,warning=FALSE}
+head(flights_data)
+```
+
+
+
+### 3.	Add full airline name from the airlines table to the flights table that keeps all the records in the flights table by using the appropriate join
+
+```{r ,warning=FALSE}
+
+merge1=merge(x=flights_data,y=airlines_data,by='carrier',all.x=TRUE)[c("airline_name","year","month","day","dep_time","sched_dep_time","dep_delay", "arr_time","sched_arr_time","arr_delay","carrier","flight",
+"tailnum","origin","dest","air_time","distance","hour","minute" ,
+"time_hour")]
+
+head(merge1)
+```
+
+### 4.	Now add the destination latitude and longitude to the flights table from the airports table by using the appropriate join
+
+```{r ,warning=FALSE}
+
+#Rename the joining column
+names(airports_data)[names(airports_data)=="faa"] <- "dest"
+
+
+merge2=merge(x=flights_data,y=airports_data,by='dest',all.x=TRUE)[c("dest",
+        "year","month","day","dep_time","sched_dep_time","dep_delay",
+        "arr_time","sched_arr_time","arr_delay","carrier","flight",
+        "tailnum","origin","air_time","distance","hour","minute" ,
+        "time_hour","lat","lon")]
+
+dim(flights_data)
+dim(merge2)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+# RESAMPLING
+Load packages
+```{r,warning=FALSE,echo=FALSE}
+library(rsample)   
+library(purrr)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(mlbench)
+library(kernlab)
+library(sessioninfo)
+theme_set(theme_bw())
+library(RCurl)
+```
+
+Get the German Credit dataset from the UCI machine learning repository
+```{r,warning=FALSE, echo=FALSE}
+UCI_german<-getURL("http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data")
+names<-c('checking_account','month','Credit_history','Purpose',
+         'Credit_amount','Savings','employment','Installment_rate',
+         'status','Other_debtors','Present_residence_since','Property',
+         'Age','installment_plans','Housing','#credits','Job','#people',
+         'Telephone','foreign','Cost_Matrix')
+
+credit_data<-read.table(textConnection(UCI_german),sep=" ",
+                        col.names=names)
+head(credit_data)
+
+```
+
+
+
+## Fit a SVM model to predict the type of credit (good or bad) with the following resampling techniques
+
+
+#### 5 fold cross validation
+
+- Data preparation, splitting and modelling
+```{r,warning=FALSE}
+# First split the dataset
+set.seed(123)
+training.samples <-credit_data$Cost_Matrix %>% 
+  createDataPartition(p = 0.8, list = FALSE)
+train.credit<-credit_data[training.samples, ]
+test.credit<-credit_data[-training.samples, ]
+
+
+# convert class variable into factor 
+credit_data$Cost_Matrix=as.factor(credit_data$Cost_Matrix)
+
+
+# First split the dataset
+set.seed(123)
+training.samples <-credit_data$Cost_Matrix %>% 
+  createDataPartition(p = 0.8, list = FALSE)
+train.credit<-credit_data[training.samples, ]
+test.credit<-credit_data[-training.samples, ]
+
+#Define training control and modelling
+train_control <- trainControl(method="cv", number=5)
+model <- train(Cost_Matrix~., data=train.credit, trControl=train_control, method="svmLinear")
+# summarize results
+print(model)
+
+# prediction
+pred=predict(model,newdata = test.credit)
+pred
+
+```
+
+
+- Show the accuracy for the training dataset
+```{r,warning=FALSE}
+model$results
+```
+
+
+- Show the accuracy results for each resample
+```{r,warning=FALSE}
+model$resample
+
+```
+
+- Show the accuracy for the test dataset
+```{r,warning=FALSE}
+mean(pred == test.credit$Cost_Matrix)
+```
+
+
+
+
+
+#### 10 fold cross-validation with 3 repeats
+
+- Modeling and prediction 
+
+```{r,warning=FALSE}
+
+# define training control
+train_control2 <- trainControl(method="repeatedcv", number=10, repeats=3)
+model2<-train(Cost_Matrix~.,data=train.credit,trControl=train_control2, method="svmLinear")
+# summarize results
+print(model2)
+pred2=predict(model2,newdata = test.credit)
+pred2
+
+```
+
+- Show the accuracy for the training dataset
+
+```{r,warning=FALSE}
+model2$results
+
+```
+
+
+- Show the accuracy results for each resample
+```{r,warning=FALSE}
+model2$resample
+```
+
+- Show the accuracy for the test dataset
+
+```{r,warning=FALSE}
+mean(pred2 == test.credit$Cost_Matrix)
+```
+
+
+
+
+#### Leave group out with 5 iterations and 85% data used for training define training control
+
+- Split the dataset 85% training and 15% testing, modeling 
+
+```{r,warning=FALSE}
+#split the dataset 
+set.seed(123)
+training.samples <-credit_data$Cost_Matrix %>% 
+  createDataPartition(p = 0.85, list = FALSE)
+train.data<-credit_data[training.samples, ]
+test.data<-credit_data[-training.samples, ]
+
+# Modelling
+train_control3 <- trainControl(method="LOOCV",number = 5)
+# train the model
+model3<-train(Cost_Matrix~.,data=train.data,trControl=train_control3, method="svmLinear")
+# summarize results
+print(model3)
+
+```
+
+- Prediction
+```{r,warning=FALSE}
+pred3=predict(model3,newdata=test.data)
+pred3
+
+```
+
+
+- Show the accuracy for the training dataset
+
+```{r,warning=FALSE}
+model3$results
+
+```
+
+
+- Show the accuracy results for each resample
+
+```{r,warning=FALSE}
+model3$resample
+
+```
+
+- Show the accuracy for the test dataset
+
+```{r,warning=FALSE}
+mean(pred3 == test.credit$Cost_Matrix)
+
+
+```
+
+
+
+#### Bootstrap with 25 iterations
+- Modeling and prediction
+```{r,warning=FALSE}
+# Bootstrap with 25 iterations
+# define training control
+train_control4 <- trainControl(method="boot", number=25)
+# train the model
+model4 <- train(Cost_Matrix~.,data=train.credit,trControl=train_control4,method="svmLinear")
+# summarize results
+print(model4)
+
+# Prediction
+pred4=predict(model4,newdata=test.credit)
+pred4
+
+
+```
+
+
+- Show the accuracy for the training dataset
+```{r,warning=FALSE}
+model4$results
+
+```
+
+- Show the accuracy results for each resample
+```{r,warning=FALSE}
+model4$resample
+```
+
+
+- Show the accuracy for the test dataset
+
+```{r,warning=FALSE}
+mean(pred4 == test.credit$Cost_Matrix)
+
+```
+
+
+# Which resampling method gives the best estimate of the test error?
+```{r,warning=FALSE}
+model4$bestTune
+```
+
+
+
+

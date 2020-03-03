@@ -1,0 +1,159 @@
+---
+title: "Homework 4.4 - Hitters dataset"
+author: "Hamed"
+date: "2/26/2020"
+output: word_document
+---
+
+# We now use boosting to predict Salary in the Hitters data set in the ISLR package.
+
+```{r, warning=FALSE}
+
+library(ISLR)
+Hitters=as.data.frame(Hitters)
+dim(Hitters)
+str(Hitters)
+
+```
+
+
+## (a) Remove the observations for whom the salary information is unknown, and then log-transform the salaries.
+
+```{r, warning=FALSE}
+
+# remove rows with missing values 
+Hitters = Hitters[!is.na(Hitters$Salary),]
+
+#log transform salary
+Hitters$Salary = log(Hitters$Salary)
+
+
+```
+
+
+## (b) Create a training set consisting of 65% of the observations, and a test set consisting of the remaining observations.
+
+```{r, warning=FALSE}
+set.seed(123)
+smp_size <-floor(0.65 * nrow(Hitters))
+train_ind <-sample(seq_len(nrow(Hitters)), size = smp_size)
+train.Hitters = Hitters[train_ind,]
+dim(train.Hitters)
+test.Hitters = Hitters[-train_ind,]
+dim(test.Hitters)
+
+
+```
+
+
+## (c) Perform boosting using XGBoost on the training set with 1,000 trees for a range of values of the shrinkage parameter λ. Produce a plot with different shrinkage values on the x-axis and the corresponding training set MSE on the y-axis.
+
+```{r, warning=FALSE}
+library(xgboost)
+library(caret) 
+library(gbm)
+
+# Ensure the R-studio can handle plots with large margins
+par("mar")
+par(mar=c(1,1,1,1))
+
+#Grid search the shrinkage
+set.seed(1)
+shrinkGrid = seq(.1,.001,by=-.001)
+shrinkGrid
+
+#Define the MSE 
+MSE = matrix(NA,nrow=length(shrinkGrid),ncol=2)
+
+# Train xgboost model using the shrinkage
+for(i in 1:length(shrinkGrid)){
+  lambda = shrinkGrid[i]
+  boost.hitters = gbm(Salary~.,data=train.Hitters,distribution="gaussian",n.trees=1000,shrinkage=lambda)
+  boost.pred.train = predict(boost.hitters,train.Hitters,n.trees=1000)
+  boost.pred.test = predict(boost.hitters,test.Hitters,n.trees=1000)
+  train.MSE = mean((boost.pred.train - train.Hitters$Salary)^2)
+  test.MSE = mean((boost.pred.test - test.Hitters$Salary)^2)
+  MSE[i,1] = train.MSE
+  MSE[i,2] = test.MSE
+}
+best.lambda = shrinkGrid[which.min(MSE[,2])]
+best.lambda
+
+# Plot the MSE against the shrinkage values for th train and test dataset
+matplot(x=shrinkGrid,y=MSE,type="l",xlab="lambda",ylab="MSE")
+legend("topright",legend = c("Train","Test"),col=c("black","red"),lty=c(1,2))
+abline(v=best.lambda,col="blue",lty=2,lwd=.5)
+
+#The best MSE 
+print(paste0("Best Test MSE: ", MSE[which.min(MSE[,2]),2]))
+
+
+```
+
+
+## (d) Compare the test MSE of boosting to the test MSE that results from applying a linear regression approach. We shall apply two regression approaches; (ridge and lasso) 
+
+```{r, warning=FALSE}
+library(glmnet)
+
+#split the dataset
+x.train.Hitters = model.matrix(Salary~.,train.Hitters)[,-1]
+x.test.Hitters = model.matrix(Salary~.,test.Hitters)[,-1]
+y.train.Hitters = train.Hitters$Salary
+y.test.Hitters = test.Hitters$Salary
+
+#define lambda 
+lambdaGrid = 10^seq(10,-2,length=100)
+
+# Ridge Linear regression cross-validated
+cv.ridge = cv.glmnet(x.train.Hitters,y.train.Hitters,alpha=0)
+bestlam.ridge = cv.ridge$lambda.min
+
+#Lasso linear regression cross-validated
+cv.lasso = cv.glmnet(x.train.Hitters,y.train.Hitters,alpha=1)
+bestlam.lasso = cv.lasso$lambda.min
+
+#Ridge and lasso regression without cross-validation 
+ridge.hitters = glmnet(x.train.Hitters,y.train.Hitters,alpha=0,lambda=lambdaGrid)
+lasso.hitters = glmnet(x.train.Hitters,y.train.Hitters,alpha=1,lambda=lambdaGrid)
+
+#Prediction
+ridge.pred = predict(ridge.hitters,s=bestlam.ridge,newx=x.test.Hitters)
+lasso.pred = predict(lasso.hitters,s=bestlam.lasso,newx=x.test.Hitters)
+
+#Mean squared error 
+ridge.MSE.test = mean((ridge.pred - y.test.Hitters)^2)
+lasso.MSE.test = mean((lasso.pred - y.test.Hitters)^2)
+print(paste0("Boost Test MSE: ", MSE[which.min(MSE[,2]),2]))
+print(paste0("Ridge Test MSE: ", ridge.MSE.test))
+print(paste0("Lasso Test MSE: ", lasso.MSE.test))
+
+```
+
+
+## (e) Which variables appear to be the most important predictors in the boosted model?
+
+```{r, warning=FALSE}
+
+summary(boost.hitters)
+
+```
+
+
+## (f) Now apply bagging to the training set. What is the test set MSE for this approach?
+
+```{r, warning=FALSE}
+  
+library(randomForest)
+bag.hitters = randomForest(Salary~.,data=train.Hitters,ntree=1000,mtry=19,importance=TRUE)
+
+bag.pred = predict(bag.hitters,newdata=test.Hitters)
+bag.MSE.test = mean((bag.pred - test.Hitters$Salary)^2)
+
+print(paste0("Bagging Test MSE: ",bag.MSE.test))
+
+# Bagging appears to have slightly outperformed boosting, ridge, and lasso.
+
+```
+
+

@@ -1,0 +1,174 @@
+
+var backgroundcolor=[];
+var bgvideo=[];
+var copy=[];
+var copycolor=[];
+var logoimg=[];
+var ctacopy=[];
+var ctatxtcolor=[];
+var ctabgcolor=[];
+var clear;
+var exiturl=[];
+
+
+function fnalert() {  
+    createdom();  
+}
+
+function createdom(){
+	
+	document.getElementById("feature").style.backgroundColor=backgroundcolor[0];
+	document.getElementById("logo").src=logoimg[1];
+	document.getElementById("logo1").src=logoimg[1];
+	document.getElementById("bgvideo").src=bgvideo[0];
+	document.getElementById("copytxt1").innerHTML=copy[0];
+	document.getElementById("copytxt1").style.color=copycolor[0]
+
+	document.getElementById("ctatxt").innerHTML=ctacopy[0];
+	document.getElementById("ctatxt").style.color=ctatxtcolor[0];
+	document.getElementById("ctaparent").style.backgroundColor=ctabgcolor[0];
+	document.getElementById("ctaparent").style.border="2px solid "+ctatxtcolor[0];
+	
+
+    newfontresize(document.getElementById("copyparent2"),document.getElementById("copytxt1"),document.getElementById("copytxt1"));
+	
+	newfontresize(document.getElementById("ctatxtparent"),document.getElementById("ctatxt"),document.getElementById("ctatxt"));
+	
+}
+var adderf = 0;
+function newfontresize(x,y,z){
+	var t = y;var tp = x; var ct = z; 
+	var cfsize = window.getComputedStyle(z, null).getPropertyValue("font-size");
+	var scfsize = cfsize.split("px");
+	var nscfsize = Number(scfsize[0]);
+	var th = window.getComputedStyle(t, null).getPropertyValue("height"); 
+	th=Number(th.split("px")[0]);
+	var tph = window.getComputedStyle(tp, null).getPropertyValue("height"); 
+	tph=Number(tph.split("px")[0]);
+	var tw = window.getComputedStyle(t, null).getPropertyValue("width"); 
+	tw=Number(tw.split("px")[0]);
+	var tpw = window.getComputedStyle(tp, null).getPropertyValue("width"); 
+	tpw=Number(tpw.split("px")[0]);
+	console.log(th+' '+tph);
+	if(th<=(tph)&& tw<=(tpw)){t.style.fontSize= (nscfsize)+"px";adderf+=1;if(adderf==2){}}else{cnfsize(tp,t,ct,nscfsize);}
+}
+function cnfsize(a,b,c,bf){	
+	c.style.fontSize = (bf-1)+"px";
+	setTimeout(function(){newfontresize(a,b,c)},10);
+}
+
+function loadafter(){
+	setTimeout(function(){animcontrol();},100);
+} 
+
+var al=0;
+function animcontrol(){ al++;
+ 	panmatr("#main-container",null,"{opacity:1;}","ease-in",1,0,{"prend":playvideo});
+	panmatr("#copyparent2",null,"{opacity:0;}","ease-in",0,0);
+	panmatr("#ctaparent",null,"{opacity:0;}","ease-in",0,0);
+	panmatr("#frame2",null,"{opacity:0;transform:translate(0px,0px);}","ease-in",0,0);
+	panmatr("#frame3",null,"{transform:translate(0px,-90px);}","ease-in",0,0);
+ 	panmatr("#frame1",null,"{opacity:1;}","ease-in",0.5,0);
+	panmatr("#frame1",null,"{opacity:0;}","ease-in",0.5,7.25);
+    panmatr("#frame2",null,"{opacity:1;}","ease-in",1,7.25); 
+	panmatr("#copyparent2",null,"{opacity:1;}","ease-in",1,7.25);
+	panmatr("#ctaparent",null,"{opacity:1;}","ease-in",1,7.25);
+	if(al==1){ 
+ 	panmatr("#frame2",null,"{transform:translate(0px,90px);}","ease-in-out",0.5,11);
+	panmatr("#frame3",null,"{transform:translate(0px,0px);}","ease-out",0.25,11.25);   	
+	panmatr("#frame3",null,"{opacity:0;transform:translate(0px,0px);}","ease-out",0.5,14.5,{"prend":animcontrol}); 
+	}else{	
+	panmatr("#logozone1",null,"{opacity:1;}","ease-in",1,7.5);  
+	}   
+}
+
+
+function playvideo(){document.getElementById("bgvideo").play(); }
+
+
+function init() {
+  if (Enabler.isPageLoaded()) {
+    pageLoadedHandler();
+  } else {
+    Enabler.addEventListener(studio.events.StudioEvent.PAGE_LOADED, pageLoadedHandler);
+  }
+
+    Enabler.setProfileId(10177707);
+    var devDynamicContent = {};
+
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018= [{}];
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0]._id = 0;
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Copy = "GET A GLOBAL ACCOUNTANCY QUALIFICATION";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_Copy = "LEARN MORE";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Exit_URL = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Exit_URL.Url = "https://www.accaglobal.com/uk/en.html";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Copy_Hex = "#ffffff";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_Copy_Hex = "#ffffff";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_BG_Hex = "#ffffff";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].BG_Hex = "#ffffff";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+	devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_Path = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_Path.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_Path.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+	devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_Path = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_Path.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_Path.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MAST_VERT_Video_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MAST_VERT_Video_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MAST_VERT_Video_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MPU_Video_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MPU_Video_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].MPU_Video_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].SQUARE_Video_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].SQUARE_Video_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].SQUARE_Video_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Masthead_VID_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Masthead_VID_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Masthead_VID_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].WSKY_Vid_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].WSKY_Vid_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].WSKY_Vid_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Mob_Vid_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Mob_Vid_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Mob_Vid_DRM.Url = "https://s0.2mdn.net/ads/richmedia/studio/45139582/45139582_20180806043801873_FFFFFF-1.png";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_DRM = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_DRM.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_DRM.Url = "https://gcdn.2mdn.net/videoplayback/id/c5186e991670a88c/itag/15/source/doubleclick/ratebypass/yes/mime/video%2Fmp4/acao/yes/ip/0.0.0.0/ipbits/0/expire/3683442323/sparams/id,itag,source,ratebypass,mime,acao,ip,ipbits,expire/signature/8982B4E92E9377545BA5EAD25526BF229B8ACF62.4B9B80D75E1B5E99C3409C0910C61A13CA946D9A/key/ck2/file/file.mp4";
+	devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_Path = {};
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_Path.Type = "file";
+    devDynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_Path.Url = "https://s0.2mdn.net/creatives/assets/2943174/Wave_728x90a.mp4";
+    Enabler.setDevDynamicContent(devDynamicContent);
+  
+    backgroundcolor.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].BG_Hex);
+	bgvideo.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].LB_Vid_DRM.Url);
+	logoimg.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_A_DRM.Url);
+	logoimg.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Logo_B_DRM.Url);
+	copy.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Copy); 
+	copycolor.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Copy_Hex);
+	ctacopy.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_Copy);
+	ctatxtcolor.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_Copy_Hex);
+	ctabgcolor.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].CTA_BG_Hex);
+    exiturl.push(dynamicContent.ACCA_SEPT_2018_ACCA_Sept_2018[0].Exit_URL.Url);
+	fnalert();
+}
+
+function exitClickHandler() {
+  Enabler.exitOverride("click", exiturl[0]);
+}
+
+function pageLoadedHandler() {
+  document.getElementById('feature').addEventListener('click', exitClickHandler, false);
+}
+function preInit() {
+  if (Enabler.isInitialized()) {
+    init();
+  } else {
+    Enabler.addEventListener(studio.events.StudioEvent.INIT,init);
+  }
+}
+window.addEventListener('load', preInit); 

@@ -1,0 +1,27 @@
+
+#Facet plots of satisfaction and office location
+
+library(ggplot2)
+df1$office_location
+df1$satisfaction
+
+#tabulate the data
+counts=table(df1$satisfaction,df1$office_location)
+
+#transpose the contigency table
+t_counts=t(counts)
+t_counts
+
+#convert contigency into a dataframe 
+facet_data=as.data.frame.matrix(t_counts)
+
+#save it into a csv file, edit and read it back
+write.csv(facet_data,"D:/mydata/facet_data.csv") #use your own file path with foward slash
+facet_data1=read.csv("D:/mydata/facet_data.csv")
+
+#Facet plotting
+require(reshape)
+dat <- melt(facet_data1,id.vars = "office_location")
+ggplot(dat,aes(x=office_location, y = value)) + 
+  facet_wrap(~variable) +
+  geom_bar(aes(fill = dat$office_location), stat = "identity")

@@ -1,0 +1,44 @@
+A statistician with 2+ years of experience in statistical modeling, BI reporting, data mining,
+ data visualization on structured and unstructured data to derive meaningful business insight.
+ Technology stack:  R programming (R-markdown and Notebook) SPSS, STATA, Python, and SAS.
+ I look forward to a fruitful transaction, feel free to contact me. 
+
+Machine learning engineer, having completed 2 data science capstone projects on IBM, cloud.
+Accolades from Oracle University include a Data Integration certified Associate.  
+Passionate about machine learning and Artificial intelligence.
+I look forward to a fruitful transaction, feel free to contact me.
+
+A Data Engineer with 2 years of experience in data extraction, enrichment, transformation and 
+data modeling (ETL) technologies. Skilled in Oracle and Microsoft SQL databases. 
+Conversant with Oracle, IBM and Azure cloud. 
+Accomplishments:
+-Oracle cloud platform Data Integration 2018 Certified Associate
+-IBM Data Science professional certificate 
+-IBM Advanced Data science certificate 
+Technology stack:R, Python, SQL, Oracle data Integrator (ODI), Oracle database
+I look forward to a fruitful transaction, feel free to contact me.
+
+A machine learning engineer with 2 years of experience in application of structured and unstructured data
+to derive predictive business insight with application of analytics in problem solving.
+I perform exploratory data analysis, data mining, and machine learning as part of data science experience
+in real life projects. Technology stack: python:(scikit learn,keras,nltk and tensorflow),
+ R:(caret,rpart,randomForest,nnet,e1071,kernlab) 
+I look forward to a fruitful transaction, feel free to contact me.
+
+As a Statistician, I apply data processing and predictive modeling techniques to derive 
+competitive business insight from data. As a Data Integration Associate, 
+I  leverage powerful ETL tools (ODI and SSIS) to integrate data from Excel files, Text files,
+Oracle and SQL Server databases into either Oracle or Azure data warehouses.  
+I am a machine learning practitioner conversant with Classification, Regression and Clustering methods.
+Programming Tools: R and Python 
+Databases: Oracle and Microsoft SQL server
+ETL Tools: Oracle Data Integrator (ODI), SQL Server Integration Services (SSIS)
+Visualization Tools: Tableau, Power BI, Oracle data visualization for desktop  
+
+
+ 
+
+
+
+
+

@@ -1,0 +1,98 @@
+---
+title: "Homework 4.1 - Auto dataset"
+author: "Hamed"
+date: "2/26/2020"
+output: word_document
+---
+# In this problem, you will use support vector approaches in order to predict whether a given car gets high or low gas mileage based on the Auto data set in the ISLR library.
+
+```{r,warning=FALSE}
+
+#Load libraries and dataset
+library(ISLR)
+library(dplyr)
+library(mlr)
+library(caret)
+library(ROCR)
+library(kernlab)
+library(e1071)
+library(foreach)
+library(doParallel)
+
+Auto=as.data.frame(Auto)
+
+```
+
+## (a) Create a binary variable that takes on a 1 for cars with gas mileage above the median, and a 0 for cars with gas mileage below the median.
+
+```{r,warning=FALSE}
+med=median(Auto$mpg)
+Auto$target=ifelse(Auto$mpg>med,'1','0')
+
+# convert target to factor and drop the string variable for classification purposes
+
+Auto$target=as.factor(as.character(Auto$target)) #convert to factor
+class(Auto$target)
+Auto=select(Auto,-starts_with('name')) #drop name
+
+# Change to fatcor and perform Variable encoding on the origin variable because its a categorical variable
+Auto$origin=as.factor(as.character(Auto$origin))
+Auto=createDummyFeatures(Auto, cols = "origin")
+str(Auto)
+
+```
+
+## (b) Fit a support vector classifier to the data with various values of cost, in order to predict whether a car gets high or low gas mileage. Report the cross-validated training dataset error associated with different values of this parameter. Comment on your results.
+
+```{r,warning=FALSE}
+# split the dataset
+set.seed(123)
+smp_size<- floor(0.85 * nrow(Auto))
+train_ind<-sample(seq_len(nrow(Auto)), size = smp_size)
+train.Auto<-Auto[train_ind, ]
+test.Auto<-Auto[-train_ind, ]
+
+# Fit the model
+SVM1=tune(svm,target~.,data = train.Auto,ranges=list(cost=c(.01,.02,.05,
+                .1,.2,.5,1,2,5,10)),kernel='linear',
+            trControl = trainControl("cv", number = 5))
+
+SVM1$best.model
+summary(SVM1) #The error reduces as the model cross validates towards 10 folds
+
+
+```
+
+## (c) Now repeat (b), this time using SVMs with radial and polynomial basis kernels, with different values of gamma (sigma) and degree and cost. Comment on your results.
+
+```{r,warning=FALSE}
+# RADIAL KERNEL
+SVM2 = tune(svm ,target~.,data=train.Auto,ranges=list(
+  cost=c(.01,.02,.05,.1,.2,.5,1,2,5,10),gamma=c(.001,.002,.005,
+        .01,.02,.05,.1,.2,.5,1,2,5,10)),kernel='radial',
+        trControl = trainControl("cv", number = 10),
+        preProcess = c("center","scale"))
+
+SVM2$best.model
+summary(SVM2)
+
+
+```
+
+
+```{r,warning=FALSE}
+# POLYNOMIAL
+
+SVM3 <- train(target ~., data = train.Auto, method = "svmPoly",
+               trControl = trainControl("cv", number = 10),
+               tuneGrid = expand.grid(C=c(.01,.02,.05,.1,.2,.5,1,2,5,10)
+              ,degree=c(1:5),scale=c(0.01:1)),
+               preProcess = c("center","scale"),
+               tuneLength = 4)
+
+SVM3$finalModel #displays cost , error, degree and scale of the model
+SVM3$results #displays the accuracy of the model crossvalidated 
+
+
+```
+

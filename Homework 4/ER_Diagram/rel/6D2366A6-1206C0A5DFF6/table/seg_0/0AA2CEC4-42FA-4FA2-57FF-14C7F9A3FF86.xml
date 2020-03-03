@@ -1,0 +1,144 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="0AA2CEC4-42FA-4FA2-57FF-14C7F9A3FF86" name="F_TRANSPORT">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:48:04 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<ordsAlias>table_5</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ROW_ID" id="5B992DBB-53F8-3192-1112-4B88C42896AF">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>22</dataTypeSize>
+<ownDataTypeParameters>22,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="policyNumber" id="AFCCDCB5-6DA5-3A4D-3C4D-CD798662C253">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="policyPeriod" id="F7F0B9C1-CE3D-BD8B-7AB1-D83CEB0FDFA1">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="insuranceName" id="AE00F239-6CEA-0308-4C3E-9A4C7BD5A9F2">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="insuranceAddress" id="2AB87CF3-95A2-412C-8D51-12B066DAD5D4">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="driverName" id="2CC41EFA-DA0D-C067-6E2C-20116939DF01">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="driverAddress" id="0B4BBB93-5AAC-6737-8D07-847883E045B3">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="carPlate" id="3097B4AC-A4B0-3B89-BA9F-233208D73659">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="carColor" id="255C3ECE-52BA-91DA-5EF3-E44CFEDE3858">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:05:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="driverLicence" id="897649A6-9C63-29FD-CBC1-9F834E559AD9">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:16:05 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>22</dataTypeSize>
+<ownDataTypeParameters>22,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="D2D7BFB8-F158-1A36-576B-88AE8E51CDBE" name="F_TRANSPORT_PK">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 09:13:27 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5B992DBB-53F8-3192-1112-4B88C42896AF"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

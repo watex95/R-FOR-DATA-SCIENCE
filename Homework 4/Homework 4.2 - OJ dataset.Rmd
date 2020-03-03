@@ -1,0 +1,180 @@
+---
+title: "Homework 4.2 - OJ dataset"
+author: "Hamed"
+date: "2/26/2020"
+output: word_document
+---
+
+# This problem involves the OJ data set which is part of the ISLR package.
+
+```{r,warning=FALSE}
+
+library(ISLR)
+library(caret)
+library(kernlab)
+library(ROCR)
+library(e1071)
+library(tidyverse)
+
+OJ=as.data.frame(OJ)
+str(OJ)
+
+
+```
+
+## (a) Create a training set containing a random sample of 60% of the observations,and a test set containing the remaining observations.
+
+```{r,warning=FALSE}
+set.seed(123)
+smp_size <-floor(0.60 * nrow(OJ))
+train_ind <-sample(seq_len(nrow(OJ)), size = smp_size)
+train.OJ = OJ[train_ind,]
+test.OJ = OJ[-train_ind,]
+dim(train.OJ)
+dim(test.OJ)
+
+
+```
+
+## (b) Fit a support vector classifier with a linear kernel to the training data using cost=0.01, with Purchase as the response and the other variables as predictors. Describe the results obtained.
+
+```{r,warning=FALSE}
+library(kernlab)
+svm1 = train(Purchase~.,data=train.OJ,method='svmLinear' ,cost=0.01)
+svm1$results #accuracy
+svm1$finalModel #error 
+
+```
+
+## (c) What are the training and test error rates?
+
+```{r,warning=FALSE}
+# Training error rates
+svm1.train.pred = predict(svm1,newdata=train.OJ)
+confusion.mat=table(obs=train.OJ$Purchase,pred=svm1.train.pred)
+confusion.mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+error_rate=(confusion.mat[1,2]+confusion.mat[2,1])/nrow(train.OJ)
+error_rate #confirmed its equal to the value gotten earlier from the model
+
+# Test error rates
+svm1.test.pred = predict(svm1,newdata=test.OJ)
+confusion.Mat=table(obs=test.OJ$Purchase,pred=svm1.test.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+test_error_linear =(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(test.OJ)
+test_error_linear
+
+
+```
+
+## (d) Use a tuning grid in caret to select an optimal cost. Consider values in the range 0.01 to 10.
+
+```{r,warning=FALSE}
+svm1.tune = tune(svm,Purchase~.,data=train.OJ,
+    ranges=list(cost=c(.01,.02,.05,.1,.2,.5,1,2,5,10)),kernel='linear')
+summary(svm1.tune)
+
+```
+
+## (e) Compute the training and test error rates using this new value for cost.
+
+```{r,warning=FALSE}
+# Train error rates
+svm1.best.train.pred = predict(svm1.tune$best.model,newdata=train.OJ)
+confusion.Mat=table(obs=train.OJ$Purchase,pred=svm1.best.train.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+error_rate=(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(train.OJ)
+error_rate
+
+# Test error rates
+svm1.best.test.pred=predict(svm1.tune$best.model,newdata=test.OJ)
+confusion.Mat=table(obs=test.OJ$Purchase,pred=svm1.best.test.pred)
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+test_error_linearTune=(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(test.OJ)
+test_error_linearTune
+
+```
+
+## (f) Repeat parts (b) through (e) using a support vector machine with aradial kernel. Use a grid of values for gamma but use default for cost
+
+```{r,warning=FALSE}
+svm2.tune = tune(svm , Purchase~.,data=train.OJ,ranges=list(
+  cost=c(.01,.02,.05,.1,.2,.5,1,2,5,10),gamma=c(.001,.002,.005,
+  .01,.02,.05,.1,.2,.5,1,2,5,10)),kernel='radial')
+summary(svm2.tune)
+svm2.tune$best.performance
+
+# Compute the training and test error rates using this new value for cost.
+# Train error rates
+svm2.best.train.pred = predict(svm2.tune$best.model,newdata=train.OJ)
+confusion.Mat=table(obs=train.OJ$Purchase,pred=svm2.best.train.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+error_rate=(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(train.OJ)
+error_rate
+
+# Test error rates
+svm2.best.test.pred = predict(svm2.tune$best.model,newdata=test.OJ)
+confusion.Mat=table(obs=test.OJ$Purchase,pred=svm2.best.test.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+test_error_radialTune =(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(test.OJ)
+test_error_radialTune
+
+```
+
+## (g) Repeat parts (b) through (e) using a support vector machine with a polynomial kernel.  Tune degree and cost using a grid.
+
+```{r,warning=FALSE}
+
+# Fit the model on the training set
+set.seed(123)
+model <- train(Purchase ~., data = train.OJ, method = "svmPoly",
+  trControl = trainControl("cv", number = 10),
+  tuneGrid = expand.grid(C=c(.01,.02,.05,.1,.2,.5,1,2,5,10)
+          ,degree=c(1:5),scale=c(0.01:1)),
+  preProcess = c("center","scale"),
+  tuneLength = 4)
+
+# Print the best tuning parameter sigma and C that
+# maximizes model accuracy
+model$bestTune
+model$finalModel #training error
+
+# Compute the training and test error rates using this new value for cost.
+# Train error rates
+svm3.best.train.pred <- model %>% predict(train.OJ)
+confusion.Mat=table(obs=train.OJ$Purchase,pred=svm3.best.train.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+error_rate=(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(train.OJ)
+error_rate #training error after tuning
+
+# Test error rates
+# Make predictions on the test data
+svm3.best.test.pred <- model %>% predict(test.OJ)
+confusion.Mat=table(obs=test.OJ$Purchase,pred=svm3.best.test.pred)
+confusion.Mat
+# The above object is a confusion matrix thus grabbing the false positive and negative elements will give the error of the prediction
+test_error_polyTune=(confusion.Mat[1,2]+confusion.Mat[2,1])/nrow(test.OJ)
+test_error_polyTune #test error
+
+```
+
+## (h) Overall, which approach seems to give the best results on this data?
+```{r,warning=FALSE}
+#The model with the lowest test error would be the best approach
+test_error_linear
+test_error_linearTune
+test_error_radialTune
+test_error_polyTune
+```
+
+
+
+
+
+
+

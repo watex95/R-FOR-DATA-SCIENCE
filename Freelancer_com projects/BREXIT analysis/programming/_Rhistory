@@ -1,0 +1,147 @@
+install.packages("DataExplorer")
+getwd()
+setwd('C:\Users\Main C7\Desktop\ORDERS\datasets')
+setwd('C:/0Users/Main C7/Desktop/ORDERS/datasets')
+library(DataExplorer)
+install.packages("DataExplorer")
+install.packages(‘gridExtra’)
+install.packages("gridExtra")
+install.packages("networkD3")
+FD=read.csv('Clean_FD_sample.csv',header = T)
+str(FD)
+attach(FD)
+#///////////////////////////////////////////////////////////////////////////////
+#FEATURE SELECTION USING FILTER METHODS
+# 1. USING CORRELATION
+#-------------------------
+scale_var=FD[,-c(1,2,5:9,22:28)] #REMOVE Non numeric variables
+cor.test(scale_var,X12.Mo..Sales)
+ggplot2.histogram(AGE,xName='Age')
+ggplot.histogram(AGE,xName='Age')
+install.packages("devtools")
+library(devtools)
+install_github("easyGgplot2", "kassambara")
+library(easyGgplot2)
+ggplot.histogram(AGE,xName='Age')
+ggplot2.histogram(AGE,xName='Age')
+library(ggplot2)
+ggplot2.histogram(AGE,xName='Age')
+p7 <- ggplot(FD, aes(x = INCOME)) +
+geom_histogram(aes(y = ..density..)) +
+stat_function(fun = dnorm, colour = "red",
+arg = list(mean = mean(airquality$Ozone, na.rm = TRUE),
+sd = sd(airquality$Ozone, na.rm = TRUE)))
+p7
+p7<- ggplot(FD, aes(x = INCOME)) +
+geom_histogram(aes(y = ..density..)) +
+stat_function(fun = dnorm, colour = "red",
+arg = list(mean = mean(airquality$Ozone, na.rm = TRUE),
+sd = sd(airquality$Ozone, na.rm = TRUE)))
+FD
+FD=read.csv('Clean_FD_sample.csv',header = T)
+p7<- ggplot(FD, aes(x = INCOME)) +
+geom_histogram(aes(y = ..density..)) +
+stat_function(fun = dnorm, colour = "red",
+arg = list(mean = mean(FD$INCOME, na.rm = TRUE),
+sd = sd(FD$INCOME, na.rm = TRUE)))
+attach(FD)
+specie <- LOYALTY_SEGMENT
+condition <- GENDER
+value <-X12.Mo..Sales
+data <- data.frame(specie,condition,value)
+# Grouped
+ggplot(data, aes(fill=condition, y=value, x=specie)) +
+geom_bar(position="dodge", stat="identity")
+d="bhmx","bndmw"
+d=c("bhmx","bndmw")
+ls()
+ls(char='v')
+ls(pat='v')
+!is.na(FD)
+is.na(FD)
+median(FD$AGE)
+typeof(median(FD$AGE))
+df=c(34,1,23,4,3,3,12,4,3,1)
+d(df)
+sd(df)
+kurtosis(df)
+library(e1071)
+install.packages("e1071")
+library(e1071)
+kurtosis(df)
+fg=c(1,2,3,4,5,6,7,8,9,10)
+tg=c(7,6,5,4,5,6,7,8,9,10)
+cor(fg,tg)
+cov(fg,tg)
+t=c(1,2,3,4,5,6,7)
+r=c(7,6,5,4,5,6,7)
+cor(t,r)
+kurtosis(34,1,23,4,3,3,12,4,3,1)
+dd=c(34,1,23,4,3,3,12,4,3,1)
+kurtosis(dd)
+setwd("C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis")
+install.packages("rjson")
+# Load the package required to read JSON files.
+library("rjson")
+# Give the input file name to the function.
+result <- fromJSON(file = "petitions_200000.json")
+# Print the result.
+print(result)
+# Give the input file name to the function.
+result <- fromJSON(file = "petition1.json")
+# Print the result.
+print(result)
+# Convert JSON file to a data frame.
+json_data_frame <- as.data.frame(result)
+print(json_data_frame)
+View(result)
+result$data
+result$data$attributes$signatures_by_constituency
+result$data$attributes$signatures_by_constituency$name
+result$data$attributes$signatures_by_constituency$ons_code
+my_data=result$data$attributes$signatures_by_constituency
+my_data=result$data$attributes$signatures_by_constituency
+# Convert JSON file to a data frame.
+json_data_frame <- as.data.frame(my_data)
+# Convert JSON file to a data frame.
+json_data_frame <- as.data.frame(my_data,check.names=FALSE,check.rows=FALSE)
+library(tidyjson)   # this library
+library(dplyr)      # for %>% and other dplyr functions
+install.packages("tidyjson")
+setRepositories()
+ap <- available.packages()
+ap
+library(installr)
+install.packages("installr")
+library(installr)
+updateR()
+source("http://bioconductor.org/biocLite.R")
+biocLite("BiocUpgrade")
+library(tidyjson)   # this library
+install.packages("tidyjson")
+# Print the result.
+print(result)
+# Convert JSON file to a data frame.
+json_data_frame <- as.data.frame(result)
+names=result$data$attributes$signatures_by_constituency
+View(names)
+do.call(rbind.data.frame, names)
+## Compute maximum length
+max.length <- max(sapply(names, length))
+## Add NA values to list elements
+l <- lapply(names, function(v) { c(v, rep(NA, max.length-length(v)))})
+## Add NA values to list elements
+names1 <- lapply(names, function(v) { c(v, rep(NA, max.length-length(v)))})
+## Rbind
+do.call(rbind, names1)
+## Rbind
+my_data=do.call(rbind, names1)
+my_data
+wrte.csv(my_data,"C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis/sample1.csv")
+write.csv(my_data,"C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis/sample1.csv")
+write.xlsx(my_data,"C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis/sample1.xlsx")
+write.xlsx(my_data,"C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis/sample1.xlsx",sheetName="sample1")
+library(xlsx)
+install.packages("xlsx")
+library(xlsx)
+write.xlsx(my_data,"C:/Users/Main C7/Desktop/Freelancer_com/BREXIT analysis/sample1.xlsx",sheetName="sample1")

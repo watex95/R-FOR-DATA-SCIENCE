@@ -1,0 +1,1624 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0068)https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch.html -->
+<html xmlns="http://www.w3.org/1999/xhtml" id="typepad-standard" xmlns:fb="http://www.facebook.com/2008/fbml" class="gr__blog_revolutionanalytics_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- head-common-individual -->
+        
+        <meta name="generator" content="http://www.typepad.com/">
+    <script async="" src="./Neural Networks from Scratch, in R (Revolutions)_files/analytics.js.download"></script><script src="./Neural Networks from Scratch, in R (Revolutions)_files/MathJax.js.download" id="">
+</script>
+
+        
+        <meta name="description" content="By Ilia Karmanov, Data Scientist at Microsoft This post is for those of you with a statistics/econometrics background but not necessarily a machine-learning one and for those of you who want some guidance in building a neural-network from scratch in R to better understand how everything fits (and how it doesn&#39;t). Andrej Karpathy [wrote](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b) that when CS231n (Deep Learning at Stanford) was offered: &gt;&quot;we intentionally designed the programming assignments to include explicit calculations involved in backpropagation on the lowest level. The students had to implement the forward and the backward pass of each layer in raw numpy. Inevitably, some students...">
+
+
+
+
+        <link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/styles.css" type="text/css" media="screen">
+        <link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/print.css" type="text/css" media="print">
+
+
+<link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/featherlight-gallery.css">
+
+        <link rel="alternate" type="application/atom+xml" title="Posts on &#39;Revolutions&#39; (Atom)" href="https://blog.revolutionanalytics.com/atom.xml">
+        <link rel="alternate" type="application/rss+xml" title="Posts on &#39;Revolutions&#39; (RSS 1.0)" href="https://blog.revolutionanalytics.com/index.rdf">
+        <link rel="alternate" type="application/rss+xml" title="Posts on &#39;Revolutions&#39; (RSS 2.0)" href="https://blog.revolutionanalytics.com/rss.xml">
+        <script type="text/javascript">
+                var TPApp = {};
+                TPApp.app_uri = "https://www.typepad.com/";
+        </script>
+        <script type="text/javascript" src="./Neural Networks from Scratch, in R (Revolutions)_files/thumbnail-gallery-min.js.download"></script>
+
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-225723-36', 'auto', {'name': 'Typepad'}, {'allowLinker': true} );  // Separate tracker for Typepad.
+ga('Typepad.require', 'linker');
+ga('Typepad.linker:autoLink', ['none']);
+ga('Typepad.set', 'dimension1', '6a010534b1db25970b010536040741970b');
+ga('Typepad.set', 'dimension2', 'Individual');
+ga('Typepad.send', 'pageview');
+</script>
+
+
+
+<meta property="og:title" content="Neural Networks from Scratch, in R">
+<meta property="og:site_name" content="Revolutions">
+<meta property="og:type" content="blog">
+<meta property="og:url" content="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch.html">
+<meta property="og:description" content="By Ilia Karmanov, Data Scientist at Microsoft This post is for those of you with a statistics/econometrics background but not necessarily a machine-learning one and for those of you who want some guidance in building a neural-network from scratch in R to better understand how everything fits (and how it doesn&#39;t). Andrej Karpathy [wrote](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b) that when CS231n (Deep Learning at Stanford) was offered: &gt;&quot;we intentionally designed the programming assignments to include explicit calculations involved in backpropagation on the lowest level. The students had to implement the forward and the backward pass of each layer in raw numpy. Inevitably, some students...">
+<meta property="fb:admins" content="">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b8d2961da1970c-600wi">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcaaa970b-600wi">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af042b970d-600wi">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcbd2970b-600wi">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af05cf970d-600wi">
+<meta property="og:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af0634970d-600wi">
+
+
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="">
+<meta name="twitter:creator" content="">
+<meta name="twitter:title" content="Neural Networks from Scratch, in R">
+<meta name="twitter:description" content="By Ilia Karmanov, Data Scientist at Microsoft This post is for those of you with a statistics/econometrics background but not necessarily a machine-learning one and for those of you who want some guidance in building a neural-network from scratch in R to better understand how everything fits (and how it doesn&#39;t). Andrej Karpathy [wrote](https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b) that when CS231n (Deep Learning at Stanford) was offered: &gt;&quot;we intentionally designed the programming assignments to include explicit calculations involved in backpropagation on the lowest level. The students had to implement the forward and the backward pass of each layer in raw numpy. Inevitably, some students..."><meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b8d2961da1970c-600wi">
+<meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcaaa970b-600wi">
+<meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af042b970d-600wi">
+<meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcbd2970b-600wi">
+<meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af05cf970d-600wi">
+<meta name="twitter:image" content="https://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af0634970d-600wi">
+
+
+
+
+        <link rel="alternate" type="application/atom+xml" title="Comments on &#39;Neural Networks from Scratch, in R&#39; (Atom)" href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch/comments/atom.xml">
+        <link rel="alternate" type="application/rss+xml" title="Comments on &#39;Neural Networks from Scratch, in R&#39; (RSS 2.0)" href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch/comments/rss.xml">
+        <title>Neural Networks from Scratch, in R (Revolutions)</title>
+        <link rel="start" href="https://blog.revolutionanalytics.com/" title="Home">
+        <link rel="prev" href="https://blog.revolutionanalytics.com/2017/07/revisiting-user2017.html?no_prefetch=1" title="Revisiting the useR!2017 conference: Recordings now available">
+        <link rel="next" href="https://blog.revolutionanalytics.com/2017/07/secret-package.html?no_prefetch=1" title="Securely store API keys in R scripts with the &quot;secret&quot; package">
+
+    <script src="./Neural Networks from Scratch, in R (Revolutions)_files/jquery-1.11.2.min.js.download"></script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style><style type="text/css">.mjx-chtml {display: inline-block; line-height: 0; text-indent: 0; text-align: left; text-transform: none; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; letter-spacing: normal; word-wrap: normal; word-spacing: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0; min-height: 0; border: 0; margin: 0; padding: 1px 0}
+.MJXc-display {display: block; text-align: center; margin: 1em 0; padding: 0}
+.mjx-chtml[tabindex]:focus, body :focus .mjx-chtml[tabindex] {display: inline-table}
+.mjx-full-width {text-align: center; display: table-cell!important; width: 10000em}
+.mjx-math {display: inline-block; border-collapse: separate; border-spacing: 0}
+.mjx-math * {display: inline-block; -webkit-box-sizing: content-box!important; -moz-box-sizing: content-box!important; box-sizing: content-box!important; text-align: left}
+.mjx-numerator {display: block; text-align: center}
+.mjx-denominator {display: block; text-align: center}
+.MJXc-stacked {height: 0; position: relative}
+.MJXc-stacked > * {position: absolute}
+.MJXc-bevelled > * {display: inline-block}
+.mjx-stack {display: inline-block}
+.mjx-op {display: block}
+.mjx-under {display: table-cell}
+.mjx-over {display: block}
+.mjx-over > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-under > * {padding-left: 0px!important; padding-right: 0px!important}
+.mjx-stack > .mjx-sup {display: block}
+.mjx-stack > .mjx-sub {display: block}
+.mjx-prestack > .mjx-presup {display: block}
+.mjx-prestack > .mjx-presub {display: block}
+.mjx-delim-h > .mjx-char {display: inline-block}
+.mjx-surd {vertical-align: top}
+.mjx-mphantom * {visibility: hidden}
+.mjx-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 2px 3px; font-style: normal; font-size: 90%}
+.mjx-annotation-xml {line-height: normal}
+.mjx-menclose > svg {fill: none; stroke: currentColor}
+.mjx-mtr {display: table-row}
+.mjx-mlabeledtr {display: table-row}
+.mjx-mtd {display: table-cell; text-align: center}
+.mjx-label {display: table-row}
+.mjx-box {display: inline-block}
+.mjx-block {display: block}
+.mjx-span {display: inline}
+.mjx-char {display: block; white-space: pre}
+.mjx-itable {display: inline-table; width: auto}
+.mjx-row {display: table-row}
+.mjx-cell {display: table-cell}
+.mjx-table {display: table; width: 100%}
+.mjx-line {display: block; height: 0}
+.mjx-strut {width: 0; padding-top: 1em}
+.mjx-vsize {width: 0}
+.MJXc-space1 {margin-left: .167em}
+.MJXc-space2 {margin-left: .222em}
+.MJXc-space3 {margin-left: .278em}
+.mjx-chartest {display: block; visibility: hidden; position: absolute; top: 0; line-height: normal; font-size: 500%}
+.mjx-chartest .mjx-char {display: inline}
+.mjx-chartest .mjx-box {padding-top: 1000px}
+.MJXc-processing {visibility: hidden; position: fixed; width: 0; height: 0; overflow: hidden}
+.MJXc-processed {display: none}
+.mjx-test {display: block; font-style: normal; font-weight: normal; font-size: 100%; font-size-adjust: none; text-indent: 0; text-transform: none; letter-spacing: normal; word-spacing: normal; overflow: hidden; height: 1px}
+.mjx-ex-box-test {position: absolute; width: 1px; height: 60ex}
+.mjx-line-box-test {display: table!important}
+.mjx-line-box-test span {display: table-cell!important; width: 10000em!important; min-width: 0; max-width: none; padding: 0; border: 0; margin: 0}
+#MathJax_CHTML_Tooltip {background-color: InfoBackground; color: InfoText; border: 1px solid black; box-shadow: 2px 2px 5px #AAAAAA; -webkit-box-shadow: 2px 2px 5px #AAAAAA; -moz-box-shadow: 2px 2px 5px #AAAAAA; -khtml-box-shadow: 2px 2px 5px #AAAAAA; padding: 3px 4px; z-index: 401; position: absolute; left: 0; top: 0; width: auto; height: auto; display: none}
+.mjx-chtml .mjx-noError {line-height: 1.2; vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+.MJXc-TeX-unknown-R {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: normal}
+.MJXc-TeX-unknown-I {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: normal}
+.MJXc-TeX-unknown-B {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: normal; font-weight: bold}
+.MJXc-TeX-unknown-BI {font-family: STIXGeneral,'Cambria Math','Arial Unicode MS',serif; font-style: italic; font-weight: bold}
+.MJXc-TeX-ams-R {font-family: MJXc-TeX-ams-R,MJXc-TeX-ams-Rw}
+.MJXc-TeX-cal-B {font-family: MJXc-TeX-cal-B,MJXc-TeX-cal-Bx,MJXc-TeX-cal-Bw}
+.MJXc-TeX-frak-R {font-family: MJXc-TeX-frak-R,MJXc-TeX-frak-Rw}
+.MJXc-TeX-frak-B {font-family: MJXc-TeX-frak-B,MJXc-TeX-frak-Bx,MJXc-TeX-frak-Bw}
+.MJXc-TeX-math-BI {font-family: MJXc-TeX-math-BI,MJXc-TeX-math-BIx,MJXc-TeX-math-BIw}
+.MJXc-TeX-sans-R {font-family: MJXc-TeX-sans-R,MJXc-TeX-sans-Rw}
+.MJXc-TeX-sans-B {font-family: MJXc-TeX-sans-B,MJXc-TeX-sans-Bx,MJXc-TeX-sans-Bw}
+.MJXc-TeX-sans-I {font-family: MJXc-TeX-sans-I,MJXc-TeX-sans-Ix,MJXc-TeX-sans-Iw}
+.MJXc-TeX-script-R {font-family: MJXc-TeX-script-R,MJXc-TeX-script-Rw}
+.MJXc-TeX-type-R {font-family: MJXc-TeX-type-R,MJXc-TeX-type-Rw}
+.MJXc-TeX-cal-R {font-family: MJXc-TeX-cal-R,MJXc-TeX-cal-Rw}
+.MJXc-TeX-main-B {font-family: MJXc-TeX-main-B,MJXc-TeX-main-Bx,MJXc-TeX-main-Bw}
+.MJXc-TeX-main-I {font-family: MJXc-TeX-main-I,MJXc-TeX-main-Ix,MJXc-TeX-main-Iw}
+.MJXc-TeX-main-R {font-family: MJXc-TeX-main-R,MJXc-TeX-main-Rw}
+.MJXc-TeX-math-I {font-family: MJXc-TeX-math-I,MJXc-TeX-math-Ix,MJXc-TeX-math-Iw}
+.MJXc-TeX-size1-R {font-family: MJXc-TeX-size1-R,MJXc-TeX-size1-Rw}
+.MJXc-TeX-size2-R {font-family: MJXc-TeX-size2-R,MJXc-TeX-size2-Rw}
+.MJXc-TeX-size3-R {font-family: MJXc-TeX-size3-R,MJXc-TeX-size3-Rw}
+.MJXc-TeX-size4-R {font-family: MJXc-TeX-size4-R,MJXc-TeX-size4-Rw}
+@font-face {font-family: MJXc-TeX-ams-R; src: local('MathJax_AMS'), local('MathJax_AMS-Regular')}
+@font-face {font-family: MJXc-TeX-ams-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_AMS-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_AMS-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_AMS-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-B; src: local('MathJax_Caligraphic Bold'), local('MathJax_Caligraphic-Bold')}
+@font-face {font-family: MJXc-TeX-cal-Bx; src: local('MathJax_Caligraphic'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-cal-Bw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Bold.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Bold.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-R; src: local('MathJax_Fraktur'), local('MathJax_Fraktur-Regular')}
+@font-face {font-family: MJXc-TeX-frak-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-frak-B; src: local('MathJax_Fraktur Bold'), local('MathJax_Fraktur-Bold')}
+@font-face {font-family: MJXc-TeX-frak-Bx; src: local('MathJax_Fraktur'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-frak-Bw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Fraktur-Bold.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Fraktur-Bold.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Fraktur-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-BI; src: local('MathJax_Math BoldItalic'), local('MathJax_Math-BoldItalic')}
+@font-face {font-family: MJXc-TeX-math-BIx; src: local('MathJax_Math'); font-weight: bold; font-style: italic}
+@font-face {font-family: MJXc-TeX-math-BIw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Math-BoldItalic.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-BoldItalic.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-BoldItalic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-R; src: local('MathJax_SansSerif'), local('MathJax_SansSerif-Regular')}
+@font-face {font-family: MJXc-TeX-sans-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-B; src: local('MathJax_SansSerif Bold'), local('MathJax_SansSerif-Bold')}
+@font-face {font-family: MJXc-TeX-sans-Bx; src: local('MathJax_SansSerif'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-sans-Bw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Bold.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Bold.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-sans-I; src: local('MathJax_SansSerif Italic'), local('MathJax_SansSerif-Italic')}
+@font-face {font-family: MJXc-TeX-sans-Ix; src: local('MathJax_SansSerif'); font-style: italic}
+@font-face {font-family: MJXc-TeX-sans-Iw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_SansSerif-Italic.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_SansSerif-Italic.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_SansSerif-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-script-R; src: local('MathJax_Script'), local('MathJax_Script-Regular')}
+@font-face {font-family: MJXc-TeX-script-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Script-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Script-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Script-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-type-R; src: local('MathJax_Typewriter'), local('MathJax_Typewriter-Regular')}
+@font-face {font-family: MJXc-TeX-type-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Typewriter-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Typewriter-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Typewriter-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-cal-R; src: local('MathJax_Caligraphic'), local('MathJax_Caligraphic-Regular')}
+@font-face {font-family: MJXc-TeX-cal-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Caligraphic-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Caligraphic-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Caligraphic-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-B; src: local('MathJax_Main Bold'), local('MathJax_Main-Bold')}
+@font-face {font-family: MJXc-TeX-main-Bx; src: local('MathJax_Main'); font-weight: bold}
+@font-face {font-family: MJXc-TeX-main-Bw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Bold.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Bold.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Bold.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-I; src: local('MathJax_Main Italic'), local('MathJax_Main-Italic')}
+@font-face {font-family: MJXc-TeX-main-Ix; src: local('MathJax_Main'); font-style: italic}
+@font-face {font-family: MJXc-TeX-main-Iw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Italic.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Italic.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-main-R; src: local('MathJax_Main'), local('MathJax_Main-Regular')}
+@font-face {font-family: MJXc-TeX-main-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Main-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Main-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Main-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-math-I; src: local('MathJax_Math Italic'), local('MathJax_Math-Italic')}
+@font-face {font-family: MJXc-TeX-math-Ix; src: local('MathJax_Math'); font-style: italic}
+@font-face {font-family: MJXc-TeX-math-Iw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Math-Italic.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Math-Italic.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Math-Italic.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size1-R; src: local('MathJax_Size1'), local('MathJax_Size1-Regular')}
+@font-face {font-family: MJXc-TeX-size1-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size1-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size1-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size1-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size2-R; src: local('MathJax_Size2'), local('MathJax_Size2-Regular')}
+@font-face {font-family: MJXc-TeX-size2-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size2-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size2-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size2-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size3-R; src: local('MathJax_Size3'), local('MathJax_Size3-Regular')}
+@font-face {font-family: MJXc-TeX-size3-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size3-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size3-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size3-Regular.otf') format('opentype')}
+@font-face {font-family: MJXc-TeX-size4-R; src: local('MathJax_Size4'), local('MathJax_Size4-Regular')}
+@font-face {font-family: MJXc-TeX-size4-Rw; src /*1*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/eot/MathJax_Size4-Regular.eot'); src /*2*/: url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/woff/MathJax_Size4-Regular.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/fonts/HTML-CSS/TeX/otf/MathJax_Size4-Regular.otf') format('opentype')}
+</style></head>
+
+
+
+<body class="layout-two-column-right post" data-gr-c-s-loaded="true"><div id="MathJax_Message" style="display: none;"></div>
+	
+	<div id="container" class="container">
+		<div id="container-inner" class="pkg">
+			
+                <div class="row">
+     
+
+
+<a id="home"></a>
+   
+
+<!-- banner -->
+<div id="banner">
+	<div id="banner-inner" class="pkg">
+		
+		<h1 id="banner-header"><a href="https://blog.revolutionanalytics.com/" accesskey="1">Revolutions</a></h1>
+		<h2 id="banner-description">
+			Milestones in AI, Machine Learning, Data Science, and visualization with R and Python since 2008
+		</h2>
+	</div>
+</div>
+
+
+
+
+
+
+			<div id="pagebody">
+
+
+				<div id="pagebody-inner" class="pkg">
+                                        <div id="alpha">
+						<div id="alpha-inner" class="pkg">
+							<!-- the plain version removes the extra jquery -->
+<!-- content nav -->
+<p class="content-nav">
+	<a class="content-nav-prev" href="https://blog.revolutionanalytics.com/2017/07/revisiting-user2017.html">« Revisiting the useR!2017 conference: Recordings now available</a> |
+	<a class="content-nav-main" href="https://blog.revolutionanalytics.com/">Main</a>
+	| <a class="content-nav-next" href="https://blog.revolutionanalytics.com/2017/07/secret-package.html">Securely store API keys in R scripts with the "secret" package »</a>
+</p>
+<script type="text/javascript">
+   $(function(){
+       var query = window.location.search.substring(1);
+       if( query == "pintix=1" ) {
+          var e=document.createElement('script');e.setAttribute('type','text/javascript');e.setAttribute('charset','UTF-8');e.setAttribute('src','https://static.typepad.com/.shared//js/pinmarklet.js?r='+Math.random()*99999999);document.body.appendChild(e);
+       }
+   });
+</script>
+<!-- entry -->
+
+	<h2 class="date-header">July 18, 2017</h2>
+
+
+<div class="entry-author-guest_blogger entry-type-post entry" id="entry-6a010534b1db25970b01bb09abc6a1970d">
+   <div class="entry-inner">
+			<h3 class="entry-header">Neural Networks from Scratch, in R</h3>
+	
+
+
+
+	<div class="entry-content">
+		<div class="entry-body">
+			<p><em>By Ilia Karmanov, Data Scientist at Microsoft </em></p>
+
+<p>This post is for those of you with a statistics/econometrics background but not necessarily a machine-learning one and for those of you who want some guidance in building a neural-network from scratch in R to better understand how everything fits (and how it doesn't).</p>
+
+<p>Andrej Karpathy <a href="https://medium.com/@karpathy/yes-you-should-understand-backprop-e2f06eab496b">wrote</a> that when CS231n (Deep Learning at Stanford) was offered:</p>
+
+<blockquote>
+  <p>"we intentionally designed the programming assignments to include explicit calculations involved in backpropagation on the lowest level. The students had to implement the forward and the backward pass of each layer in raw numpy. Inevitably, some students complained on the class message boards".</p>
+</blockquote>
+
+<p>Why bother with backpropagation when all frameworks do it for you automatically and there are more interesting deep-learning problems to consider?</p>
+
+<p>Nowadays we can literally train a full neural-network (on a GPU) in 5 lines.</p>
+
+<pre>import keras
+model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dense(10, activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer=RMSprop())
+model.fit()
+</pre>
+
+<p>Karpathy, abstracts away from the "intellectual curiosity" or "you might want to improve on the core algorithm later" argument. His argument is that the calculations are a <a href="https://en.wikipedia.org/wiki/Leaky_abstraction">leaky abstraction</a>:</p>
+
+<blockquote>
+  <p>“it is easy to fall into the trap of abstracting away the learning process — believing that you can simply stack arbitrary layers together and backprop will 'magically make them work' on your data”</p>
+</blockquote>
+
+<p>Hence, my motivation for this post is two-fold:</p>
+
+		</div>
+					<a id="more"></a>
+			<div class="entry-more">
+				<ol>
+<li><p>Understanding (by writing from scratch) the leaky abstractions behind neural-networks dramatically shifted my focus to elements whose importance I initially overlooked. If my model is not learning I have a better idea of what to address rather than blindly wasting time switching optimisers (or even frameworks).</p></li>
+<li><p>A deep-neural-network (DNN), once taken apart into lego blocks, is no longer a black-box that is inaccessible to other disciplines outside of AI. It's a combination of many topics that are very familiar to most people with a basic knowledge of statistics. I believe they need to cover very little (just the glue that holds the blocks together) to get an insight into a whole new realm.</p></li>
+</ol>
+
+<p>Starting from a linear regression we will work through the maths and the code all the way to a deep-neural-network (DNN) in the accompanying R-notebooks. Hopefully to show that very little is actually new information.</p>
+
+<p><img src="./Neural Networks from Scratch, in R (Revolutions)_files/blog_summ.png" alt="Summary"></p>
+
+<h2>Step 1 - Linear Regression (<a href="https://github.com/ilkarman/DemoNeuralNet/blob/master/01_LinearRegression.ipynb">See Notebook</a>)</h2>
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01b8d2961da1970c-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01b8d2961da1970c img-responsive" alt="Step1" title="Step1" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01b8d2961da1970c-500wi.jpg"></a><br></p>
+
+<p>Implementing the closed-form solution for the Ordinary Least Squares estimator in R requires just a few lines:</p>
+
+<pre># Matrix of explanatory variables
+X &lt;- as.matrix(X)
+# Add column of 1s for intercept coefficient
+intcpt &lt;- rep(1, length(y))
+# Combine predictors with intercept
+X &lt;- cbind(intcpt, X)
+# OLS (closed-form solution)
+beta_hat &lt;- solve(t(X) %*% X) %*% t(X) %*% y
+</pre>
+
+<p>The vector of values in the variable <code>beta_hat</code> define our "machine-learning model". A linear regression is used to predict a continuous variable (e.g. how many minutes will this plane be delayed by). In the case of predicting a category (e.g. will this plane be delayed - yes/no) we want our prediction to fall between 0 and 1 so that we can interpret it as the probability of observing the respective category (given the data). </p>
+
+<p>When we have just two mutually-exclusive outcomes we would use a binomial logistic regression. With more than two outcomes (or "classes"), which are mutually-exclusive (e.g. this plane will be delayed by less than 5 minutes, 5-10 minutes, or more than 10 minutes), we would use a multinomial logistic regression (or "softmax"). In the case of many (n) classes that are not mutually-exclusive (e.g. this post references "R" and "neural-networks" and "statistics"), we can fit n-binomial logistic regressions.</p>
+
+<p>An alternative approach to the closed-form solution we found above is to use an iterative method, called <a href="https://en.wikipedia.org/wiki/Gradient_descent">Gradient Descent</a> (GD). The procedure may look like so:</p>
+
+<ul>
+<li>Start with a random guess for the weights</li>
+<li>Plug guess into loss function</li>
+<li>Move guess in the opposite direction of the gradient at that point by a small amount (something we call the `learning-rate')</li>
+<li>Repeat above for N steps</li>
+</ul>
+
+<p>GD only uses the <a href="https://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant">Jacobian</a> matrix (not the <a href="https://en.wikipedia.org/wiki/Hessian_matrix">Hessian</a>), however we know that when we have a convex loss, all local minima are global minima and thus GD is guaranteed to converge to the global minimum. </p>
+
+<p>The loss-function used for a linear-regression is the Mean Squared Error:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-1-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;msup&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-1" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-2" class="mjx-mrow"><span id="MJXc-Node-3" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span><span id="MJXc-Node-4" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-5" class="mjx-mfrac MJXc-space3"><span class="mjx-box MJXc-stacked" style="width: 1.3em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 1.3em; top: -1.368em;"><span id="MJXc-Node-6" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 1.3em; bottom: -0.767em;"><span id="MJXc-Node-7" class="mjx-mrow"><span id="MJXc-Node-8" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span><span id="MJXc-Node-9" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 1.3em;"></span></span><span class="mjx-vsize" style="height: 2.135em; vertical-align: -0.767em;"></span></span><span id="MJXc-Node-10" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-11" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-12" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-13" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-14" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-15" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-16" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-17" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-18" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-19" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span><span id="MJXc-Node-20" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-21" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-22" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-23" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-24" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.584em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-25" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>C</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><munder><mo>∑</mo><mi>x</mi></munder><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><msup><mo stretchy="false">)</mo><mn>2</mn></msup></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-1">\begin{equation*} 
+   C = \frac{1}{2n}\sum_x(y(x) - a(x))^2
+\end{equation*}</script></p>
+
+<p>To use GD we only need to find the partial derivative of this with respect to <code>beta_hat</code> (the 'delta'/gradient).</p>
+
+<p>This can be implemented in R, like so:</p>
+
+<pre># Start with a random guess
+beta_hat &lt;- matrix(0.1, nrow=ncol(X_mat))
+  # Repeat below for N-iterations
+  for (j in 1:N)
+  {
+    # Calculate the cost/error (y_guess - y_truth)
+    residual &lt;- (X_mat %*% beta_hat) - y
+    # Calculate the gradient at that point
+    delta &lt;- (t(X_mat) %*% residual) * (1/nrow(X_mat))
+    # Move guess in opposite direction of gradient
+    beta_hat &lt;- beta_hat - (lr*delta)
+  }
+</pre>
+
+<p>Running this for 200 iterations gets us to same gradient and coefficient as the closed-form solution. Aside from being a stepping stone to a neural-network (where we use GD), this iterative method can be useful in practice when the the closed-form solution cannot be calculated because the matrix is too big to invert (to fit into memory).</p>
+
+<h2>Step 2 - Logistic Regression (<a href="https://github.com/ilkarman/DemoNeuralNet/blob/master/02_LogisticRegression.ipynb">See Notebook</a>)</h2>
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcaaa970b-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01b7c90bcaaa970b img-responsive" alt="Step2" title="Step2" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01b7c90bcaaa970b-500wi.jpg"></a><br></p>
+
+<p>A logistic regression is a linear regression for binary classification problems. The two main differences to a standard linear regression are:</p>
+
+<ol>
+<li>We use an 'activation'/link function called the logistic-sigmoid to squash the output to a probability bounded by 0 and 1</li>
+<li>Instead of minimising the quadratic loss we minimise the negative log-likelihood of the Bernoulli distribution</li>
+</ol>
+
+<p>Everything else remains the same.</p>
+
+<p>We can calcuate our activation function like so:</p>
+
+<pre>sigmoid &lt;- function(z){1.0/(1.0+exp(-z))}
+</pre>
+
+<p>We can create our log-likelihood function in R:</p>
+
+<pre>log_likelihood &lt;- function(X_mat, y, beta_hat)
+{
+  scores &lt;- X_mat %*% beta_hat
+  ll &lt;- (y * scores) - log(1+exp(scores))
+  sum(ll)
+}
+</pre>
+
+<p>This loss function (the logistic loss or the log-loss) is also called the cross-entropy loss. The cross-entropy loss is basically a measure of 'surprise' and will be the foundation for all the following models, so it is worth examining a bit more.</p>
+
+<p>If we simply constructed the least-squares loss like before, because we now have a non-linear activation function (the sigmoid), the loss will no longer be convex which will make optimisation hard.</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-2-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;msup&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-26" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-27" class="mjx-mrow"><span id="MJXc-Node-28" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span><span id="MJXc-Node-29" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-30" class="mjx-mfrac MJXc-space3"><span class="mjx-box MJXc-stacked" style="width: 1.3em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 1.3em; top: -1.368em;"><span id="MJXc-Node-31" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 1.3em; bottom: -0.767em;"><span id="MJXc-Node-32" class="mjx-mrow"><span id="MJXc-Node-33" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span><span id="MJXc-Node-34" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 1.3em;"></span></span><span class="mjx-vsize" style="height: 2.135em; vertical-align: -0.767em;"></span></span><span id="MJXc-Node-35" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-36" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-37" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-38" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-39" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-40" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-41" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-42" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-43" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-44" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span><span id="MJXc-Node-45" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-46" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-47" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-48" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-49" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.584em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-50" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>C</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><munder><mo>∑</mo><mi>x</mi></munder><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><msup><mo stretchy="false">)</mo><mn>2</mn></msup></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-2">\begin{equation*} 
+   C = \frac{1}{2n}\sum_x(y(x) - a(x))^2
+\end{equation*}</script></p>
+
+<p>We could construct our own loss function for the two classes. When <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-3-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-51" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-52" class="mjx-mrow"><span id="MJXc-Node-53" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-54" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-55" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi><mo>=</mo><mn>1</mn></math></span></span><script type="math/tex" id="MathJax-Element-3">y=1</script>, we want our loss function to be very high if our prediction is close to 0, and very low when it is close to 1. When <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-4-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-56" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-57" class="mjx-mrow"><span id="MJXc-Node-58" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-59" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-60" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">0</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi><mo>=</mo><mn>0</mn></math></span></span><script type="math/tex" id="MathJax-Element-4">y=0</script>, we want our loss function to be very high if our prediction is close to 1, and very low when it is close to 0. This leads us to the following loss function:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-5-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;ln&lt;/mi&gt;&lt;mo&gt;&amp;#x2061;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;ln&lt;/mi&gt;&lt;mo&gt;&amp;#x2061;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-61" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-62" class="mjx-mrow"><span id="MJXc-Node-63" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span><span id="MJXc-Node-64" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-65" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-66" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 0.8em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 0.8em; top: -1.368em;"><span id="MJXc-Node-67" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 0.8em; bottom: -0.722em;"><span id="MJXc-Node-68" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 0.8em;"></span></span><span class="mjx-vsize" style="height: 2.089em; vertical-align: -0.722em;"></span></span><span id="MJXc-Node-69" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-70" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-71" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-72" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-73" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-74" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-75" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-76" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">ln</span></span><span id="MJXc-Node-77" class="mjx-mo"><span class="mjx-char"></span></span><span id="MJXc-Node-78" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-79" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span><span id="MJXc-Node-80" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-81" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-82" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-83" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-84" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">+</span></span><span id="MJXc-Node-85" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-86" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-87" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-88" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-89" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-90" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-91" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-92" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-93" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">ln</span></span><span id="MJXc-Node-94" class="mjx-mo"><span class="mjx-char"></span></span><span id="MJXc-Node-95" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-96" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-97" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-98" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span><span id="MJXc-Node-99" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-100" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-101" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-102" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>C</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>x</mi></munder><mi>y</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi>ln</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mi>ln</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-5">\begin{equation*} 
+   C = -\frac{1}{n}\sum_xy(x)\ln(a(x)) + (1 - y(x))\ln(1-a(x))
+\end{equation*}</script></p>
+
+<p>The delta for this loss function is pretty much the same as the one we had earlier for a linear-regression. The only difference is that we apply our sigmoid function to the prediction. This means that the GD function for a logistic regression will also look very similar:</p>
+
+<pre>logistic_reg &lt;- function(X, y, epochs, lr)
+{
+  X_mat &lt;- cbind(1, X)
+  beta_hat &lt;- matrix(1, nrow=ncol(X_mat))
+  for (j in 1:epochs)
+  {
+    # For a linear regression this was:
+    # 1*(X_mat %*% beta_hat) - y
+    residual &lt;- sigmoid(X_mat %*% beta_hat) - y
+    # Update weights with gradient descent
+    delta &lt;- t(X_mat) %*% as.matrix(residual, ncol=nrow(X_mat))*(1/nrow(X_mat))
+    beta_hat &lt;- beta_hat - (lr*delta)
+  }
+  # Print log-likliehood
+  print(log_likelihood(X_mat, y, beta_hat))
+  # Return
+  beta_hat
+}
+</pre>
+
+<h2>Step 3 - Softmax Regression (No Notebook)</h2>
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af042b970d-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01bb09af042b970d img-responsive" alt="Step3" title="Step3" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01bb09af042b970d-500wi.jpg"></a><br></p>
+
+<p>A generalisation of the logistic regression is the multinomial logistic regression (also called 'softmax'), which is used when there are more than two classes to predict. I haven't created this example in R, because the neural-network in the next step can reduce to something similar, however for completeness I wanted to highlight the main differences if you wanted to create it.</p>
+
+<p>First, instead of using the sigmoid function to squash our (one) value between 0 and 1:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-6-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;&amp;#x03C3;&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;/mrow&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-103" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-104" class="mjx-mrow"><span id="MJXc-Node-105" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.001em;">σ</span></span><span id="MJXc-Node-106" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-107" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.003em;">z</span></span><span id="MJXc-Node-108" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-109" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-110" class="mjx-mfrac MJXc-space3"><span class="mjx-box MJXc-stacked" style="width: 3.305em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 3.305em; top: -1.368em;"><span id="MJXc-Node-111" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 3.305em; bottom: -0.866em;"><span id="MJXc-Node-112" class="mjx-mrow"><span id="MJXc-Node-113" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-114" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">+</span></span><span id="MJXc-Node-115" class="mjx-msubsup MJXc-space2"><span class="mjx-base"><span id="MJXc-Node-116" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">e</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.409em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-117" class="mjx-texatom" style=""><span id="MJXc-Node-118" class="mjx-mrow"><span id="MJXc-Node-119" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-120" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.003em;">z</span></span></span></span></span></span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 3.305em;"></span></span><span class="mjx-vsize" style="height: 2.234em; vertical-align: -0.866em;"></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>σ</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow class="MJX-TeXAtom-ORD"><mo>−</mo><mi>z</mi></mrow></msup></mrow></mfrac></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-6">\begin{equation*} 
+\sigma(z)=\frac{1}{1+e^{-z}}
+\end{equation*}</script></p>
+
+<p>We use the softmax function to squash the sum of our <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-7-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-121" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-122" class="mjx-mrow"><span id="MJXc-Node-123" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></span></span><script type="math/tex" id="MathJax-Element-7">n</script> values (for <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-8-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-124" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-125" class="mjx-mrow"><span id="MJXc-Node-126" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math></span></span><script type="math/tex" id="MathJax-Element-8">n</script> classes) to 1:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-9-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;&amp;#x03D5;&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;msup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;msub&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/msup&gt;&lt;mrow&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/munder&gt;&lt;msup&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;msub&gt;&lt;mi&gt;z&lt;/mi&gt;&lt;mi&gt;k&lt;/mi&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-127" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-128" class="mjx-mrow"><span id="MJXc-Node-129" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.52em;">ϕ</span></span><span id="MJXc-Node-130" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-131" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.003em;">z</span></span><span id="MJXc-Node-132" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-133" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-134" class="mjx-mfrac MJXc-space3"><span class="mjx-box MJXc-stacked" style="width: 2.993em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 2.993em; top: -1.407em;"><span id="MJXc-Node-135" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-136" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">e</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.566em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-137" class="mjx-texatom" style=""><span id="MJXc-Node-138" class="mjx-mrow"><span id="MJXc-Node-139" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.003em;"><span id="MJXc-Node-140" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.003em;">z</span></span></span><span class="mjx-sub" style="font-size: 83.4%; vertical-align: -0.262em; padding-right: 0.06em;"><span id="MJXc-Node-141" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span></span></span></span></span></span><span class="mjx-denominator" style="width: 2.993em; bottom: -1.151em;"><span id="MJXc-Node-142" class="mjx-mrow"><span id="MJXc-Node-143" class="mjx-munderover"><span class="mjx-base"><span id="MJXc-Node-144" class="mjx-mo"><span class="mjx-char MJXc-TeX-size1-R" style="padding-top: 0.52em; padding-bottom: 0.52em;">∑</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.439em; padding-right: 0.071em;"><span id="MJXc-Node-145" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.299em;">k</span></span></span></span><span id="MJXc-Node-146" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-147" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">e</span></span></span><span class="mjx-sup" style="font-size: 70.7%; vertical-align: 0.433em; padding-left: 0px; padding-right: 0.071em;"><span id="MJXc-Node-148" class="mjx-texatom" style=""><span id="MJXc-Node-149" class="mjx-mrow"><span id="MJXc-Node-150" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.003em;"><span id="MJXc-Node-151" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em; padding-right: 0.003em;">z</span></span></span><span class="mjx-sub" style="font-size: 83.4%; vertical-align: -0.295em; padding-right: 0.06em;"><span id="MJXc-Node-152" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.299em;">k</span></span></span></span></span></span></span></span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 2.993em;"></span></span><span class="mjx-vsize" style="height: 2.558em; vertical-align: -1.151em;"></span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>ϕ</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><msup><mi>e</mi><mrow class="MJX-TeXAtom-ORD"><msub><mi>z</mi><mi>j</mi></msub></mrow></msup><mrow><munder><mo>∑</mo><mi>k</mi></munder><msup><mi>e</mi><mrow class="MJX-TeXAtom-ORD"><msub><mi>z</mi><mi>k</mi></msub></mrow></msup></mrow></mfrac></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-9">\begin{equation*} 
+\phi(z)=\frac{e^{z_j}}{\sum_ke^{z_k}}
+\end{equation*}</script></p>
+
+<p>This means the value supplied for each class can be interpreted as the probability of that class, given the evidence. This also means that when we see the target class and increase the weights to increase the probability of observing it, the probability of the other classes will fall. The implicit assumption is that our classes are mutually exclusive.</p>
+
+<p>Second, we use a more general version of the cross-entropy loss function:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-10-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/munder&gt;&lt;msub&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/msub&gt;&lt;mi&gt;ln&lt;/mi&gt;&lt;mo&gt;&amp;#x2061;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/msub&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-153" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-154" class="mjx-mrow"><span id="MJXc-Node-155" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span><span id="MJXc-Node-156" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-157" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-158" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 0.8em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 0.8em; top: -1.368em;"><span id="MJXc-Node-159" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 0.8em; bottom: -0.722em;"><span id="MJXc-Node-160" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 0.8em;"></span></span><span class="mjx-vsize" style="height: 2.089em; vertical-align: -0.722em;"></span></span><span id="MJXc-Node-161" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-162" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-163" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-164" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-165" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.815em;"><span id="MJXc-Node-166" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span></span></span><span id="MJXc-Node-167" class="mjx-msubsup MJXc-space1"><span class="mjx-base" style="margin-right: -0.006em;"><span id="MJXc-Node-168" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-169" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span><span id="MJXc-Node-170" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">ln</span></span><span id="MJXc-Node-171" class="mjx-mo"><span class="mjx-char"></span></span><span id="MJXc-Node-172" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-173" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-174" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-175" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span><span id="MJXc-Node-176" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>C</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>x</mi></munder><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>y</mi><mi>j</mi></msub><mi>ln</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>a</mi><mi>j</mi></msub><mo stretchy="false">)</mo></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-10">\begin{equation*} 
+   C = -\frac{1}{n}\sum_x\sum_j y_j\ln(a_j)
+\end{equation*}</script></p>
+
+<p>To see why, remember that for binary classifications (previous example) we had two classes: <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-11-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-177" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-178" class="mjx-mrow"><span id="MJXc-Node-179" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span><span id="MJXc-Node-180" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-181" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>j</mi><mo>=</mo><mn>2</mn></math></span></span><script type="math/tex" id="MathJax-Element-11">j=2</script>, under the condition that the categories are mutually-exclusive <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-12-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/munder&gt;&lt;msub&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/msub&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-182" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-183" class="mjx-mrow"><span id="MJXc-Node-184" class="mjx-munderover"><span class="mjx-base"><span id="MJXc-Node-185" class="mjx-mo"><span class="mjx-char MJXc-TeX-size1-R" style="padding-top: 0.52em; padding-bottom: 0.52em;">∑</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.439em; padding-right: 0.071em;"><span id="MJXc-Node-186" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span><span id="MJXc-Node-187" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-188" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-189" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span><span id="MJXc-Node-190" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-191" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></math></span></span><script type="math/tex" id="MathJax-Element-12">\sum_ja_j=1</script> and that <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-13-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-192" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-193" class="mjx-mrow"><span id="MJXc-Node-194" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi></math></span></span><script type="math/tex" id="MathJax-Element-13">y</script> is <a href="https://www.quora.com/What-is-one-hot-encoding-and-when-is-it-used-in-data-science">one-hot</a> so that <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-14-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-195" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-196" class="mjx-mrow"><span id="MJXc-Node-197" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-198" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-199" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">+</span></span><span id="MJXc-Node-200" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-201" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span><span id="MJXc-Node-202" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-203" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>y</mi><mn>1</mn><mo>+</mo><mi>y</mi><mn>2</mn><mo>=</mo><mn>1</mn></math></span></span><script type="math/tex" id="MathJax-Element-14">y1+y2=1</script>, we can re-write the general formula as:</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-15-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;msub&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;mi&gt;ln&lt;/mi&gt;&lt;mo&gt;&amp;#x2061;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mi&gt;ln&lt;/mi&gt;&lt;mo&gt;&amp;#x2061;&lt;/mo&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;msub&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-204" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-205" class="mjx-mrow"><span id="MJXc-Node-206" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span><span id="MJXc-Node-207" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-208" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-209" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 0.8em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 0.8em; top: -1.368em;"><span id="MJXc-Node-210" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 0.8em; bottom: -0.722em;"><span id="MJXc-Node-211" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 0.8em;"></span></span><span class="mjx-vsize" style="height: 2.089em; vertical-align: -0.722em;"></span></span><span id="MJXc-Node-212" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-213" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-214" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-215" class="mjx-msubsup MJXc-space1"><span class="mjx-base" style="margin-right: -0.006em;"><span id="MJXc-Node-216" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-217" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span id="MJXc-Node-218" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">ln</span></span><span id="MJXc-Node-219" class="mjx-mo"><span class="mjx-char"></span></span><span id="MJXc-Node-220" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-221" class="mjx-msubsup"><span class="mjx-base"><span id="MJXc-Node-222" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-223" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span id="MJXc-Node-224" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-225" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">+</span></span><span id="MJXc-Node-226" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-227" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-228" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-229" class="mjx-msubsup MJXc-space2"><span class="mjx-base" style="margin-right: -0.006em;"><span id="MJXc-Node-230" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-231" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span id="MJXc-Node-232" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-233" class="mjx-mi MJXc-space1"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">ln</span></span><span id="MJXc-Node-234" class="mjx-mo"><span class="mjx-char"></span></span><span id="MJXc-Node-235" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-236" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span><span id="MJXc-Node-237" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-238" class="mjx-msubsup MJXc-space2"><span class="mjx-base"><span id="MJXc-Node-239" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-240" class="mjx-mn" style=""><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span></span><span id="MJXc-Node-241" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mi>C</mi><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>x</mi></munder><msub><mi>y</mi><mn>1</mn></msub><mi>ln</mi><mo>⁡</mo><mo stretchy="false">(</mo><msub><mi>a</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>y</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mi>ln</mi><mo>⁡</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>a</mi><mn>1</mn></msub><mo stretchy="false">)</mo></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-15">\begin{equation*} 
+   C = -\frac{1}{n}\sum_xy_1\ln(a_1) + (1 - y_1)\ln(1-a_1)
+\end{equation*}</script></p>
+
+<p>Which is the same equation we first started with. However, now we relax the constraint that <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-16-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-242" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-243" class="mjx-mrow"><span id="MJXc-Node-244" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span><span id="MJXc-Node-245" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-246" class="mjx-mn MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">2</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>j</mi><mo>=</mo><mn>2</mn></math></span></span><script type="math/tex" id="MathJax-Element-16">j=2</script>. It can be shown that the cross-entropy loss here has the same gradient as for the case of the binary/two-class cross-entropy on logistic outputs.</p>
+
+<p><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="mjx-chtml MJXc-display" style="text-align: center;"><span id="MathJax-Element-17-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot; display=&quot;block&quot;&gt;&lt;mfrac&gt;&lt;mrow&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x2202;&lt;/mi&gt;&lt;mi&gt;C&lt;/mi&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mi mathvariant=&quot;normal&quot;&gt;&amp;#x2202;&lt;/mi&gt;&lt;msub&gt;&lt;mi&gt;&amp;#x03B2;&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;/msub&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mfrac&gt;&lt;munder&gt;&lt;mo&gt;&amp;#x2211;&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;/munder&gt;&lt;msub&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;/msub&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;(&lt;/mo&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mi&gt;y&lt;/mi&gt;&lt;mo stretchy=&quot;false&quot;&gt;)&lt;/mo&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; text-align: center; position: relative;"><span id="MJXc-Node-247" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-248" class="mjx-mrow"><span id="MJXc-Node-249" class="mjx-mfrac"><span class="mjx-box MJXc-stacked" style="width: 1.611em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 1.611em; top: -1.417em;"><span id="MJXc-Node-250" class="mjx-mrow"><span id="MJXc-Node-251" class="mjx-mi"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.372em; padding-right: 0.035em;">∂</span></span><span id="MJXc-Node-252" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.299em; padding-right: 0.045em;">C</span></span></span></span><span class="mjx-denominator" style="width: 1.611em; bottom: -0.999em;"><span id="MJXc-Node-253" class="mjx-mrow"><span id="MJXc-Node-254" class="mjx-mi"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.372em; padding-right: 0.035em;">∂</span></span><span id="MJXc-Node-255" class="mjx-msubsup"><span class="mjx-base" style="margin-right: -0.007em;"><span id="MJXc-Node-256" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.52em; padding-bottom: 0.446em; padding-right: 0.007em;">β</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-257" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.299em;">i</span></span></span></span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 1.611em;"></span></span><span class="mjx-vsize" style="height: 2.416em; vertical-align: -0.999em;"></span></span><span id="MJXc-Node-258" class="mjx-mo MJXc-space3"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.077em; padding-bottom: 0.299em;">=</span></span><span id="MJXc-Node-259" class="mjx-mfrac MJXc-space3"><span class="mjx-box MJXc-stacked" style="width: 0.8em; padding: 0px 0.12em;"><span class="mjx-numerator" style="width: 0.8em; top: -1.368em;"><span id="MJXc-Node-260" class="mjx-mn"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.372em; padding-bottom: 0.372em;">1</span></span></span><span class="mjx-denominator" style="width: 0.8em; bottom: -0.722em;"><span id="MJXc-Node-261" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">n</span></span></span><span class="mjx-line" style="border-bottom: 1.3px solid; top: -0.296em; width: 0.8em;"></span></span><span class="mjx-vsize" style="height: 2.089em; vertical-align: -0.722em;"></span></span><span id="MJXc-Node-262" class="mjx-munderover MJXc-space1"><span class="mjx-itable"><span class="mjx-row"><span class="mjx-cell"><span class="mjx-op"><span id="MJXc-Node-263" class="mjx-mo"><span class="mjx-char MJXc-TeX-size2-R" style="padding-top: 0.741em; padding-bottom: 0.741em;">∑</span></span></span></span></span><span class="mjx-row"><span class="mjx-under" style="font-size: 70.7%; padding-top: 0.236em; padding-bottom: 0.141em; padding-left: 0.735em;"><span id="MJXc-Node-264" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span></span></span></span><span id="MJXc-Node-265" class="mjx-msubsup MJXc-space1"><span class="mjx-base"><span id="MJXc-Node-266" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span></span><span class="mjx-sub" style="font-size: 70.7%; vertical-align: -0.212em; padding-right: 0.071em;"><span id="MJXc-Node-267" class="mjx-mi" style=""><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.299em;">i</span></span></span></span><span id="MJXc-Node-268" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-269" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">a</span></span><span id="MJXc-Node-270" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">(</span></span><span id="MJXc-Node-271" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.299em;">x</span></span><span id="MJXc-Node-272" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span><span id="MJXc-Node-273" class="mjx-mo MJXc-space2"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.299em; padding-bottom: 0.446em;">−</span></span><span id="MJXc-Node-274" class="mjx-mi MJXc-space2"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.225em; padding-bottom: 0.52em; padding-right: 0.006em;">y</span></span><span id="MJXc-Node-275" class="mjx-mo"><span class="mjx-char MJXc-TeX-main-R" style="padding-top: 0.446em; padding-bottom: 0.594em;">)</span></span></span></span><span class="MJX_Assistive_MathML MJX_Assistive_MathML_Block" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>C</mi></mrow><mrow><mi mathvariant="normal">∂</mi><msub><mi>β</mi><mi>i</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>x</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>y</mi><mo stretchy="false">)</mo></math></span></span></span><script type="math/tex; mode=display" id="MathJax-Element-17">\begin{equation*} 
+    \frac{\partial C}{\partial \beta_i} = \frac{1}{n}\sum_xx_i(a(x) - y)
+\end{equation*}</script></p>
+
+<p>However, although the gradient has the same formula it will be different because the activation here takes on a different value (softmax instead of logistic-sigmoid). </p>
+
+<p>In most deep-learning frameworks you have the choice of 'binary-crossentropy' or 'categorical-crossentropy' loss. Depending on whether your last layer contains sigmoid or softmax activation you would want to choose binary or categorical cross-entropy (respectively). The training of the network should not be affected, since the gradient is the same, however the reported loss (for evaluation) would be wrong if these are mixed up.  </p>
+
+<p>The motivation to go through softmax is that most neural-networks will use a softmax layer as the final/'read-out' layer, with a multinomial/categorical cross-entropy loss instead of using sigmoids with a binary cross-entropy loss — when the categories are mutually exclusive. Although multiple sigmoids for multiple classes can also be used (and will be used in the next example), this is generally only used for the case of non-mutually-exclusive labels (i.e. we can have multiple labels). With a softmax output, since the sum of the outputs is constrained to equal 1, we have the advantage of interpreting the outputs as class probabilities.</p>
+
+<h2>Step 4 - Neural Network (<a href="https://github.com/ilkarman/DemoNeuralNet/blob/master/03_NeuralNet.ipynb">See Notebook</a>)</h2>
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01b7c90bcbd2970b-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01b7c90bcbd2970b img-responsive" alt="Step4" title="Step4" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01b7c90bcbd2970b-500wi.jpg"></a><br></p>
+
+<p>A neural network can be thought of as a series of logistic regressions stacked on top of each other. This means we could say that a logistic regression is a neural-network (with sigmoid activations) with no hidden-layer.</p>
+
+<p>This hidden-layer lets a neural-network generate non-linearities and leads to the <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">Universal approximation theorem</a>, which states that a network with just one hidden layer can approximate any linear or non-linear function. The number of hidden-layers can go into the hundreds. </p>
+
+<p>It can be useful to think of a neural-network as a combination of two things: 1) many logistic regressions stacked on top of each other that are 'feature-generators' and 2) one read-out-layer which is just a softmax regression. The recent successes in deep-learning can arguable be attributed to the 'feature-generators'. For example; previously with computer vision, we had to painfully state that we wanted to find triangles, circles, colours, and in what combination (similar to how economists decide which interaction-terms they need in a linear regression). Now, the hidden-layers are basically an optimisation to decide which features (which 'interaction-terms') to extract. A lot of deep-learning (transfer learning) is actually done by generating features using a trained-model with the head (read-out layer) cut-off, and then training a logistic regression (or boosted decision-trees) using those features as inputs.</p>
+
+<p>The hidden-layer also means that our loss function is not convex in parameters and we can't roll down a smooth-hill to get to the bottom. Instead of using Gradient Descent (which we did for the case of a logistic-regression) we will use Stochastic Gradient Descent (SGD), which basically shuffles the observations (random/stochastic) and updates the gradient after each mini-batch (generally much less than total number of observations) has been propagated through the network. There are many alternatives to SGD that Sebastian Ruder does a great job of summarising <a href="http://sebastianruder.com/optimizing-gradient-descent/">here</a>. I think this is a fascinating topic to go through, but outside the scope of this blog-post. Briefly, however, the vast majority of the optimisation methods are first-order (including SGD, Adam, RMSprop, and Adagrad) because calculating the second-order is too computionally difficult. However, some of these first-order methods have a fixed learning-rate (SGD) and some have an adaptive learning-rate (Adam), which means that the 'amount' we update our weights by becomes a function of the loss - we may make big jumps in the beginning but then take smaller steps as we get closer to the target.</p>
+
+<p>It should be clear, however that minimising the loss on training data is not the main goal - in theory we want to minimise the loss on 'unseen'/test data;  hence all the opimisation methods proxy for that under the assumption that a low lost on training data will generalise to 'new' data from the same distribution. This means we may prefer a neural-network with a higher training-loss; because it has a lower validation-loss (on data it hasn't been trained on) - we would typically say that the network has 'overfit' in this case. There have been some <a href="https://arxiv.org/abs/1705.08292">recent papers</a> that claim that adaptive optimisation methods do not generalise as well as SGD because they find very sharp minima points.</p>
+
+<p>Previously we only had to back-propagate the gradient one layer, now we also have to back-propagate it through all the hidden-layers. Explaining the back-propagation algorithm is beyond the scope of this post, however it is crucial to understand. Many good <a href="http://neuralnetworksanddeeplearning.com/chap2.html">resources</a> exist online to help.</p>
+
+<p>We can now create a neural-network from scratch in R using four functions.</p>
+
+<p>First, we initialise our weights:</p>
+
+<pre>neuralnetwork &lt;- function(sizes, training_data, epochs, 
+  mini_batch_size, lr, C, verbose=FALSE, 
+  validation_data=training_data)
+</pre>
+
+<p>Since we now have a complex combination of parameters we can't just initialise them to be 1 or 0, like before - the network may get stuck. To help, we use the gaussian distribution (however, just like with the opimisation, there are many other methods):</p>
+
+<script src="./Neural Networks from Scratch, in R (Revolutions)_files/eedfca43224c44a360ac151e65294b69.js.download"></script><link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/gist-embed-123720f37c57ce9a8f29de081c38ed61.css"><div id="gist51600774" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-weights-r" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-r ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-weights-r-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-weights-r-LC1" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">biases</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">listb</span>), <span class="pl-k">function</span>(<span class="pl-smi">idx</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-weights-r-LC2" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">r</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listb</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-weights-r-LC3" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">matrix</span>(rnorm(<span class="pl-v">n</span><span class="pl-k">=</span><span class="pl-smi">r</span>), <span class="pl-v">nrow</span><span class="pl-k">=</span><span class="pl-smi">r</span>, <span class="pl-v">ncol</span><span class="pl-k">=</span><span class="pl-c1">1</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-weights-r-LC4" class="blob-code blob-code-inner js-file-line">    })</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-weights-r-LC5" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-weights-r-LC6" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">weights</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">listb</span>), <span class="pl-k">function</span>(<span class="pl-smi">idx</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-weights-r-LC7" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">c</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listw</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-weights-r-LC8" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">r</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listb</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-weights-r-LC9" class="blob-code blob-code-inner js-file-line">    <span class="pl-k">matrix</span>(rnorm(<span class="pl-v">n</span><span class="pl-k">=</span><span class="pl-smi">r</span><span class="pl-k">*</span><span class="pl-smi">c</span>), <span class="pl-v">nrow</span><span class="pl-k">=</span><span class="pl-smi">r</span>, <span class="pl-v">ncol</span><span class="pl-k">=</span><span class="pl-smi">c</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-weights-r-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-weights-r-LC10" class="blob-code blob-code-inner js-file-line">    })</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/ilkarman/eedfca43224c44a360ac151e65294b69/raw/41a79909f7339dd0f24401ea5c64c2b1eeeba7a8/weights.R" style="float:right">view raw</a>
+        <a href="https://gist.github.com/ilkarman/eedfca43224c44a360ac151e65294b69#file-weights-r">weights.R</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+<p>Second, we use stochastic gradient descent as our optimisation method:</p>
+
+<script src="./Neural Networks from Scratch, in R (Revolutions)_files/09766b37841e6dccba52c932bf57cf29.js.download"></script><link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/gist-embed-123720f37c57ce9a8f29de081c38ed61.css"><div id="gist51600471" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-sgd-r" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-r ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-sgd-r-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-sgd-r-LC1" class="blob-code blob-code-inner js-file-line"> <span class="pl-en">SGD</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">training_data</span>, <span class="pl-smi">epochs</span>, <span class="pl-smi">mini_batch_size</span>, <span class="pl-smi">lr</span>, <span class="pl-smi">C</span>, <span class="pl-smi">sizes</span>, <span class="pl-smi">num_layers</span>, <span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>,</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-sgd-r-LC2" class="blob-code blob-code-inner js-file-line">                 <span class="pl-v">verbose</span><span class="pl-k">=</span><span class="pl-c1">FALSE</span>, <span class="pl-smi">validation_data</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-sgd-r-LC3" class="blob-code blob-code-inner js-file-line"> {</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-sgd-r-LC4" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Every epoch</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-sgd-r-LC5" class="blob-code blob-code-inner js-file-line">   <span class="pl-k">for</span> (<span class="pl-smi">j</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-smi">epochs</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-sgd-r-LC6" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Stochastic mini-batch (shuffle data)</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-sgd-r-LC7" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">training_data</span> <span class="pl-k">&lt;-</span> sample(<span class="pl-smi">training_data</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-sgd-r-LC8" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Partition set into mini-batches</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-sgd-r-LC9" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">mini_batches</span> <span class="pl-k">&lt;-</span> split(<span class="pl-smi">training_data</span>, </td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-sgd-r-LC10" class="blob-code blob-code-inner js-file-line">                           ceiling(seq_along(<span class="pl-smi">training_data</span>)<span class="pl-k">/</span><span class="pl-smi">mini_batch_size</span>))</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-sgd-r-LC11" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Feed forward (and back) all mini-batches</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-sgd-r-LC12" class="blob-code blob-code-inner js-file-line">     <span class="pl-k">for</span> (<span class="pl-smi">k</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">mini_batches</span>)) {</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-sgd-r-LC13" class="blob-code blob-code-inner js-file-line">       <span class="pl-c"><span class="pl-c">#</span> Update biases and weights</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-sgd-r-LC14" class="blob-code blob-code-inner js-file-line">       <span class="pl-smi">res</span> <span class="pl-k">&lt;-</span> update_mini_batch(<span class="pl-smi">mini_batches</span>[[<span class="pl-smi">k</span>]], <span class="pl-smi">lr</span>, <span class="pl-smi">C</span>, <span class="pl-smi">sizes</span>, <span class="pl-smi">num_layers</span>, <span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-sgd-r-LC15" class="blob-code blob-code-inner js-file-line">       <span class="pl-smi">biases</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">res</span>[[<span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-sgd-r-LC16" class="blob-code blob-code-inner js-file-line">       <span class="pl-smi">weights</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">res</span>[[<span class="pl-k">-</span><span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-sgd-r-LC17" class="blob-code blob-code-inner js-file-line">     }</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-sgd-r-LC18" class="blob-code blob-code-inner js-file-line">   }</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-sgd-r-LC19" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Return trained biases and weights</span></td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L20" class="blob-num js-line-number" data-line-number="20"></td>
+        <td id="file-sgd-r-LC20" class="blob-code blob-code-inner js-file-line">   <span class="pl-k">list</span>(<span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-sgd-r-L21" class="blob-num js-line-number" data-line-number="21"></td>
+        <td id="file-sgd-r-LC21" class="blob-code blob-code-inner js-file-line"> }</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/ilkarman/09766b37841e6dccba52c932bf57cf29/raw/b0dc568187974a2ec4dd3ef13850b5c1f625290b/sgd.R" style="float:right">view raw</a>
+        <a href="https://gist.github.com/ilkarman/09766b37841e6dccba52c932bf57cf29#file-sgd-r">sgd.R</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+<p>Third, as part of the SGD method, we update the weights after each mini-batch has been forward and backwards-propagated:</p>
+
+<script src="./Neural Networks from Scratch, in R (Revolutions)_files/bee1d8af000b0a0d17f3948f90448af6.js.download"></script><link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/gist-embed-123720f37c57ce9a8f29de081c38ed61.css"><div id="gist51599927" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-update_mini_batch-r" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-r ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-update_mini_batch-r-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-update_mini_batch-r-LC1" class="blob-code blob-code-inner js-file-line"> <span class="pl-en">update_mini_batch</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">mini_batch</span>, <span class="pl-smi">lr</span>, <span class="pl-smi">C</span>, <span class="pl-smi">sizes</span>, <span class="pl-smi">num_layers</span>, <span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-update_mini_batch-r-LC2" class="blob-code blob-code-inner js-file-line"> {</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-update_mini_batch-r-LC3" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">nmb</span> <span class="pl-k">&lt;-</span> length(<span class="pl-smi">mini_batch</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-update_mini_batch-r-LC4" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">listw</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">sizes</span>[<span class="pl-c1">1</span><span class="pl-k">:</span>length(<span class="pl-smi">sizes</span>)<span class="pl-k">-</span><span class="pl-c1">1</span>] </td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-update_mini_batch-r-LC5" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">listb</span> <span class="pl-k">&lt;-</span>  <span class="pl-smi">sizes</span>[<span class="pl-k">-</span><span class="pl-c1">1</span>]  </td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-update_mini_batch-r-LC6" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-update_mini_batch-r-LC7" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Initialise updates with zero vectors (for EACH mini-batch)</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-update_mini_batch-r-LC8" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">nabla_b</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">listb</span>), <span class="pl-k">function</span>(<span class="pl-smi">idx</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-update_mini_batch-r-LC9" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">r</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listb</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-update_mini_batch-r-LC10" class="blob-code blob-code-inner js-file-line">     <span class="pl-k">matrix</span>(<span class="pl-c1">0</span>, <span class="pl-v">nrow</span><span class="pl-k">=</span><span class="pl-smi">r</span>, <span class="pl-v">ncol</span><span class="pl-k">=</span><span class="pl-c1">1</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-update_mini_batch-r-LC11" class="blob-code blob-code-inner js-file-line">   })</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-update_mini_batch-r-LC12" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">nabla_w</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">listb</span>), <span class="pl-k">function</span>(<span class="pl-smi">idx</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L13" class="blob-num js-line-number" data-line-number="13"></td>
+        <td id="file-update_mini_batch-r-LC13" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">c</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listw</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L14" class="blob-num js-line-number" data-line-number="14"></td>
+        <td id="file-update_mini_batch-r-LC14" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">r</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">listb</span>[[<span class="pl-smi">idx</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L15" class="blob-num js-line-number" data-line-number="15"></td>
+        <td id="file-update_mini_batch-r-LC15" class="blob-code blob-code-inner js-file-line">     <span class="pl-k">matrix</span>(<span class="pl-c1">0</span>, <span class="pl-v">nrow</span><span class="pl-k">=</span><span class="pl-smi">r</span>, <span class="pl-v">ncol</span><span class="pl-k">=</span><span class="pl-smi">c</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L16" class="blob-num js-line-number" data-line-number="16"></td>
+        <td id="file-update_mini_batch-r-LC16" class="blob-code blob-code-inner js-file-line">   })  </td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L17" class="blob-num js-line-number" data-line-number="17"></td>
+        <td id="file-update_mini_batch-r-LC17" class="blob-code blob-code-inner js-file-line">
+</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L18" class="blob-num js-line-number" data-line-number="18"></td>
+        <td id="file-update_mini_batch-r-LC18" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Go through mini_batch</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L19" class="blob-num js-line-number" data-line-number="19"></td>
+        <td id="file-update_mini_batch-r-LC19" class="blob-code blob-code-inner js-file-line">   <span class="pl-k">for</span> (<span class="pl-smi">i</span> <span class="pl-k">in</span> <span class="pl-c1">1</span><span class="pl-k">:</span><span class="pl-smi">nmb</span>){</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L20" class="blob-num js-line-number" data-line-number="20"></td>
+        <td id="file-update_mini_batch-r-LC20" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">x</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">mini_batch</span>[[<span class="pl-smi">i</span>]][[<span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L21" class="blob-num js-line-number" data-line-number="21"></td>
+        <td id="file-update_mini_batch-r-LC21" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">y</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">mini_batch</span>[[<span class="pl-smi">i</span>]][[<span class="pl-k">-</span><span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L22" class="blob-num js-line-number" data-line-number="22"></td>
+        <td id="file-update_mini_batch-r-LC22" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Back propogation will return delta</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L23" class="blob-num js-line-number" data-line-number="23"></td>
+        <td id="file-update_mini_batch-r-LC23" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Backprop for each observation in mini-batch</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L24" class="blob-num js-line-number" data-line-number="24"></td>
+        <td id="file-update_mini_batch-r-LC24" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">delta_nablas</span> <span class="pl-k">&lt;-</span> backprop(<span class="pl-smi">x</span>, <span class="pl-smi">y</span>, <span class="pl-smi">C</span>, <span class="pl-smi">sizes</span>, <span class="pl-smi">num_layers</span>, <span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L25" class="blob-num js-line-number" data-line-number="25"></td>
+        <td id="file-update_mini_batch-r-LC25" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">delta_nabla_b</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">delta_nablas</span>[[<span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L26" class="blob-num js-line-number" data-line-number="26"></td>
+        <td id="file-update_mini_batch-r-LC26" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">delta_nabla_w</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">delta_nablas</span>[[<span class="pl-k">-</span><span class="pl-c1">1</span>]]</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L27" class="blob-num js-line-number" data-line-number="27"></td>
+        <td id="file-update_mini_batch-r-LC27" class="blob-code blob-code-inner js-file-line">     <span class="pl-c"><span class="pl-c">#</span> Add on deltas to nabla</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L28" class="blob-num js-line-number" data-line-number="28"></td>
+        <td id="file-update_mini_batch-r-LC28" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">nabla_b</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">biases</span>),<span class="pl-k">function</span>(<span class="pl-smi">j</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L29" class="blob-num js-line-number" data-line-number="29"></td>
+        <td id="file-update_mini_batch-r-LC29" class="blob-code blob-code-inner js-file-line">       unlist(<span class="pl-smi">nabla_b</span>[[<span class="pl-smi">j</span>]])<span class="pl-k">+</span>unlist(<span class="pl-smi">delta_nabla_b</span>[[<span class="pl-smi">j</span>]]))</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L30" class="blob-num js-line-number" data-line-number="30"></td>
+        <td id="file-update_mini_batch-r-LC30" class="blob-code blob-code-inner js-file-line">     <span class="pl-smi">nabla_w</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">weights</span>),<span class="pl-k">function</span>(<span class="pl-smi">j</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L31" class="blob-num js-line-number" data-line-number="31"></td>
+        <td id="file-update_mini_batch-r-LC31" class="blob-code blob-code-inner js-file-line">       unlist(<span class="pl-smi">nabla_w</span>[[<span class="pl-smi">j</span>]])<span class="pl-k">+</span>unlist(<span class="pl-smi">delta_nabla_w</span>[[<span class="pl-smi">j</span>]]))</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L32" class="blob-num js-line-number" data-line-number="32"></td>
+        <td id="file-update_mini_batch-r-LC32" class="blob-code blob-code-inner js-file-line">   }</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L33" class="blob-num js-line-number" data-line-number="33"></td>
+        <td id="file-update_mini_batch-r-LC33" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> After mini-batch has finished update biases and weights:</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L34" class="blob-num js-line-number" data-line-number="34"></td>
+        <td id="file-update_mini_batch-r-LC34" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> i.e. weights = weights - (learning-rate/numbr in batch)*nabla_weights</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L35" class="blob-num js-line-number" data-line-number="35"></td>
+        <td id="file-update_mini_batch-r-LC35" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Opposite direction of gradient</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L36" class="blob-num js-line-number" data-line-number="36"></td>
+        <td id="file-update_mini_batch-r-LC36" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">weights</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">weights</span>), <span class="pl-k">function</span>(<span class="pl-smi">j</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L37" class="blob-num js-line-number" data-line-number="37"></td>
+        <td id="file-update_mini_batch-r-LC37" class="blob-code blob-code-inner js-file-line">     unlist(<span class="pl-smi">weights</span>[[<span class="pl-smi">j</span>]])<span class="pl-k">-</span>(<span class="pl-smi">lr</span><span class="pl-k">/</span><span class="pl-smi">nmb</span>)<span class="pl-k">*</span>unlist(<span class="pl-smi">nabla_w</span>[[<span class="pl-smi">j</span>]]))</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L38" class="blob-num js-line-number" data-line-number="38"></td>
+        <td id="file-update_mini_batch-r-LC38" class="blob-code blob-code-inner js-file-line">   <span class="pl-smi">biases</span> <span class="pl-k">&lt;-</span> lapply(seq_along(<span class="pl-smi">biases</span>), <span class="pl-k">function</span>(<span class="pl-smi">j</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L39" class="blob-num js-line-number" data-line-number="39"></td>
+        <td id="file-update_mini_batch-r-LC39" class="blob-code blob-code-inner js-file-line">     unlist(<span class="pl-smi">biases</span>[[<span class="pl-smi">j</span>]])<span class="pl-k">-</span>(<span class="pl-smi">lr</span><span class="pl-k">/</span><span class="pl-smi">nmb</span>)<span class="pl-k">*</span>unlist(<span class="pl-smi">nabla_b</span>[[<span class="pl-smi">j</span>]]))</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L40" class="blob-num js-line-number" data-line-number="40"></td>
+        <td id="file-update_mini_batch-r-LC40" class="blob-code blob-code-inner js-file-line">   <span class="pl-c"><span class="pl-c">#</span> Return</span></td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L41" class="blob-num js-line-number" data-line-number="41"></td>
+        <td id="file-update_mini_batch-r-LC41" class="blob-code blob-code-inner js-file-line">   <span class="pl-k">list</span>(<span class="pl-smi">biases</span>, <span class="pl-smi">weights</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-update_mini_batch-r-L42" class="blob-num js-line-number" data-line-number="42"></td>
+        <td id="file-update_mini_batch-r-LC42" class="blob-code blob-code-inner js-file-line"> }</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/ilkarman/bee1d8af000b0a0d17f3948f90448af6/raw/590ac841028f6962ffee1d01d9987d0e4f3f397a/update_mini_batch.R" style="float:right">view raw</a>
+        <a href="https://gist.github.com/ilkarman/bee1d8af000b0a0d17f3948f90448af6#file-update_mini_batch-r">update_mini_batch.R</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+<p>Fourth, the algorithm we use to calculate the deltas is the back-propagation algorithm.</p>
+
+<p>In this example we use the cross-entropy loss function, which produces the following gradient:</p>
+
+<pre>cost_delta &lt;- function(method, z, a, y) {
+  if (method=='ce'){return (a-y)}
+}
+</pre>
+
+<p>Also, to be consistent with our logistic regression example we use the sigmoid activation for the hidden layers and for the read-out layer:</p>
+
+<pre># Calculate activation function
+sigmoid &lt;- function(z){1.0/(1.0+exp(-z))}
+# Partial derivative of activation function
+sigmoid_prime &lt;- function(z){sigmoid(z)*(1-sigmoid(z))}
+</pre>
+
+<p>As mentioned previously, usually the softmax activation is used for the read-out layer. For the hidden layers, ReLU is more common, which is just the max function (negative weights get flattened to 0). The activation function for the hidden layers can be imagined as a race to carry a baton/flame (gradient) without it dying. The sigmoid function flattens out at 0 and at 1, resulting in a flat gradient which is equivalent to the flame dying out (we have lost our signal). The ReLU function helps preserve this gradient.</p>
+
+<p>The back-propagation function is defined as:</p>
+
+<pre>backprop &lt;- function(x, y, C, sizes, num_layers, biases, weights)
+</pre>
+
+<p>Check out the <a href="https://notebooks.azure.com/ilia/libraries/nnetR">notebook</a> for the full code — however the principle remains the same: we have a forward-pass where we generate our prediction by propagating the weights through all the layers of the network. We then plug this into the cost gradient and update the weights through all of our layers.</p>
+
+<p>This concludes the creation of a neural network (with as many hidden layers as you desire). It can be a good exercise to replace the hidden-layer activation with ReLU and read-out to be softmax, and also add L1 and L2 regularization. Running this on the <a href="http://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html">iris dataset</a> in the notebook (which contains 4 explanatory variables with 3 possible outomes), with just one hidden-layer containing 40 neurons we get an accuracy of 96% after 30 rounds/epochs of training.</p>
+
+<p>The notebook also runs a 100-neuron <a href="http://yann.lecun.com/exdb/mnist/">handwriting-recognition</a> example to predict the digit corresponding to a 28x28 pixel image.</p>
+
+<h2>Step 5 - Convolutional Neural Network (<a href="https://github.com/ilkarman/DemoNeuralNet/blob/master/04_Convolutions.ipynb">See Notebook</a>)</h2>
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af05cf970d-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01bb09af05cf970d img-responsive" alt="Step5" title="Step5" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01bb09af05cf970d-500wi.jpg"></a><br></p>
+
+<p>Here, we will briefly examine only the forward-propagation in a convolutional neural-network (CNN). CNNs were first made popular in 1998 by <a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98b.pdf">LeCun's seminal paper</a>. Since then, they have proven to be the best method we have for recognising patterns in images, sounds, videos, and even text!</p>
+
+<p>Image recognition was initially a manual process; researchers would have to specify which bits (features) of an image were useful to identify. For example, if we wanted to classify an image into ‘cat’ or ‘basketball’ we could have created code that extracts colours (basketballs are orange) and shapes (cats have triangular ears). Perhaps with a count of these features we could then run a linear regression to get the relationship between number of triangles and whether the image is a cat or a tree. This approach suffers from issues of image scale, angle, quality and light.
+<a href="https://en.wikipedia.org/wiki/Scale-invariant_feature_transform">Scale Invariant Feature Transformation</a> (SIFT) largely improved upon this and was used to provide a `feature description' of an object, which could then be fed into a linear regression (or any other relationship learner). However, this approach had set-in-stone rules that could not be optimally altered for a specific domain.</p>
+
+<p>CNNs look at images (extract features) in an interesting way. To start, they look only at very small parts of an image (at a time), perhaps through a restricted window of 5 by 5 pixels (a filter). 2D convolutions are used for images, and these slide the window across until the whole image has been covered. This stage would typically extract colours and edges. However, the next layer of the network would look at a combination of the previous filters and thus 'zoom-out'. After a certain number of layers the network would be 'zoomed-out' enough to recognise shapes and larger structures. </p>
+
+<p>These filters end up as the 'features' that the network has learned to identify. It can then pretty much count the presence of each feature to identify a relationship with the image label ('basketball' or 'cat'). This approach appears quite natural for images — since they can broken down into small parts that describe it (colours, textures, etc.). CNNs appear to thrive on the fractal-like nature of images. This also means they may not be a great fit for other forms of data such as an excel worksheet where there is no inherent structure: we can change the column order and the data remains the same — try swapping pixels in an image (the image changes)! </p>
+
+<p>In the previous example we looked at a standard neural-net classifying handwritten text. In that network each neuron from layer <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-18-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-276" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-277" class="mjx-mrow"><span id="MJXc-Node-278" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.299em;">i</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>i</mi></math></span></span><script type="math/tex" id="MathJax-Element-18">i</script>, was connected to each neuron at layer <span class="MathJax_Preview" style="color: inherit; display: none;"></span><span id="MathJax-Element-19-Frame" class="mjx-chtml MathJax_CHTML" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mi&gt;j&lt;/mi&gt;&lt;/math&gt;" role="presentation" style="font-size: 113%; position: relative;"><span id="MJXc-Node-279" class="mjx-math" aria-hidden="true"><span id="MJXc-Node-280" class="mjx-mrow"><span id="MJXc-Node-281" class="mjx-mi"><span class="mjx-char MJXc-TeX-math-I" style="padding-top: 0.446em; padding-bottom: 0.446em;">j</span></span></span></span><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>j</mi></math></span></span><script type="math/tex" id="MathJax-Element-19">j</script> — our 'window' was the whole image. This means if we learn what the digit '2' looks like; we may not recognise it when it is written upside down by mistake, because we have only seen it upright. CNNs have the advantage of looking at small bits of the digit '2' and finding patterns between patterns between patterns. This means that a lot of the features it extracts may be immune to rotation, skew, etc. For more detail, Brandon Rohrer explains <a href="https://www.youtube.com/watch?v=FmpDIaiMIeA">here</a> what a CNN actually is in detail.</p>
+
+<p>We can define a 2D convolution function in R:</p>
+
+<pre>convolution &lt;- function(input_img, filter, show=TRUE, out=FALSE)
+{  
+  conv_out &lt;- outer(
+    1:(nrow(input_img)-kernel_size[[1]]+1),
+    1:(ncol(input_img)-kernel_size[[2]]+1),
+    Vectorize(function(r,c) sum(input_img[r:(r+kernel_size[[1]]-1),
+                                          c:(c+kernel_size[[2]]-1)]*filter))
+  )    
+}
+</pre>
+
+<p>And use it to a apply a 3x3 filter to an image:</p>
+
+<pre>conv_emboss &lt;- matrix(c(2,0,0,0,-1,0,0,0,-1), nrow = 3)
+convolution(input_img = r_img, filter = conv_emboss)
+</pre>
+
+<p>You can check the notebook to see the result, however this seems to extract the edges from a picture. Other, convolutions can 'sharpen' an image, like this 3x3 filter:</p>
+
+<pre>conv_sharpen &lt;- matrix(c(0,-1,0,-1,5,-1,0,-1,0), nrow = 3)
+convolution(input_img = r_img, filter = conv_sharpen)
+</pre>
+
+<p>Typically we would randomly initialise a number of filters (e.g. 64):</p>
+
+<pre>filter_map &lt;- lapply(X=c(1:64), FUN=function(x){
+    # Random matrix of 0, 1, -1
+    conv_rand &lt;- matrix(sample.int(3, size=9, replace = TRUE), ncol=3)-2
+    convolution(input_img = r_img, filter = conv_rand, show=FALSE, out=TRUE)
+})
+</pre>
+
+<p>We can visualise this map with the following function:</p>
+
+<script src="./Neural Networks from Scratch, in R (Revolutions)_files/3a2cb478a39b7a53d4a2ad2a2ca804f7.js.download"></script><link rel="stylesheet" href="./Neural Networks from Scratch, in R (Revolutions)_files/gist-embed-123720f37c57ce9a8f29de081c38ed61.css"><div id="gist51600626" class="gist">
+    <div class="gist-file">
+      <div class="gist-data">
+        <div class="js-gist-file-update-container js-task-list-container file-box">
+  <div id="file-featuremap-r" class="file">
+    
+
+  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-r ">
+      
+<table class="highlight tab-size js-file-line-container" data-tab-size="8">
+      <tbody><tr>
+        <td id="file-featuremap-r-L1" class="blob-num js-line-number" data-line-number="1"></td>
+        <td id="file-featuremap-r-LC1" class="blob-code blob-code-inner js-file-line"><span class="pl-en">square_stack_lst_of_matricies</span> <span class="pl-k">&lt;-</span> <span class="pl-k">function</span>(<span class="pl-smi">lst</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L2" class="blob-num js-line-number" data-line-number="2"></td>
+        <td id="file-featuremap-r-LC2" class="blob-code blob-code-inner js-file-line">{</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L3" class="blob-num js-line-number" data-line-number="3"></td>
+        <td id="file-featuremap-r-LC3" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">sqr_size</span> <span class="pl-k">&lt;-</span> sqrt(length(<span class="pl-smi">lst</span>))</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L4" class="blob-num js-line-number" data-line-number="4"></td>
+        <td id="file-featuremap-r-LC4" class="blob-code blob-code-inner js-file-line">    <span class="pl-c"><span class="pl-c">#</span> Stack vertically</span></td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L5" class="blob-num js-line-number" data-line-number="5"></td>
+        <td id="file-featuremap-r-LC5" class="blob-code blob-code-inner js-file-line">    <span class="pl-smi">cols</span> <span class="pl-k">&lt;-</span> do.call(<span class="pl-smi">cbind</span>, <span class="pl-smi">lst</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L6" class="blob-num js-line-number" data-line-number="6"></td>
+        <td id="file-featuremap-r-LC6" class="blob-code blob-code-inner js-file-line">    <span class="pl-c"><span class="pl-c">#</span> Split to another dim</span></td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L7" class="blob-num js-line-number" data-line-number="7"></td>
+        <td id="file-featuremap-r-LC7" class="blob-code blob-code-inner js-file-line">    dim(<span class="pl-smi">cols</span>) <span class="pl-k">&lt;-</span> c(dim(<span class="pl-smi">filter_map</span>[[<span class="pl-c1">1</span>]])[[<span class="pl-c1">1</span>]],</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L8" class="blob-num js-line-number" data-line-number="8"></td>
+        <td id="file-featuremap-r-LC8" class="blob-code blob-code-inner js-file-line">                   dim(<span class="pl-smi">filter_map</span>[[<span class="pl-c1">1</span>]])[[<span class="pl-c1">1</span>]]<span class="pl-k">*</span><span class="pl-smi">sqr_size</span>,</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L9" class="blob-num js-line-number" data-line-number="9"></td>
+        <td id="file-featuremap-r-LC9" class="blob-code blob-code-inner js-file-line">                   <span class="pl-smi">sqr_size</span>)</td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L10" class="blob-num js-line-number" data-line-number="10"></td>
+        <td id="file-featuremap-r-LC10" class="blob-code blob-code-inner js-file-line">    <span class="pl-c"><span class="pl-c">#</span> Stack horizontally</span></td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L11" class="blob-num js-line-number" data-line-number="11"></td>
+        <td id="file-featuremap-r-LC11" class="blob-code blob-code-inner js-file-line">    do.call(<span class="pl-smi">rbind</span>, lapply(<span class="pl-c1">1</span><span class="pl-k">:</span>dim(<span class="pl-smi">cols</span>)[<span class="pl-c1">3</span>], <span class="pl-k">function</span>(<span class="pl-smi">i</span>) <span class="pl-smi">cols</span>[, , <span class="pl-smi">i</span>])) </td>
+      </tr>
+      <tr>
+        <td id="file-featuremap-r-L12" class="blob-num js-line-number" data-line-number="12"></td>
+        <td id="file-featuremap-r-LC12" class="blob-code blob-code-inner js-file-line">}</td>
+      </tr>
+</tbody></table>
+
+
+  </div>
+
+  </div>
+</div>
+
+      </div>
+      <div class="gist-meta">
+        <a href="https://gist.github.com/ilkarman/3a2cb478a39b7a53d4a2ad2a2ca804f7/raw/915729360ac29fb6908be13a454db900d36eeeb0/featuremap.R" style="float:right">view raw</a>
+        <a href="https://gist.github.com/ilkarman/3a2cb478a39b7a53d4a2ad2a2ca804f7#file-featuremap-r">featuremap.R</a>
+        hosted with ❤ by <a href="https://github.com/">GitHub</a>
+      </div>
+    </div>
+</div>
+
+
+<p><a class="asset-img-link" style="display: inline;" href="http://revolution-computing.typepad.com/.a/6a010534b1db25970b01bb09af0634970d-pi"><img class="asset  asset-image at-xid-6a010534b1db25970b01bb09af0634970d img-responsive" alt="Features" title="Features" src="./Neural Networks from Scratch, in R (Revolutions)_files/6a010534b1db25970b01bb09af0634970d-500wi.png"></a><br></p>
+
+<p>Running this function we notice how computationally intensive the process is (compared to a standard fully-connected layer). If these feature maps are not useful 'features' (i.e. the loss is difficult to decrease when these are used) then back-propagation will mean we will get different weights which correspond to different feature-maps; which will become more useful to make the classification.</p>
+
+<p>Typically we stack convolutions on top of other convolutions (and hence the need for a deep network) so that edges becomes shapes and shapes become noses and noses become faces. It can be interesting to examine some <a href="https://adeshpande3.github.io/assets/deconvnet.png">feature maps</a> from trained networks to see what the network has actually learnt.</p>
+
+<h3>Download Notebooks</h3>
+
+<p>You can find notebooks implementing the code behind this post on Github by following the links in the section headings, or as Azure Notebooks at the link below:</p>
+
+<p>Azure Notebooks: <a href="https://notebooks.azure.com/ilia/libraries/nnetR">NeuralNetR</a></p>
+
+			</div>
+		
+
+                        <!-- SIGNATURE -->
+                        
+
+		
+	</div>
+
+	<div class="entry-footer">
+			<p class="entry-footer-info">
+				<span class="post-footers">Posted by <a rel="author" href="https://profile.typepad.com/6p01b7c890d130970b">Guest Blogger</a> at 09:30 </span> <span class="separator">|</span> <a class="permalink" href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch.html">Permalink</a>
+			</p>
+		
+		<!-- technorati tags -->
+
+
+		<!-- post footer links -->
+	<p class="entry-footer-share">
+		<span class="entry-footer-links-favorite"></span>
+	</p>
+
+
+	</div>
+   </div>
+</div>
+
+
+
+        
+        
+        <a id="comments"></a>
+	<div class="comments" id="all-comments">
+		<h3 class="comments-header">Comments</h3>
+					<div class="comments-info">
+				<p><a href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch/comments/atom.xml"><img src="./Neural Networks from Scratch, in R (Revolutions)_files/feed.png" alt="Feed" width="10" height="10"></a> You can follow this conversation by subscribing to the <a href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch/comments/atom.xml">comment feed</a> for this post.</p>
+			</div>
+		
+		<div class="comments-content" id="comments-content">
+                <!-- comment list --><a id="c6a010534b1db25970b01b7c90ce9f5970b"></a>
+<div class="comment font-entrybody comment-odd" id="comment-6a010534b1db25970b01b7c90ce9f5970b">
+	<div class="comment-content font-entrybody" id="comment-6a010534b1db25970b01b7c90ce9f5970b-content">
+		<span id="comment-6a010534b1db25970b01b7c90ce9f5970b-content"><p>Wow... I understood a word or two. :)</p></span>
+	</div>
+	<p class="comment-footer font-entryfooter">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://blog.developers.win" href="http://blog.developers.win/">Mike-EEE</a> |
+		<a rel="nofollow" href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch.html?cid=6a010534b1db25970b01b7c90ce9f5970b#comment-6a010534b1db25970b01b7c90ce9f5970b">July 18, 2017 at 10:59</a>
+	</p>
+</div><a id="c6a010534b1db25970b01bb09b05f77970d"></a>
+<div class="comment font-entrybody comment-even" id="comment-6a010534b1db25970b01bb09b05f77970d">
+	<div class="comment-content font-entrybody" id="comment-6a010534b1db25970b01bb09b05f77970d-content">
+		<span id="comment-6a010534b1db25970b01bb09b05f77970d-content"><p>Great walk thru.  Good bridge material between basic and advanced presentations.</p></span>
+	</div>
+	<p class="comment-footer font-entryfooter">
+		Posted by:
+		<a rel="nofollow" target="_blank" title="http://brunnerworks.com" href="http://brunnerworks.com/">Patrick Stroh</a> |
+		<a rel="nofollow" href="https://blog.revolutionanalytics.com/2017/07/nnets-from-scratch.html?cid=6a010534b1db25970b01bb09b05f77970d#comment-6a010534b1db25970b01bb09b05f77970d">July 19, 2017 at 05:03</a>
+	</p>
+</div>
+
+		</div>
+        
+	</div>
+<script type="text/javascript">var c943723d42e77e9214eb884a1d898ea="</form>";</script>
+<script type="text/javascript">var ffe51c373e0873b7778b6324a0b5533 = '<form id="comment-form" action="';</script>
+<script type="text/javascript">var c943723d42e77e9214eb884a1d898za = '" method="post"><input type="hidden" name="entry_xid" id="comment-entry-xid" value="6a010534b1db25970b01bb09abc6a1970d" \/><input type="hidden" name="token" value="1576001458-e932c5c6b3633540f0d6b946e555d81b5fbb324a:Z8thfboSLbG8bCGM" \/>';</script>
+<script type="text/javascript">var OOcd55d4dc47109d7b462b01c7dd4dab = "aHR0cHM6Ly9ibG9nLnJldm9sdXRpb25hbmFseXRpY3MuY29tLy5zZXJ2aWNlcy9jb21tZW50cw";</script>
+<script type="text/javascript">var bad4dd7c10b264b7d90174cd4d55dc00 = atob(OOcd55d4dc47109d7b462b01c7dd4dab);</script>
+
+<!-- comment-form-atp -->
+
+
+<p class="comments-closed font-entrybody">
+	The comments to this entry are closed.
+</p>
+
+
+
+
+
+    
+    
+
+
+
+
+						</div>
+					</div>
+                                        <div id="beta">
+						<div id="beta-inner" class="pkg">
+							
+<!-- sidebar -->
+
+
+	<div class="module-archives module">
+		<h2 class="module-header">Information</h2>
+		<div class="module-content">
+			<ul class="module-list">
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/about.html">About this blog</a></li>
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/comments-policy.html">Comments Policy</a></li>
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/categories.html">About Categories</a></li>
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/authors.html">About the Authors</a></li>
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/local-r-groups.html">Local R User Group Directory</a></li>
+				
+				<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/tips-on-starting-an-r-user-group.html">Tips on Starting an R User Group</a></li>
+				
+			</ul>
+		</div>
+	</div>
+<!-- list_inlcude.tt  -->
+<div id="search_revolutions_blog" class="module-typelist module">
+<h2 class="module-header">Search Revolutions Blog</h2>
+	<div class="typelist-plain module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><div class="typelist-note"><form method="get" action="https://www.google.com/search">
+  <input type="hidden" name="ie" value="UTF-8"> 
+  <input type="hidden" name="oe" value="UTF-8">
+  <div style="background-color:white;"></div>
+   <input type="text" name="q" size="18" maxlength="255" value="">
+  <input type="submit" name="btnG" value=" Search Blog ">
+   <br>
+<small>
+    <input type="hidden" name="domains" value="blog.revolutionanalytics.com">
+<br>
+    <input type="hidden" name="sitesearch" value="blog.revolutionanalytics.com" checked="checked">
+   <br></small>
+</form>
+ <!-- SiteSearch Google --></div></li>
+			
+		</ul><!-- last /ul -->
+	</div>
+</div>
+<!-- end list_include.tt -->
+
+<!-- custom_code.tt --><div class="module-custom_html module">
+    <div class="module-content">
+Got comments or suggestions for the blog editor? <br>
+Email <a href="mailto:davidsmi@microsoft.com">David Smith</a>.
+    </div>
+</div>
+<!-- end custom_code.tt -->
+<!-- custom_code.tt --><div class="module-custom_html module">
+    <div class="module-content">
+<a href="https://www.twitter.com/revodavid"><img src="./Neural Networks from Scratch, in R (Revolutions)_files/t_small-b.png" alt="Follow revodavid on Twitter"></a> Follow David on Twitter: <a href="https://twitter.com/revodavid">@revodavid</a>
+    </div>
+</div>
+<!-- end custom_code.tt -->
+<!-- custom_code.tt --><div class="module-custom_html module">
+    <div class="module-content">
+Get this blog via email with <a href="https://blogtrottr.com/?subscribe=http://blog.revolutionanalytics.com" title="Get this feed delivered by email"><img src="./Neural Networks from Scratch, in R (Revolutions)_files/blogtrottr-button-91x17px.gif" alt="Blogtrottr"></a>
+    </div>
+</div>
+<!-- end custom_code.tt -->
+<div class="module-categories module">
+	<h2 class="module-header"><a href="https://blog.revolutionanalytics.com/archives.html">Categories</a></h2>
+	<div class="module-content">
+                   <ul class="module-list">
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/academia/">academia</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/advanced-tips/">advanced tips</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/ai/">AI</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/airoundups/">airoundups</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/announcements/">announcements</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/applications/">applications</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/beginner-tips/">beginner tips</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/big-data/">big data</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/courses/">courses</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/current-events/">current events</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/data-science/">data science</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/developers/">developer tips</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/events/">events</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/finance/">finance</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/government/">government</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/graphics/">graphics</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/high-performance-computing/">high-performance computing</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/life-sciences/">life sciences</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/microsoft/">Microsoft</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/open-source/">open source</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/other-industry/">other industry</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/packages/">packages</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/popularity/">popularity</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/predictive-analytics/">predictive analytics</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/profiles/">profiles</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/python/">python</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/r/">R</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/r-is-hot/">R is Hot</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/random/">random</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/reviews/">reviews</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/revolution/">Revolution</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/rmedia/">Rmedia</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/roundups/">roundups</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/sports-1/">sports</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/statistics/">statistics</a></li>
+
+
+
+                        <li class="module-list-item"><a href="https://blog.revolutionanalytics.com/user-groups/">user groups</a></li>
+
+		</ul>
+
+<a style="font-size:85%;display:none;" class="cat-more" href="https://blog.revolutionanalytics.com/archives.html">See More</a>
+	</div>
+</div>
+<!-- list_inlcude.tt  -->
+<div id="r_links" class="module-typelist module">
+<h2 class="module-header">R links</h2>
+	<div class="module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><a href="https://docs.microsoft.com/azure/machine-learning/r-developers-guide?WT.mc_id=RevolutionsSidebar-blog-davidsmi">R on Azure</a><br>Developer's guide and documentation</li>
+							<li class="module-list-item"><a href="https://mran.microsoft.com/packages/">Find R packages</a><br>CRAN package directory at MRAN</li>
+							<li class="module-list-item"><a href="https://mran.microsoft.com/download">Download Microsoft R Open</a><br>Free, high-performance R</li>
+							<li class="module-list-item"><a href="https://www.r-project.org/">R Project site</a><br>Information about the R project</li>
+			
+		</ul><!-- last /ul -->
+	</div>
+</div>
+<!-- end list_include.tt -->
+
+<!-- list_inlcude.tt  -->
+<div id="recommended_sites" class="module-typelist module">
+<h2 class="module-header">Recommended Sites</h2>
+	<div class="module-content">
+		<ul class="module-list">
+							<li class="module-list-item"><a href="https://twitter.com/rlangtip">@RLangTip</a><br>Daily tips on using R</li>
+							<li class="module-list-item"><a href="https://flowingdata.com/">FlowingData</a><br>Modern data visualization</li>
+							<li class="module-list-item"><a href="http://www.statisticsblog.com/">Probability and statistics blog</a><br>Monte Carlo simulations in R</li>
+							<li class="module-list-item"><a href="http://www.r-bloggers.com/">R Bloggers</a><br>Daily news and tutorials about R, contributed by R bloggers worldwide.</li>
+							<li class="module-list-item"><a href="http://www.analyticbridge.com/group/rprojectandotherfreesoftwaretools">R Project group on analyticbridge.com</a><br>Community and discussion forum</li>
+							<li class="module-list-item"><a href="http://www.stat.columbia.edu/~cook/movabletype/mlm/">Statistical Modeling, Causal Inference, and Social Science</a><br>Andrew Gelman's statistics blog</li>
+			
+		</ul><!-- last /ul -->
+	</div>
+</div>
+<!-- end list_include.tt -->
+
+<!-- archives -->
+
+	<div class="module-archives module">
+		<h2 class="module-header"><a href="https://blog.revolutionanalytics.com/archives.html">Archives</a></h2>
+		<div class="module-content">
+			<ul class="module-list">
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/11/index.html">November 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/10/index.html">October 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/09/index.html">September 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/08/index.html">August 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/07/index.html">July 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/06/index.html">June 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/05/index.html">May 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/04/index.html">April 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/03/index.html">March 2019</a></li>
+				
+					
+					<li class="module-list-item"><a href="https://blog.revolutionanalytics.com/2019/02/index.html">February 2019</a></li>
+				
+			</ul>
+		</div>
+	</div>
+
+<div class="module-syndicate module">
+	<div class="module-content">
+	<a href="https://blog.revolutionanalytics.com/atom.xml"><i class="fas fa-rss"></i> Subscribe to this blog's feed</a>
+	</div>
+</div>
+<!-- custom_code.tt --><div class="module-custom_html module">
+    <div class="module-content">
+<script type="text/javascript">
+  var varAutoFirePV = 1;
+  var varClickTracking = 1;
+  var varCustomerTracking = 1;
+  var Route = "123865";
+  var Ctrl = "";
+  document.write("<script type='text/javascript' src='" + (window.location.protocol) + "//c.microsoft.com/ms.js'" + "'><\/script>");
+</script><script type="text/javascript" src="https://c.microsoft.com/ms.js" '=""></script>​
+    </div>
+</div>
+<!-- end custom_code.tt -->
+<!-- custom_code.tt --><div class="module-custom_html module">
+    <div class="module-content">
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./Neural Networks from Scratch, in R (Revolutions)_files/ga.js.download" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var firstTracker = _gat._getTracker("UA-6984166-10");
+firstTracker._setDomainName(".revolutionanalytics.com");
+firstTracker._setAllowLinker(true);
+firstTracker._setAllowHash(false);
+firstTracker._trackPageview();
+var secondTracker = _gat._getTracker("UA-6984166-9");
+secondTracker._setDomainName(".revolutionanalytics.com");
+secondTracker._setAllowLinker(true);
+secondTracker._setAllowHash(false);
+secondTracker._trackPageview();
+} catch (err) { }
+</script>
+    </div>
+</div>
+<!-- end custom_code.tt -->
+
+
+
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+</div> <!-- row -->
+			
+
+
+
+		</div>
+	</div>
+	
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+<!--
+var extra_happy = Math.floor(1000000000 * Math.random());
+document.write('<img src="https://www.typepad.com/t/stats?blog_id=1774446&amp;user_id=3164880&amp;page=' + escape(location.href) + '&amp;referrer=' + escape(document.referrer) + '&amp;i=' + extra_happy + '" width="1" height="1" alt="" style="position: absolute; top: 0; left: 0;" />');
+// -->
+</script><img src="./Neural Networks from Scratch, in R (Revolutions)_files/stats" width="1" height="1" alt="" style="position: absolute; top: 0; left: 0;">
+
+
+
+
+<!-- Begin disqus Tag -->
+
+<!-- End disqus Tag -->
+
+
+
+<!-- ph=1 -->
+</body></html>

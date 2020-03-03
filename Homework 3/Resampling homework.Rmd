@@ -1,0 +1,118 @@
+---
+title: "Resampling Homwork 3.3"
+author: "Hamed"
+date: "2/18/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+
+```{r ,warning=FALSE include=FALSE}
+
+library(rsample)   
+library(purrr)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(mlbench)
+library(kernlab)
+library(sessioninfo)
+theme_set(theme_bw())
+library(RCurl)
+
+```
+
+
+
+
+```{r ,warning=FALSE include=FALSE}
+
+UCI_german<-getURL("http://archive.ics.uci.edu/ml/machine-learning-databases/statlog/german/german.data")
+
+names<-c('checking_account','month','Credit_history','Purpose',
+         'Credit_amount','Savings','employment','Installment_rate',
+         'status','Other_debtors','Present_residence_since','Property',
+         'Age','installment_plans','Housing','#credits','Job','#people',
+         'Telephone','foreign','Cost_Matrix')
+
+credit_data<-read.table(textConnection(UCI_german),sep=" ",
+                        col.names=names)
+head(credit_data)
+
+```
+
+
+
+
+
+```{r setup,warning=FALSE include=FALSE}
+# convert class variable into factor 
+credit_data$Cost_Matrix=as.factor(credit_data$Cost_Matrix)
+
+# First split the dataset
+set.seed(123)
+training.samples <-credit_data$Cost_Matrix %>% 
+  createDataPartition(p = 0.8, list = FALSE)
+train.credit<-credit_data[training.samples, ]
+test.credit<-credit_data[-training.samples, ]
+
+dim(train.credit) #shape of the train data 
+
+dim(test.credit) #shape of test data
+
+
+```
+
+
+```{r ,warning=FALSE include=FALSE}
+
+#Modelling
+train_control <- trainControl(method="cv", number=5)
+model <- train(Cost_Matrix~., data=train.credit, trControl=train_control, method="svmLinear")
+
+# summarize results
+print(model)
+
+
+```
+
+
+```{r setup,warning=FALSE include=FALSE}
+# prediction
+pred=predict(model,newdata = test.credit)
+pred
+
+```
+
+
+
+```{r,warning=FALSE include=FALSE}
+
+
+```
+
+
+
+```{r,warning=FALSE include=FALSE}
+
+
+
+```
+
+
+
+```{r,warning=FALSE include=FALSE}
+
+
+
+```
+
+
+
+```{r ,warning=FALSE include=FALSE}
+
+
+
+```
+

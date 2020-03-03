@@ -1,0 +1,72 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="C2DDAB2F-BEC4-9114-D7E7-7878DF8104D5" name="INSURANCE">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:52:57 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<ordsAlias>table_1</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="policyNumber" id="7E99E0EA-4C59-1D9D-5B10-1DE9F583BF15">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:53:42 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>22</dataTypeSize>
+<ownDataTypeParameters>22,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="policyPeriod" id="952486AF-551E-9C67-1D68-B3EC16991CC2">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:56:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="insuranceName" id="E8BB76F9-B5A3-3417-F451-0019EFB3DFAE">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:56:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="insuranceAddress" id="CB845556-BC49-730B-EFF6-739990BA6D2C">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:56:34 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="D6C2D498-DAFF-8F89-0D04-CA2F07B2C656" name="INSURANCE_PK">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 07:53:42 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="7E99E0EA-4C59-1D9D-5B10-1DE9F583BF15"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

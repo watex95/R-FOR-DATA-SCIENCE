@@ -1,0 +1,158 @@
+---
+title: "Homework 1 Bonus"
+author: "Hamed"
+date: "2/9/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+#### (a).	Read the data into a data frame in R
+
+```{r ,warning=FALSE}
+pdcalls=read.csv("jerseycitypdservicecalls2017csv.csv",header = T)
+attach(pdcalls)
+head(pdcalls,6)
+```
+
+
+#### (b).	Find the number of variables and number of rows of data, The first number is for rows and the second for variables
+
+```{r ,warning=FALSE}
+dim(pdcalls)
+```
+
+
+#### (c).	Inspect the data by printing out the first six rows.
+
+```{r, warning=FALSE}
+head(pdcalls,6)
+
+```
+
+#### (d).	How many rows are there with missing values?
+
+```{r ,warning=FALSE}
+sum(!complete.cases(pdcalls))
+
+```
+
+#### (e).	Remove the rows with missing data
+
+```{r ,warning=FALSE}
+
+dim(pdcalls) #Before removing the missing data
+
+pdcalls <- pdcalls[complete.cases(pdcalls), ]
+
+dim(pdcalls) #After removing the missing data
+
+```
+
+#### (f).	Check to see if there are any duplicate rows.  If there are duplicate rows then remove them.
+
+```{r ,warning=FALSE}
+which(duplicated(pdcalls)) #check for duplicates
+dim(pdcalls) #dimension of the dataframe before removing duplicates
+
+pdcalls=pdcalls[!duplicated(pdcalls), ] #remove duplicates
+dim(pdcalls)
+
+```
+
+
+#### (g).	Sort the data by call type
+```{r ,warning=FALSE}
+head(pdcalls) #Before the sorting
+head(pdcalls[order(call.type),]) #After sorting
+
+```
+
+
+#### (h).	Create a new data frame called calls911 by filtering the original dataset for the 911 calls.  Print out the first six rows and check if the filtering worked.  How many 911 calls were there?
+
+```{r,warning=FALSE}
+library(dplyr)
+calls911=filter(pdcalls,call.type=='911') #create the dataframe
+head(calls911)
+
+# Number of 911 calls
+nrow(calls911)
+
+```
+
+
+#### (i).	Create a new variable (column) called dispatchduration by subtracting time.received from time.dispatched.  
+
+```{r,warning=FALSE}
+library(dplyr)
+pdcalls$time_R<-as.POSIXct(strptime(pdcalls$time.received,
+          format = "%m/%d/%Y %H:%M:%OS",tz = "EST"))
+
+pdcalls$time_D<-as.POSIXct(strptime(pdcalls$time.dispatched,
+          format = "%m/%d/%Y %H:%M:%OS", tz = "EST"))
+
+pdcalls$dispatchduration<-difftime(pdcalls$time_D, pdcalls$time_R,
+                                  units = "secs")
+
+
+head(pdcalls)
+
+```
+
+#### (j).	Now check if there are missing values in the newly created column and also check for dispatch durations that are negative or zero. This is garbage data so remove these rows.
+
+
+```{r ,warning=FALSE}
+
+#Missing values
+sum(!complete.cases(pdcalls$dispatchduration))
+
+#Negative values
+nrow(pdcalls[pdcalls$dispatchduration<0,])
+
+# Zero values
+nrow(pdcalls[pdcalls$dispatchduration==0,])
+
+# Remove negative and zero values
+pdcalls_clean=pdcalls[pdcalls$dispatchduration>0,]
+dim(pdcalls_clean)
+head(pdcalls_clean)
+```
+
+
+#### (k).	Find the average (mean) dispatch duration using the new variable (column) you created above.
+
+```{r,warning=FALSE}
+mean(pdcalls_clean$dispatchduration)
+```
+
+
+#### (l).	Find the average (mean) dispatch duration by call type
+
+```{r ,warning=FALSE}
+library(doBy)
+summaryBy(dispatchduration~call.type, data=pdcalls_clean, FUN=mean)
+
+```
+
+
+
+#### (m).	How many rows contain the word GUNSHOTS in the call code description column.
+
+```{r,warning=FALSE}
+length(grep("GUNSHOTS", pdcalls$call.code.description))
+
+```
+
+#### (n).	Now create a data frame called gunshotdata that has just the rows that contain the word GUNSHOTS in the call code description
+
+```{r }
+library(dplyr)
+gunshotdata=dplyr::filter(pdcalls, grepl('GUNSHOTS', call.code.description))
+head(gunshotdata)
+
+```
+
+
+

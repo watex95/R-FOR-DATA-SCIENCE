@@ -1,0 +1,141 @@
+---
+title: "Homework 4.3 - Carseats dataset"
+author: "Hamed"
+date: "2/26/2020"
+output: word_document
+---
+
+# Use the Carseats data set in ISLR package
+
+```{r,warning=FALSE}
+library(ISLR)
+library(tree)
+
+carseats=as.data.frame(Carseats)
+str(carseats)
+dim(carseats)
+
+```
+
+## (a) Split the data set into a training set and a test set.
+
+```{r,warning=FALSE}
+set.seed(123)
+smp_size <-floor(0.80 * nrow(carseats))
+smp_size
+
+train_ind <-sample(seq_len(nrow(carseats)), size = smp_size)
+train.carseats = carseats[train_ind,]
+dim(train.carseats)
+test.carseats = carseats[-train_ind,]
+dim(test.carseats)
+
+```
+
+
+## (b) Fit a regression tree to the training set by selecting an appropriate target variable to predict. Plot the tree, and interpret the results. What test MSE do you obtain?
+
+```{r,warning=FALSE}
+#Regression model tree 
+tree.carseats = tree(Sales~.,data=train.carseats)
+summary.carseats = summary(tree.carseats)
+summary.carseats
+
+#Plot the tree
+plot(tree.carseats)
+text(tree.carseats,pretty=0)
+
+#Prediction
+tree.pred = predict(tree.carseats, newdata=test.carseats)
+head(tree.pred)
+
+#Mean squared error
+mean((tree.pred-test.carseats$Sales)^2)
+
+```
+
+## (c) Use cross-validation in order to determine the optimal level of tree complexity. 
+
+```{r,warning=FALSE}
+#Cross validation
+cv.carseats = cv.tree(tree.carseats)
+names(cv.carseats)
+cv.carseats
+
+#plot the deviance against the size of the tree model
+plot(cv.carseats$size, cv.carseats$dev,type="b")
+points(which.min(cv.carseats$dev),cv.carseats$dev[which.min(cv.carseats$dev)],col="red",pch=19,cex=1.25)
+
+#Prune and Plot the pruned cross validated tree
+prune.carseats = prune.tree(tree.carseats,best = which.min(cv.carseats$dev))
+plot(prune.carseats)
+text(prune.carseats,pretty=0)
+
+#Prediction
+prune.pred = predict(prune.carseats, test.carseats)
+head(prune.pred)
+
+#Mean squared error
+mean((prune.pred-test.carseats$Sales)^2)
+
+```
+
+## (d) Use the bagging approach to do the prediction. What test MSE do you  obtain? Which variables are most important? Plot the variable importance.
+
+```{r,warning=FALSE}
+
+library(randomForest)
+set.seed(1)
+
+#Bagging
+bag.carseats = randomForest(Sales~.,data=train.carseats,mtry=10,importance=T)
+bag.carseats
+
+#Prediction and mean squared error (MSE)
+yhat.bag = predict(bag.carseats,newdata=test.carseats)
+mean((yhat.bag - test.carseats$Sales)^2)
+
+#Variable importance
+importance(bag.carseats)
+varImpPlot(bag.carseats)
+
+```
+
+# (e) Use random forest to do the prediction. What test MSE do you obtain? 
+
+```{r,warning=FALSE}
+#Value of m=5
+rf5.carseats = randomForest(Sales~.,data=train.carseats,mtry=5,importance=T)
+rf5.carseats
+
+#Prediction and MSE
+yhat5.rf = predict(rf5.carseats,newdata=test.carseats)
+mean((yhat5.rf-test.carseats$Sales)^2)
+
+
+```
+
+## Try various values of m, the number of variables considered at each split and describe the effect of m on the error rate.
+
+```{r,warning=FALSE}
+
+#Value of m=3
+rf3.carseats = randomForest(Sales~.,data=train.carseats,mtry=3,importance=T)
+rf3.carseats
+
+#Prediction and MSE
+yhat3.rf = predict(rf3.carseats,newdata=test.carseats)
+mean((yhat3.rf-test.carseats$Sales)^2)
+
+```
+
+
+## Which variables are most important. Plot the variable importance. 
+
+```{r,warning=FALSE}
+
+par(mfrow=c(2,2))
+varImpPlot(rf5.carseats)
+varImpPlot(rf3.carseats)
+
+```

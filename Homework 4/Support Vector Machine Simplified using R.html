@@ -1,0 +1,2357 @@
+<!DOCTYPE html>
+<!-- saved from url=(0076)https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html -->
+<html dir="ltr" lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr" xmlns:og="http://ogp.me/ns#"><link rel="stylesheet" href="./Support Vector Machine Simplified using R_files/css(1)"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="./Support Vector Machine Simplified using R_files/3597120983-css_bundle_v2.css" rel="stylesheet" type="text/css">
+<script src="./Support Vector Machine Simplified using R_files/amp4ads-host-v0.js.download"></script><script src="./Support Vector Machine Simplified using R_files/f(8).txt"></script><script src="./Support Vector Machine Simplified using R_files/osd.js.download"></script><script src="./Support Vector Machine Simplified using R_files/f(9).txt"></script><script src="./Support Vector Machine Simplified using R_files/f(10).txt" id="google_shimpl"></script><script async="" src="./Support Vector Machine Simplified using R_files/analytics.js.download"></script><script async="async" src="./Support Vector Machine Simplified using R_files/jquery.min.js.download"></script>
+<script type="text/javascript"> (function() { var css = document.createElement('link'); css.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'; css.rel = 'stylesheet'; css.type = 'text/css'; document.getElementsByTagName('head')[0].appendChild(css); })(); </script><link href="./Support Vector Machine Simplified using R_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+<script async="async" src="./Support Vector Machine Simplified using R_files/f(11).txt"></script>
+<meta content="ListenData" property="og:site_name">
+<meta content="article" property="og:type">
+<meta content="https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s1600/SVM%2Bwith%2Br.png" property="og:image">
+<meta content="10204724803294460" property="fb:admins">
+<meta content="1054461654652175" property="fb:app_id">
+<meta content="en_US" property="og:locale">
+<meta content="en_GB" property="og:locale:alternate">
+<meta content="CE34D0D68A93442C0826CBAD63B98E2C" name="msvalidate.01">
+<link href="https://www.linkedin.com/in/deepanshubhalla" rel="publisher">
+<meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1" name="viewport">
+
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta content="CE34D0D68A93442C0826CBAD63B98E2C" name="msvalidate.01">
+<meta content="english" name="language">
+
+<meta content="blogger" name="generator">
+<link href="https://www.listendata.com/favicon.ico" rel="icon" type="image/x-icon">
+<link href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" rel="canonical">
+<link rel="alternate" type="application/atom+xml" title="ListenData - Atom" href="https://www.listendata.com/feeds/posts/default">
+<link rel="alternate" type="application/rss+xml" title="ListenData - RSS" href="https://www.listendata.com/feeds/posts/default?alt=rss">
+<link rel="service.post" type="application/atom+xml" title="ListenData - Atom" href="https://www.blogger.com/feeds/7958828565254404797/posts/default">
+
+<link rel="alternate" type="application/atom+xml" title="ListenData - Atom" href="https://www.listendata.com/feeds/6763939167167291207/comments/default">
+<!--[if IE]><script type="text/javascript" src="https://www.blogger.com/static/v1/jsbin/2786782378-ieretrofit.js"></script>
+<![endif]-->
+<link href="./Support Vector Machine Simplified using R_files/SVM with r.png" rel="image_src">
+<meta content="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" property="og:url">
+<meta content="Support Vector Machine Simplified using R" property="og:title">
+<meta content="Listen Data offers data science tutorials covering a wide range of topics such as SAS, Python, R, SPSS, Advanced Excel, VBA, SQL, Machine Learning" property="og:description">
+<meta content="https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/w1200-h630-p-k-no-nu/SVM%2Bwith%2Br.png" property="og:image">
+<!--[if IE]> <script> (function() { var html5 = ("abbr,article,aside,audio,canvas,datalist,details," + "figure,footer,header,hgroup,mark,menu,meter,nav,output," + "progress,section,time,video").split(','); for (var i = 0; i < html5.length; i++) { document.createElement(html5[i]); } try { document.execCommand('BackgroundImageCache', false, true); } catch(e) {} })(); </script> <![endif]-->
+<title>Support Vector Machine Simplified using R</title>
+<style type="text/css">@font-face{font-family:'Oswald';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/s/oswald/v30/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUtiZTaR.woff2)format('woff2');unicode-range:U+0460-052F,U+1C80-1C88,U+20B4,U+2DE0-2DFF,U+A640-A69F,U+FE2E-FE2F;}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/s/oswald/v30/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUJiZTaR.woff2)format('woff2');unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116;}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/s/oswald/v30/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUliZTaR.woff2)format('woff2');unicode-range:U+0102-0103,U+0110-0111,U+0128-0129,U+0168-0169,U+01A0-01A1,U+01AF-01B0,U+1EA0-1EF9,U+20AB;}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/s/oswald/v30/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUhiZTaR.woff2)format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF,U+2113,U+2C60-2C7F,U+A720-A7FF;}@font-face{font-family:'Oswald';font-style:normal;font-weight:400;src:url(//fonts.gstatic.com/s/oswald/v30/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2)format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}</style>
+<style id="page-skin-1" type="text/css"><!--
+/*<Variable name="keycolor" description="Main Color" type="color" default="#66bbdd"/><Group description="Main Backgrounds" selector=".body-fauxcolumns-outer"><Variable name="body.background.color" description="Outer Background" type="color" default="#5A5955"/><Variable name="wrapper.background.color" description="Main Background" type="color" default="#ffffff"/></Group><Variable name="body.background" description="Body Background" type="background" color="#5A5955" default="$(color) none repeat scroll top left"/><Variable name="body.background.override" description="Body Background Override" type="string" default=""/><Group description="Page Text" selector="body"><Variable name="body.font" description="Font" type="font" default="normal normal 13px Arial, sans-serif"/><Variable name="body.text.color" description="Main Text Color" type="color" default="#333"/><Variable name="footer.text.color" description="Footer Text Color" type="color" default="#ffffff"/></Group><Group description="Links" selector=".main-outer"><Variable name="link.color" description="Link Color" type="color" default="#2b6dad"/><Variable name="link.visited.color" description="Visited Color" type="color" default="#2b6dad"/><Variable name="link.hover.color" description="Hover Color" type="color" default="#006c8e"/></Group><Group description="Blog Title" selector=".header h1.title, .header p.title"><Variable name="header.font" description="Font" type="font" default="normal normal 24px Oswald, Arial, sans-serif"/><Variable name="header.text.color" description="Title Color" type="color" default="#333333"/></Group><Group description="Blog Description" selector=".header .description"><Variable name="description.text.color" description="Description Color" type="color" default="#555555"/></Group><Group description="Post Title" selector="h2.post-title, .comments h4, h1.post-title"><Variable name="post.title.font" description="Font" type="font" default="normal normal 18px Oswald, Arial, sans-serif"/><Variable name="post.title.color" description="Text Color" type="color" default="#0099cc"/></Group><Group description="Gadgets" selector=".sidebar h2"><Variable name="widget.title.background.color" description="Background Color" type="color" default="#333333"/><Variable name="widget.title.font" description="Title Font" type="font" default="normal normal 12px Oswald, Arial, sans-serif"/><Variable name="widget.title.text.color" description="Title Color" type="color" default="#ffffff"/><Variable name="widget.alternate.text.color" description="Alternate Color" type="color" default="#999999"/></Group><Group description="Post Footer" selector=".post-footer"><Variable name="post.footer.background.color" description="Background Color" type="color" default="transparent"/><Variable name="post.footer.text.color" description="Text Color" type="color" default="#666666"/><Variable name="post.footer.border.color" description="Border Color" type="color" default="#eeeeee"/></Group><Group description="Secondary Navigation Menu" selector=".nav-2"><Variable name="secondary.navigation.background.color" description="Background Color" type="color" default="#333333"/><Variable name="secondary.navigation.text.color" description="Text Color" type="color" default="#ffffff"/><Variable name="secondary.navigation.hover.color" description="Hover Color" type="color" default="#000000"/></Group><Group description="Primary Navigation Menu" selector="#primary-menu"><Variable name="primary.navigation.background.color" description="Background Color" type="color" default="#333333"/><Variable name="primary.navigation.text.color" description="Text Color" type="color" default="#ffffff"/><Variable name="primary.navigation.hover.color" description="Hover Color" type="color" default="#000000"/></Group><Group description="Footer" selector="#footer-wrapper"><Variable name="footer.color" description="Footer Color" type="color" default="#ffffff"/></Group>*/html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1;display:block}*{margin:0;padding:0}html{display:block}
+blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:&#39;&#39;content:none}table{border-collapse:collapse;border-spacing:0}.navbar,.post-feeds,.feed-links{display:none}.section,.widget{margin:0;padding:0}strong,b{font-weight:bold}cite,em,i{font-style:italic}a:link{color:#2b6dad;text-decoration:none;outline:0;transition:all .5s;-moz-transition:all .5s;-webkit-transition:all .5s}a:visited{color:#2b6dad;text-decoration:none}a:hover{color:#006c8e;text-decoration:none}a img{border:0;border-width:0;outline:0}abbr,acronym{border-bottom:1px dotted;cursor:help}sup,sub{vertical-align:baseline;position:relative;top:-.4em;font-size:86%}sub{top:.4em}small{font-size:86%}kbd{font-size:80%;border:1px solid #999;padding:2px 5px;border-bottom-width:2px;border-radius:3px}mark{background-color:#ba0000;color:black}p,blockquote,pre,table,figure,hr,form,ol,ul,dl{margin:1.5em 0}hr{height:1px;border:0;background-color:#666}
+h1,h2,h3,h4,h5,h6{font-weight:bold;line-height:normal;margin:0 0 .6em}
+h1{font-size:200%}
+h2{font-size:140%; color: #ff5722;}
+h3{font-size:140%;}
+h4{font-size:120%; color: #ff5722;}
+h5{font-size:120%}
+h6{font-size:120%; color: #ff5722;}
+ol,ul,dl{margin:.5em 0 .5em 3em}
+ol{list-style:decimal outside}
+ul li {list-style:square; list-style-position:outside;}
+.widget .post-body li {
+margin-bottom: .5em !important;
+}
+dt{font-weight:bold}dd{margin:0 0 .5em 2em}input,button,select,textarea{font:inherit;font-size:100%;line-height:normal;vertical-align:baseline}textarea{display:block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
+blockquote{background:#fdfdfd;margin-left:2em;margin-right:2em;border-left:4px solid #ff5722;padding:1em 1em;font-style:italic}blockquote p{margin:0;padding-top:10px}.post-body table[border=&quot;1&quot;] th,.post-body table[border=&quot;1&quot;] td,.post-body table[border=&quot;1&quot;] caption{border:1px solid;padding:.2em .5em;text-align:left;vertical-align:top}.post-body table.tr-caption-container{border:1px solid #ddd}.post-body .post-body table[border=&quot;1&quot;] caption{border:0;font-style:italic}.post-body table{margin-left: auto;
+margin-right: auto;background:#fff}
+.post-body td{display: table-cell;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+vertical-align: middle;
+text-align:left;
+padding:5px 7px;
+border:1px solid #e5e5e5;
+}
+.post-body th{
+border-collapse: collapse;
+box-sizing: border-box;
+color: rgb(50, 50, 50);
+display: table-cell;
+background-color: rgb(229, 229, 229);
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+font-weight: 600;
+line-height: 24px;
+vertical-align: middle;
+text-align:center;
+padding:1px;
+border:1px solid #e5e5e5;
+}
+.separator a{
+clear: none !important;
+float: none !important;
+margin-left: 0 !important;
+margin-right: 0 !important;
+}
+.post-body table.tr-caption-container td{background:#f6f6f6;border:0;padding:8px}.post-body table.tr-caption-container,.post-body table.tr-caption-container img,img{max-width:100%;height:auto;}.post-body td.tr-caption{color:#666;font-size:80%;padding:0 8px 8px!important}body#layout
+.post-body img{
+margin-bottom: 8px;
+max-width: 100%;
+}
+img.alignleft{
+display: block;
+margin: 20px 20px 20px 0;
+}
+img.alignright{
+display: block;
+margin: 20px 0 20px 20px;
+}
+img.aligncenter{
+clear: both;
+display: block;
+margin: 10px auto;
+}
+.alignleft {
+float: left;
+}
+.alignright {
+float: right;
+}
+.alignnone {
+display: none;
+}
+#wrapper{padding:0;margin:30px 20px 20px}body#layout .panel{float:left width:88px}.clear{clear:both}.clear:after{visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0}
+body{background:#5A5955 none repeat scroll top left;margin:0;padding:0;color:#333;font:normal normal 13px Arial,sans-serif;text-align:left}
+#wrapper{background:#fff;max-width:1200px;margin:20px auto;padding:20px}.toggleMenu1{display:none;background:#2f2e2c;padding:0 15px;height:48px;line-height:48px;color:#000!important}
+#nav-bar1{font-family:"Oswald",Arial,sans-serif;background:#232B2B;height:48px;line-height:48px;text-transform:uppercase;font-size:16px;}ul.nav-menu1{background:#232B2B;list-style:none;margin:0;*zoom:1;float:left}ul.nav-menu1:before,ul.nav-menu1:after{content:" ";display:table}ul.nav-menu1:after{clear:both}ul.nav-menu1 ul{list-style:none;margin:0;width:9em}ul.nav-menu1 li{position:relative;margin:0}ul.nav-menu1>li{float:left; list-style-type: none;}ul.nav-menu1>li>.parent{background-repeat:no-repeat;background-position:right}ul.nav-menu1 li.selected{background:#ba0000}ul.nav-menu1 li:hover>a,#nav a:hover{background:#ba0000}ul.nav-menu1 li ul{position:absolute;left:-9999px}ul.nav-menu1>li.hover>ul{left:0}ul.nav-menu1 li li.hover ul{left:100%;top:0}ul.nav-menu1 a.active{background:#ba0000}ul.nav-menu1 li a{display:block;padding:0 15px;color:#fff;height:48px;line-height:48px}ul.nav-menu1 li li a{display:block;background:#555;position:relative;z-index:100;height:34px;line-height:34px}ul.nav-menu1 li li li a{background:#666;z-index:200}ul.nav-menu1 a:hover,ul.nav-menu1 a.active:hover{background:#222}
+#nav-bar{font-family:"Oswald",Arial,sans-serif;background:#232B2B;height:48px;line-height:48px;text-transform:uppercase;font-size:16px;}ul.nav-menu{background:#232B2B;list-style:none;margin:0;*zoom:1;float:left}ul.nav-menu:before,ul.nav-menu:after{content:" ";display:table}ul.nav-menu:after{clear:both}ul.nav-menu ul{list-style:none;margin:0;width:9em}
+ul.nav-menu li{position:relative;margin:0; list-style-type: none;}
+ul.nav-menu>li{float:left;list-style-type: none;}
+ul.nav-menu>li>.parent{background-repeat:no-repeat;background-position:right}
+ul.nav-menu li.selected{background:#ba0000}
+ul.nav-menu li:hover>a,#nav a:hover{background:#ba0000}
+ul.nav-menu li ul{position:absolute;left:-9999px}
+ul.nav-menu>li.hover>ul{left:0}
+ul.nav-menu li li.hover ul{left:100%;top:0}
+ul.nav-menu a.active{background:#ba0000}
+ul.nav-menu li a{display:block;padding:0 15px;color:#fff;line-height:48px}
+ul.nav-menu li li a{display:block;width:170px;background:#555;position:relative;z-index:100;height:auto;line-height:34px}ul.nav-menu li li li a{background:#666;z-index:200}ul.nav-menu a:hover,ul.nav-menu a.active:hover{background:#222}#search-form{background:#444;float:right;margin:0}#search-form input#search-box[type="text"]{height:36px;line-height:36px;margin:5px 0 5px 10px;padding:0 10px;width:150px;color:#636363;border:0;text-transform:uppercase}#search-form input#search-button[type="submit"]{background:#ba0000;color:#fff;height:36px;line-height:36px;margin:5px 10px 5px 0;padding:0 10px;border:0;text-transform:uppercase}#search-form input#search-button[type="submit"]:hover{background:#000}#search-form input#search-box[type="text"]:focus{background:#eee;outline:0}
+#header-wrapper{margin:0 auto;overflow:hidden}.header{margin:0 0 20px}.header h1.title,.header p.title{font:normal normal 24px "Oswald",Arial,sans-serif;margin:0;text-transform:uppercase;color:#333}.header .description{color:#555}.header a{color:#333}.header a:hover{color:#09c}
+.toggleMenu {
+position: relative;
+padding-left: 1.25em;
+background:#ba0000;
+padding:0 15px;
+height:48px;
+line-height:48px;
+color:#fff!important;
+font-weight:500;
+}
+.toggleMenu:before {
+content: "";
+position: absolute;
+left: 0;
+top: 1em;
+width: 1em;
+height: 0.1em;
+background: white;
+box-shadow:
+0 0.5em 0 0 white,
+0 1em 0 0  white;
+}
+.db  {color: #ff5722; font-size: 24px; font-weight:bold;  margin: 1rem 0;}
+.db2 {color: #333; font-size: 22px; font-weight:bold;  margin: 1rem 0;}
+.db3 {color: #333; font-size: 22px; margin: 1rem 0;}
+#content-wrapper{margin:0 auto;overflow:hidden;word-wrap:break-word}
+#post-wrapper{float:left;width:75%;margin:0 0 10px;padding:20px 0; }
+.post-container{padding:0 20px 0 0}.breadcrumbs{font-size:12px;color:#666;padding:10px 0;margin:0 0 20px;border-bottom:3px dotted #eee}
+.post{margin:0 0 20px;padding:0 0 20px;border-bottom:3px dotted #eee;position:relative;min-height:90px}
+.post-body{font-family: 'Roboto', sans-serif; font-size:20px; line-height:1.7;text-align:justify;font-weight: 400;color:rgba(0,0,0,0.74);}
+.post-body a:link {text-decoration: underline;}
+.post.hentry {
+padding: 10px;
+border: 1px solid  #eee;
+}
+.affiliate-box {
+margin:20px 0 15px;
+color: #2b6dad; background-color: #d4f4f7;
+font-size: 14px; border: 2px dashed #fff;
+line-height: 14px; padding: 15px;
+overflow:hidden;}
+#related-box {
+margin:15px 0 10px;
+padding: 10px;
+overflow:hidden;
+font-size: 18px;
+font-weight:bold;
+color: #ff5722;
+box-shadow: 3px 3px 5px 6px #ccc;
+}
+#related-box a {
+text-decoration: underline;
+color : #666;
+font-size: 18px;
+}
+h2.post-title,.post-snippet,.post-footer{margin-left:210px}h2.post-title,h1.post-title{font:normal normal 20px "Oswald",Arial,sans-serif;text-transform:uppercase}h2.post-title a,h1.post-title a,h2.post-title,h1.post-title{color:#424242}h2.post-title a:hover,h1.post-title a:hover{color:#ba0000}.img-thumbnail{background:#FFF;float:left;margin:0 10px 5px 0;padding:6px;border:1px solid #e5e5e5}.img-thumbnail img{width:222px;min-height:145px}a.readmore{float:right;background:#FF7166;display:inline-block;padding:6px 7px;margin:15px 0 0 0;color:#fff;font-size:14px}a.readmore:hover{background:#333}a.recent-post-newer-link,a.recent-post-older-link{float:right;font:normal normal 12px Oswald, Arial, sans-serif;padding:4px 8px;display:inline-block;background:#FF7166;color:#fff;text-transform:uppercase}a.recent-post-newer-link{margin-right:5px}a.recent-post-newer-link:hover,a.recent-post-older-link:hover{background:#333}a.mobile-recent-post-newer-link,a.mobile-recent-post-older-link{float:right;font-size:13px;padding:4px 8px;display:inline-block;background:#ba0000;color:#fff;text-transform:uppercase}a.mobile-recent-post-newer-link{margin-right:5px}.post-footer{background:#fdfdfd;color:#666;padding:5px;margin-bottom:5px;font-size:12px}.postthumb{transition:all .4s;-moz-transition:all .4s;-webkit-transition:all .4s;-o-transition:all .4s;margin:3px 10px 3px 0;float:left;width:80px;height:80px;border:4px solid #ddd}.postthumb:hover{opacity:.6;border:4px solid #eee}.admin-meta,.comment-meta,.date-meta,.label-meta{background-image:url(
+https://1.bp.blogspot.com/-LXxSAQZCX6w/WpEhqZ9diEI/AAAAAAAAGvc/MntFwJUR-ywpiudMjG0uZfQQw9fLZq4qgCLcBGAs/s1600/csg-542f92beb36dc.png);background-repeat:no-repeat;margin-right:8px;padding-left:16px;display:inline-block}.post-footer a{color:#888}.post-footer a:hover{color:#09c}.admin-meta{background-position:0 0;height:12px}.comment-meta{background-position:0 -22px;height:12px}.date-meta{background-position:0 -44px;height:12px}.label-meta{background-position:0 -66px;height:12px}.author-profile{background:#edeff1;padding:15px;margin:15px 0;overflow:hidden}.author-profile img{border:1px solid #efefef;float:left;margin-right:6px}.author-profile a.g-profile{font-weight:bold}#blog-pager{display:none}
+.first-recent-post-title{background:#FFF;margin-right:10px;margin-bottom:10px}
+.recent-post-title{background:#eee;margin-bottom:10px}
+.first-recent-post-title p{
+font:normal normal 12px Oswald, Arial, sans-serif;
+font-size:16px;
+margin:0 0 0 10px;
+padding:4px 8px;
+display:inline-block;
+background:#BA0000;
+color:#fff;
+text-transform:uppercase;
+border:1px solid #fff;}
+.recent-post-title p{font:normal normal 12px Oswald, Arial, sans-serif;margin:0;padding:4px 8px;display:inline-block;background:#ba0000;color:#fff;text-transform:uppercase}.recent-post-title a{color:#fff}
+#sidebar-wrapper{float:right;width:25%;margin:0 auto;padding:20px 0}
+.sidebar-container{padding:0}
+.sidebar h2,.panel p{font:normal normal 16px "Oswald",Arial,sans-serif;text-transform:uppercase;background:#BA0000;
+color:#fff;margin:0 0 10px 0;padding:6px 8px}
+.sidebar .widget-content{padding:0 0 20px}
+.sidebar ul,.sidebar ol{font-size:15px; margin:0 0 15px 0; padding:6px 18px}.sidebar li{margin:0; padding:2px}
+.set, .panel {
+margin: 0 0 10px;
+}
+.tabs .panel {
+padding: 10px;
+}
+.widget ul{padding:0;list-style:none} .set .tabs .tabs-menu{border-bottom:3px solid #ba0000;padding:0;margin:0}.tabs-menu li{font:normal normal 16px "Oswald",Arial,sans-serif;display:inline-block;*display:inline;zoom:1;margin:0 3px -1px 0;padding:8px 12px;background-color:#edeff1;cursor:pointer;position:relative;text-transform:uppercase}.tabs-menu .active-tab{background-color:#ba0000;color:#fff;borde-bottom:0;padding-bottom:9px}.tabs-content{padding:15px 0 20px}#footer-wrapper{margin:0 auto;overflow:hidden;padding:20px 0;border-top:3px solid #FF7166}.footer-left{float:left}.footer-right{float:right}.PopularPosts .item-thumbnail{margin:0 6px 0 0;display:inline}.PopularPosts .item-thumbnail a img{height:78px;width:78px;display:block;margin:0;padding:0}.PopularPosts .widget-content ul li{padding:6px 0!important;border-bottom:1px dotted #e2e2e2}.PopularPosts .item-title{font-weight:bold}.PopularPosts .item-snippet{font-size:11px;color:#666}.profile-img{display:inline;opaciry:10;margin:0 6px 3px 0}.label-size-1,.label-size-2,.label-size-3,.label-size-4,.label-size-5{font-size:100%;filter:alpha(100);opacity:10}.cloud-label-widget-content{text-align:left}.label-size{background:#ba0000;display:block;float:left;margin:0 3px 3px 0;color:#fff;font-size:11px;text-transform:uppercase}.label-size a,.label-size span{display:inline-block;color:#fff;padding:6px 8px;font-weight:bold}.label-size:hover{background:#333}
+.label-count{white-space:nowrap;padding-right:3px;margin-left:-3px;background:#ba0000;color:#fff!important}.label-size{line-height:1.2}
+.about-author {
+width : 650px;
+overflow : hidden;
+background: #f6f8fa;
+margin: 0 0 10px 0;
+padding: 10px;
+border: 1px solid #EAEDEF;
+color: #000;
+font-size: 15px;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+line-height: 24px;
+}
+.about-author img {
+display: block;
+width:  120px;
+height: 120px;
+margin: 0 1.2em 0 0;
+float: left;
+background-size: cover;
+background-repeat: no-repeat;
+background-position: center center;
+-webkit-border-radius: 999em;
+-moz-border-radius: 999em;
+border-radius: 999em;
+border: 2px solid #ddd;
+box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+}
+.about-author p {
+padding:10px;
+margin:0px;
+text-align:justify;
+color:#666;
+}
+.about-author .social_menu {
+float: left;
+padding: 5px 0 0 140px;
+position: relative;
+text-align:justify;
+color:#666;
+font-size: 15px;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+.row {
+display: -ms-flexbox;
+display: -webkit-flex;
+display: flex;
+margin: 1rem 0;
+}
+.col {
+-webkit-flex: 1;
+-ms-flex: 1;
+flex: 1;
+padding: 1em;
+border: solid;
+}
+#bottombar-wrapper ul, .sidebar ul {
+list-style-type:none;
+margin:0 0 0 0;
+padding:0 0 0 0;
+}
+#bottombar-wrapper td, #bottombar-wrapper th, .sidebar td, .sidebar th {vertical-align:center;text-align:left;font-size:13px;padding:0 0 0 0;border:0 none;
+}
+/* BOTTOMBAR WRAPPER */
+#bottombar-wrapper {
+margin:0;
+padding:10px;
+background:#FFF;
+overflow:hidden;
+word-wrap:break-word;
+}
+#bottombar-wrapper h2 {
+font-family:"Oswald",Verdana,Sans-serif;
+font-weight:normal;
+text-transform:uppercase;
+margin:0 0 8px;
+font-size:16px;
+}
+.kiri {
+float:left;
+width:650px;
+margin:0 5px 5px 0;
+border:1px #666;
+}
+.kiri h2 {
+font:normal normal 12px Oswald, Arial, sans-serif;
+margin:0 0 0 0;
+padding:4px 8px;
+display:inline-block;
+background:#BA0000;
+color:#fff;
+text-transform:uppercase;
+border:1px solid #fff;
+}
+.kiri ul, .kiri ol {
+font-size:15px;
+}
+#return-to-top {
+position: fixed;
+bottom: 20px;
+right: 20px;
+background: rgba(255, 255, 255, 0.9);
+width: 48px;
+height: 48px;
+text-decoration: none;
+border: 1px solid rgba(0, 0, 0, 0.17);
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.17);
+border-radius: 35px;
+transition: all 0.3s ease;
+}
+.share{float:left;margin-right:10px;display:inline-block}
+.button {
+border: none;
+color: #FFFFFF;
+cursor: pointer;
+display: inline-block;
+font-family: 'Open Sans Condensed',sans-serif;
+font-size: 14px;
+font-weight: bold;
+line-height: 1;
+margin: 10px 10px 10px 0;
+padding: 1em 1.5em 0.75em;
+text-decoration: none;
+text-transform: uppercase;
+}
+a.button {
+color: #FFFFFF;
+font-weight: bold;
+text-decoration: none;
+}
+a.button:hover {
+-webkit-opacity: 0.8;
+-moz-opacity:0.8;
+opacity: 0.8;
+}
+.button.orange {
+background-color: #FF8B62;
+-webkit-box-shadow: 0 0 5px #F68962 inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #F68962 inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #F68962 inset, 0 1px 1px #EEEEEE;
+}
+.button.red {
+background-color: #FF7166;
+-webkit-box-shadow: 0 0 5px #EF7F65 inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #EF7F65 inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #EF7F65 inset, 0 1px 1px #EEEEEE;
+}
+.button.blue {
+background-color: #93D0EA;
+-webkit-box-shadow: 0 0 5px #8FCDE7 inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #8FCDE7 inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #8FCDE7 inset, 0 1px 1px #EEEEEE;
+}
+.button.green {
+background-color: #A5D16D;
+-webkit-box-shadow: 0 0 5px #A4CF6C inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #A4CF6C inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #A4CF6C inset, 0 1px 1px #EEEEEE;
+}
+.button.yellow {
+background-color: #EADC8E;
+-webkit-box-shadow: 0 0 5px #EEE3A4 inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #EEE3A4 inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #EEE3A4 inset, 0 1px 1px #EEEEEE;
+}
+.button.dark {
+background-color: #292929;
+-webkit-box-shadow: 0 0 5px #363636 inset, 0 1px 1px #EEEEEE;
+-moz-box-shadow: 0 0 5px #363636 inset, 0 1px 1px #EEEEEE;
+box-shadow: 0 0 5px #363636 inset, 0 1px 1px #EEEEEE;
+}
+.button.small {
+font-size: 11px;
+}
+.button.big {
+font-size: 18px;
+padding: 1.2em 2.5em 1em;
+}
+.social {
+background-color: #fff;
+border-top: 1px solid rgba(0, 0, 0, 0.1);
+box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+float: left;
+bottom:0;
+padding: 10px;
+position: fixed;
+z-index: 99999;
+transition: all .4s ease-out;
+}
+.smGlobalBtn{
+display: inline-block;
+position: relative;
+cursor: pointer;
+width: 75px;
+box-shadow: 0 2px 2px #999;
+padding: 0px;
+text-decoration: none !important;
+text-align: center;
+color: #fff !important;
+font-size: 20px;
+font-weight: normal;
+line-height: 29px;
+border-radius: 6px;
+}
+.social2 {
+background-color: #fff;
+border-top: 1px solid rgba(0, 0, 0, 0.1);
+box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+float: left;
+bottom:0;
+padding: 10px;
+position: fixed;
+z-index: 99999;
+transition: all .4s ease-out;
+}
+a.boxclose{
+float:right;
+margin-top:-15px;
+margin-right:-15px;
+cursor:pointer;
+color: #666;
+border: 1px solid #ccc;
+border-radius: 10px;
+background: #fff;
+font-size: 11px;
+display: inline-block;
+line-height: 0px;
+padding: 8px 3px;
+}
+.boxclose:before {
+content: "\2716";
+}
+.smGlobalBtn2{
+display: inline-block;
+position: relative;
+cursor: pointer;
+width: 110px;
+box-shadow: 0 2px 2px #999;
+padding: 0px;
+margin-right: 10px;
+text-decoration: none !important;
+text-align: center;
+color: #fff !important;
+font-size: 20px;
+font-weight: normal;
+line-height: 29px;
+border-radius: 6px;
+overflow:hidden;
+}
+.smGlobalBtn2 span{
+font-size: 16px; padding-left:5px;
+}
+.smGlobalBtn3{
+margin-top: 1em;
+border: none;
+overflow: visible;
+font: inherit;
+color: inherit;
+text-transform: none;
+display: inline-block;
+border-radius: 500px;
+font-weight: 400;
+padding: 0 30px;
+vertical-align: middle;
+font-size: .875rem;
+line-height: 38px;
+text-align: center;
+text-decoration: none !important;
+box-shadow: 0 5px 10px rgba(0,0,0,.15);
+text-transform: uppercase;
+transition: .3s ease-in-out;
+transition-property: color,background-color,border-color,box-shadow;
+}
+.smGlobalBtn3 span{
+font-size: 20px; padding-left:5px; color:#fff; font-weight: 600;
+}
+.facebookBtn{
+background: #4060A5;
+}
+.facebookBtn:before{
+font-family: "FontAwesome";
+content: "\f09a";
+}
+.twitterBtn{
+background: #00ABE3;
+}
+.twitterBtn:before{
+font-family: "FontAwesome";
+content: "\f099";
+}
+.emailBtn{
+background: #fe4a49;
+}
+.emailBtn:before{
+font-family: "FontAwesome";
+content: "\f0e0";
+color: #FFF;
+font-size: 20px;
+}
+.whatBtn{
+background: #25D366;
+}
+.whatBtn:before{
+font-family: "FontAwesome";
+content: "\f232";
+}
+.linkedinBtn{
+background: #0077B5;
+}
+.linkedinBtn:before{
+font-family: "FontAwesome";
+content: "\f0E1";
+}
+@media screen and (min-width:1200px){
+.toggleMenu{display:none;}
+.toggleMenu:before {display:none;}
+}
+@media only screen and (min-width: 960px) and (max-width: 1170px) {
+#wrapper{margin:0 auto}
+.rp_lfc h3 a, .sidebar .po_content h3 a,.rp_fwc h3 a, .rp-list-left .reposth, .rp-list-right .reposth, .rp-full-width .reposth { 			position: relative; top:-6px; }
+.repost1 .wrapper { width: 159px; }
+.repost1 .wrapper img { height: 100px; }
+.rp-list-left, .rp-list-right { width: 226px; }
+.rp-lf-img { width: 70px; height: 60px; }
+.rp-lf-img img { height: 60px; }
+.rp_lfc h3 a, #demo3 h3 a, .sidebar .po_content h3 a, .sidebar .po_content h3 a, .rp_fwc h3 a { font-size: 13px; }
+.rp-list-left .reposth, .rp-list-left .reposth a, .rp-list-right .reposth, .rp-list-right .reposth a { margin: 0 0 0 80px; }
+.rp-list-left .wrapper, .rp-list-right .wrapper { margin-bottom: 5px; }
+.rp-full-width p { margin: 0 0 0 160px; }
+.rp-list-left, .rp-list-right{width: 250px !important;}
+.toggleMenu{display:none;}
+.toggleMenu:before {display:none;}
+.techornate-socials span{font-size:18px !important;}
+}
+@media only screen and (min-width: 768px) and (max-width: 980px) {
+.repost1 .wrapper {width:183px;}
+.rp-list-left, .rp-list-right{width:262px;}
+.rp-lf-img{width:70px;height:85px;}
+.rp-lf-img img{height:60px;}
+.rp_lfc h3 a, .sidebar .po_content h3 a,.rp_fwc h3 a, .rp-list-left .reposth, .rp-list-right .reposth, .rp-full-width .reposth li a { position: relative; top:-6px; }
+#demo3 .als-item {width:130px;}
+.toggleMenu{display:none;}
+.toggleMenu:before {display:none;}
+#related-post{width: 100% !important;}
+#related-post ul{padding: 10px 15px !important; margin-left: 12px !important;}
+#related-post ul li {
+font-size: 18px !important;
+margin-bottom: 6px;
+font-weight:400;
+}
+#related-post a {
+text-decoration: underline !important;
+}
+}
+@media screen and (max-width:768px){.active{display:block}ul.nav-menu a.active{background:transparent}#search-form{width:100%;margin:0 0 0 0!important}ul.nav-menu>li{float:none}ul.nav-menu>li>.parent{background-position:95% 50%}ul.nav-menu li li .parent{background-repeat:no-repeat;background-position:95% 50%}ul.nav-menu{float:none;width:100%}ul.nav-menu ul{display:block;width:100%;float:none}ul.nav-menu>li.hover>ul,ul.nav-menu li li.hover ul{position:static}#search-form{background:#666}
+.sidebar{ display:none !important; }
+#wrapper{padding:18px}#post-wrapper,#sidebar-wrapper{float:none;width:100%;max-width:100%}.post-container{padding:0} .rp-list-gallery {margin: 0 0 0 25px;} .repost1 .wrapper img{height:auto;} #demo3 .als-item img{height:auto;}
+#demo3 .als-item {width: 140px !important;}
+.rp-list-left, .rp-list-right{width: 280px !important;}
+.post-body {
+font-size: 18px !important;
+line-height: 1.5 !important;
+}
+.mobile-index-title {
+font: 18px 'Trebuchet MS',Trebuchet,Verdana,sans-serif;
+width: 100%;
+font-weight:bold;
+}
+#related-post{width: 100% !important;}
+#related-post ul{padding: 10px 15px !important; margin-left: 12px !important;}
+#related-post ul li {
+font-size: 18px !important;
+margin-bottom: 6px;
+font-weight:400;
+}
+#related-post a {
+text-decoration: underline !important;
+}
+}
+@media only screen and (max-width:640px){#wrapper{padding:14px}#post-wrapper,#sidebar-wrapper{float:none;width:100%;max-width:100%}.footer-left,.footer-right{float:none;text-align:center} .rp-list-gallery,.repost1,reposth, .rp-full-width,.rp-list-left, .rp-list-right, .sidebar{ display:none !important; }
+.contact-form-widget{width:460px !important;}
+img.alignleft {
+display: block;
+margin: 20px 25px 20px 25px;
+float:none;
+}
+#toc ol {
+margin-left: 2em;
+}
+h2,h3,.db,.db2{font-size: 22px; width:100%;}
+.post-body {
+font-size: 18px !important;
+line-height: 1.5 !important;
+}
+.mobile-index-title {
+font: 18px 'Trebuchet MS',Trebuchet,Verdana,sans-serif;
+width: 100%;
+font-weight:bold;
+}
+.row{flex-direction: column;}
+code {font-size: 100% !important;}
+#related-post{width: 100% !important;}
+#related-post ul{padding: 10px 15px !important; margin-left: 12px !important;}
+#related-post ul li {
+font-size: 18px !important;
+margin-bottom: 6px;
+font-weight:400;
+}
+#related-post a {
+text-decoration: underline !important;
+}
+#toc ol {
+margin-left: 2em;
+}
+.smGlobalBtn3 {padding: 0 15px;}
+.smGlobalBtn3 span {font-size: 16px;}
+#return-to-top {height: 40px; width:40px; transform: translateY(-40px);}
+}
+@media only screen and (max-width:480px){#wrapper{padding:12px}#post-wrapper,#sidebar-wrapper{float:none;width:100%;max-width:100%}
+h2.post-title,.post-snippet,.post-footer{margin-left:110px}
+h2,h3,.db,.db2{font-size: 22px; width:100%;}
+.img-thumbnail{width:110px;height:71px}
+.img-thumbnail img{width:100px;height:71px} .rp-list-gallery,.repost1,reposth, .rp-full-width,.rp-list-left, .rp-list-right, .sidebar{ display:none !important; }
+.contact-form-widget{width:400px !important;}
+img.alignleft {
+display: block;
+margin: 20px 25px 20px 25px;
+float:none;
+}
+.post-body {
+font-size: 18px !important;
+line-height: 1.5 !important;
+}
+.mobile-index-title {
+font: 20px 'Trebuchet MS',Trebuchet,Verdana,sans-serif;
+font-weight:500;
+width: 100%;
+}
+code {font-size: 100% !important;}
+.smGlobalBtn3 {padding: 0 15px;}
+.smGlobalBtn3 span {font-size: 15px;}
+.row{flex-direction: column;}
+.about-author{display:none;}
+.smGlobalBtn{width:75px;}
+#related-post{width: 100% !important;}
+#related-post ul{padding: 10px 15px !important; margin-left: 12px !important;}
+#related-post ul li {
+font-size: 18px !important;
+margin-bottom: 6px;
+font-weight:400;
+}
+#related-post a {
+text-decoration: underline !important;
+}
+#toc ol {
+margin-left: 2em;
+}
+#return-to-top {height: 40px; width:40px; transform: translateY(-40px);}
+}
+@media screen and (max-width:320px){#wrapper{padding:10px}#post-wrapper,#sidebar-wrapper{float:none;width:100%;max-width:100%}
+.about-author{display:none;}
+.row{flex-direction: column;}
+.smGlobalBtn{width:60px;}
+h2,h3,.db,.db2{font-size: 22px; width:100%;}
+.post-body {
+font-size: 18px !important;
+line-height: 1.5 !important;
+}
+.mobile-index-title {
+font: 20px 'Trebuchet MS',Trebuchet,Verdana,sans-serif;
+width: 100%;
+font-weight:500;
+}
+.smGlobalBtn3 {padding: 6px;border-radius:0;}
+.smGlobalBtn3 span {font-size: 14px;}
+#related-post{width: 100% !important;}
+#related-post ul{padding: 10px 15px !important; margin-left: 12px !important;}
+#related-post ul li {
+font-size: 18px !important;
+margin-bottom: 6px;
+font-weight:400;
+}
+#related-post a {
+text-decoration: underline !important;
+}
+#toc ol {
+margin-left: 2em;
+}
+#return-to-top {height: 40px; width:40px; transform: translateY(-40px);}
+}
+#ContactForm1{display: none !important;}
+.comment-content a {display: none;}
+
+--></style>
+<style type="text/css">
+
+
+.hidden-section-container {
+  background-color:rgba(232, 232, 232, 0.93);
+  box-shadow:0 2px 10px rgba(0,0,0,0.2);
+}
+ 
+
+pre {
+    display: block;
+	overflow: auto; 
+	white-space: pre-wrap;
+    font-family:  -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    font-size: 16px;
+    margin: 1rem 0;
+    padding: 1rem 0rem 1rem 1rem;
+	background-color: #f6f8fa;
+    border-radius: 2px;
+	color: #444;
+}
+
+
+code {
+    font-family:  -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+	color: #ff5722;
+    line-height: 22px;
+    font-size: 90%;
+	font-weight:500;
+    padding: 3px;
+    background-color: #f6f8fa;
+    border-radius: 3px; 
+	margin-right : 5px;
+}
+
+pre code {
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0px;
+	color: #444;
+}
+
+
+.content-box-gray .content {
+    overflow: hidden;
+    padding: 10px;
+    font-size: 16px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 1px solid gray;
+    color: #444;
+}
+.content-box-gray .title {
+    height:auto;
+    line-height:30px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background:#990000;
+    font-size:18px;
+    font-weight:bold;
+    font-family:verdana;
+    display:block;
+    color:white;
+    display:block;
+    padding:10px;
+    border: 1px solid gray;
+    border-bottom:none;
+}
+
+
+.toplist {
+    float: left;
+    width: 100%;
+    font-family: 'Roboto',sans-serif;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.toplist .toplist_head {
+    float: left;
+    width: 100%;
+    font-size: 120%;
+    font-weight: bold;
+    color: #ff5722;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #ff5722;
+}
+
+
+.toplist ol {
+    counter-reset: item;
+    margin-left: 0;
+    padding-left: 0;
+    width: 100%;
+    float: left;
+}
+
+.toplist li:before {
+    font-family: 'Roboto',sans-serif;
+    font-weight: normal;
+    width: 50px;
+    left: 0;
+    position: absolute;
+    top: 15px;
+    color: #ff5722;
+    font-size: 140%;
+    content: counter(item);
+    counter-increment: item;
+    text-align: center;
+    padding-right: 0;
+}
+
+.toplist li:first-child {
+    border-top: 0;
+    margin-top: 0;
+}
+
+.toplist li {
+    padding-left: 70px;
+    position: relative;
+    display: block;
+    padding-top: 15px !important;
+    margin-top: 15px;
+    border-top: 1px solid #f2f2f2;
+    line-height: 24px;
+    font-size: 100%;
+}
+
+
+<!---
+
+#fdw-pricing-table {
+  margin:0 auto;
+  text-align: center;
+  width: 928px;
+  zoom: 1;
+ }
+
+ #fdw-pricing-table:before, #fdw-pricing-table:after {
+   content: &quot;&quot;;
+   display: table
+ }
+
+ #fdw-pricing-table:after {
+   clear: both
+ }
+
+#w-pricing-table {
+  margin:0 auto;
+  text-align: center;
+  width: 928px;
+  zoom: 1;
+ }
+
+ #w-pricing-table:before, #w-pricing-table:after {
+   content: &quot;&quot;;
+   display: table
+ }
+
+ #w-pricing-table:after {
+   clear: both
+ }
+
+
+ #w-pricing-table .plan {
+  font: 13px &#39;Lucida Sans&#39;, &#39;trebuchet MS&#39;, Arial, Helvetica;     
+  background: #fff;      
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 20px;
+  width: 250px;
+  float: left;
+  _display: inline;
+  position: relative;
+  margin: 0 5px;
+  -moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+  -webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);  
+ }
+
+ #w-pricing-table .plan:after {
+   z-index: -1; 
+   position: absolute; 
+   content: &quot;&quot;;
+   bottom: 10px;
+   right: 4px;
+   width: 80%; 
+   top: 80%; 
+   -webkit-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);   
+   -moz-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+   box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+   -webkit-transform: rotate(3deg);    
+   -moz-transform: rotate(3deg);   
+   -o-transform: rotate(3deg);
+   -ms-transform: rotate(3deg);
+   transform: rotate(3deg); 
+ } 
+
+ #w-pricing-table .header {
+  font-size: 18px;
+  font-weight: normal;
+  border-bottom: 3px solid;
+ }
+
+ #w-pricing-table .header:after {
+  position: absolute;
+  bottom: -8px; left: 0;
+  height: 3px; width: 100%;
+  content: &#39;&#39;;
+ }
+
+
+ #w-pricing-table .price{
+  font-size: 25px;
+ }
+
+ #w-pricing-table .monthly{
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #666;
+ }
+
+
+ #fdw-pricing-table .plan {
+  font: 13px &#39;Lucida Sans&#39;, &#39;trebuchet MS&#39;, Arial, Helvetica;     
+  background: #fff;      
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 20px;
+  width: 180px;
+  float: left;
+  _display: inline;
+  position: relative;
+  margin: 0 5px;
+  -moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+  -webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);
+  box-shadow: 0 2px 2px -1px rgba(0,0,0,.3);  
+ }
+
+ #fdw-pricing-table .plan:after {
+   z-index: -1; 
+   position: absolute; 
+   content: &quot;&quot;;
+   bottom: 10px;
+   right: 4px;
+   width: 80%; 
+   top: 80%; 
+   -webkit-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);   
+   -moz-box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+   box-shadow: 0 12px 5px rgba(0, 0, 0, .3);
+   -webkit-transform: rotate(3deg);    
+   -moz-transform: rotate(3deg);   
+   -o-transform: rotate(3deg);
+   -ms-transform: rotate(3deg);
+   transform: rotate(3deg); 
+ } 
+ 
+ 
+
+ #fdw-pricing-table .header {
+  font-size: 18px;
+  font-weight: normal;
+  border-bottom: 3px solid;
+ }
+
+ #fdw-pricing-table .header:after {
+  position: absolute;
+  bottom: -8px; left: 0;
+  height: 3px; width: 100%;
+  content: &#39;&#39;;
+ }
+ 
+ 
+ #fdw-pricing-table .plan1 .header{
+  border-bottom-color: #B3E03F;
+ }
+
+ #fdw-pricing-table .plan2 .header{
+  border-bottom-color: #7BD553;
+ }
+
+ #fdw-pricing-table .plan3 .header{
+  border-bottom-color: #3AD5A0;
+ }
+
+ #w-pricing-table .plan4 .header{
+  border-bottom-color: #990000;
+ }   
+ 
+
+ #fdw-pricing-table .price{
+  font-size: 25px;
+ }
+
+ #fdw-pricing-table .monthly{
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #666;
+ }
+
+
+ #fdw-pricing-table ul {
+  margin: 20px 0;
+  padding: 0;
+  list-style: none;
+ }
+
+ #fdw-pricing-table li {
+  padding: 10px 0;
+ }
+ 
+  
+ #fdw-pricing-table .signup {
+  position: relative;
+  padding: 10px 20px;
+  color: #fff;
+  font: bold 15px Arial, Helvetica;
+  text-decoration: none;
+  display: inline-block;       
+  background-color: #72ce3f;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;     
+  text-shadow: 0 -1px 0 rgba(0,0,0,.15);
+  opacity: .9;       
+ }
+
+ #fdw-pricing-table .signup:hover {
+  opacity: 1;       
+ }
+
+ #fdw-pricing-table .signup:active {
+  -moz-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+  -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;
+  box-shadow: 0 2px 2px rgba(0,0,0,.3) inset;       
+ }   
+
+ #fdw-pricing-table .plan1 .signup{
+  background: #B3E03F;
+ }
+
+ #fdw-pricing-table .plan2 .signup{
+  background: #7BD553;
+ }
+
+ #fdw-pricing-table .plan3 .signup{
+  background: #3AD5A0;
+ }
+
+ #w-pricing-table .plan4 .signup{
+ font-size: 16px;
+ font-weight: bold;
+ } 
+
+
+-->
+
+ 
+@media only screen and (max-width: 600px) {
+    #fdw-pricing-table {
+        width: 100%;
+    }
+}
+
+.navigation {
+  width: 300px;
+}
+
+.mainmenu, .submenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mainmenu a {
+  display: block;
+  background-color: #CCC;
+  text-decoration: none;
+  padding: 10px;
+  color: #000;
+}
+
+.mainmenu a:hover {
+    background-color: #C5C5C5;
+}
+
+.mainmenu li:hover .submenu {
+  display: block;
+  max-height: 200px;
+}
+
+.submenu a {
+  background-color: #999;
+}
+
+/* hover behaviour for links inside .submenu */
+.submenu a:hover {
+  background-color: #666;
+}
+
+.submenu {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: all 0.5s ease-out;
+}
+
+#toc {
+    background: #FAFAFA;
+    padding: 5px 0 2px;
+    width: 97%;
+    max-width: 650px;
+    margin-left: 2%;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+    display:inline-block;
+
+}
+
+#toc span{
+	font-size: 24px;
+	font-weight: bold;
+    margin-left: 2%;
+}
+
+
+
+.box {
+display: block;
+line-height: 28px;
+margin: 10px 0;
+padding: 1em 2em;
+border-radius: 3px;
+}
+
+.box.white {
+background-color: #fcfcfc;
+border-top-color: #ff3547;
+border-top-width: 10px;
+border-top-style: solid;
+color: #666;
+}
+
+.box.green {
+background-color: #f2f6f9;
+border-top-color: #3d86d5;
+border-top-width: 10px;
+border-top-style: solid;
+color: #666;
+}
+
+
+.box2:before {
+content: "\f05a";
+font-family: FontAwesome;
+margin-right: 5px;
+font-size: 22px;
+}
+
+.box2 {
+display: block;
+line-height: 24px;
+margin: 10px 0;
+padding: 1em 2em;
+border-radius: 3px;
+background-color: #f2f6f9;
+border-top-color: #3d86d5;
+border-top-width: 10px;
+border-top-style: solid;
+color: #666;
+}
+
+
+.box2 pre{
+background : #edf4f9;
+}
+
+</style>
+<style type="text/css">
+#related-post{margin:30px 0 30px; width: 70%; float: left;}
+#related-post span{color: #ff5722; font-size: 24px;font-weight:bold; display: block; margin-bottom: 10px; border-bottom: 1px solid;}
+#related-post a{color: #666;}
+</style>
+<script language="JavaScript">
+//<![CDATA[
+var relatedTitles = new Array();
+var relatedTitlesNum = 0;
+var relatedUrls = new Array();
+function related_results_labels(json) {
+for (var i = 0; i < json.feed.entry.length; i++) {
+var entry = json.feed.entry[i];
+relatedTitles[relatedTitlesNum] = entry.title.$t;
+for (var k = 0; k < entry.link.length; k++) {
+if (entry.link[k].rel == 'alternate') {
+relatedUrls[relatedTitlesNum] = entry.link[k].href;
+relatedTitlesNum++;
+break;
+}
+}
+}
+}
+function removeRelatedDuplicates() {
+var tmp = new Array(0);
+var tmp2 = new Array(0);
+for(var i = 0; i < relatedUrls.length; i++) {
+if(!contains(tmp, relatedUrls[i])) {
+tmp.length += 1;
+tmp[tmp.length - 1] = relatedUrls[i];
+tmp2.length += 1;
+tmp2[tmp2.length - 1] = relatedTitles[i];
+}
+}
+relatedTitles = tmp2;
+relatedUrls = tmp;
+}
+function contains(a, e) {
+for(var j = 0; j < a.length; j++) if (a[j]==e) return true;
+return false;
+}
+function printRelatedLabels() {
+for(var i = 0; i < relatedUrls.length; i++)
+{
+if(relatedUrls[i]==currentposturl)
+{
+relatedUrls.splice(i,1)
+relatedTitles.splice(i,1)
+}
+}
+var r = Math.floor((relatedTitles.length - 1) * Math.random());
+var i = 0;
+if(relatedTitles.length>1)
+document.write('<ul>');
+while (i < relatedTitles.length && i < 20 && i<maxresults) {
+document.write('<li><a href="' + relatedUrls[r] + '">' + relatedTitles[r] + '</a></li>');
+if (r < relatedTitles.length - 1) {
+r++;
+} else {
+r = 0;
+}
+i++;
+}
+document.write('</ul>');
+}
+
+//]]>
+</script>
+<style type="text/css">.comment-form{overflow:hidden}.comments h3{font-family:"Oswald",arial,sans-serif;line-height:16px;text-transform:uppercase;font-weight:normal;color:#666;margin:0 0 20px 0;font-size:16px;padding:0}h4#comment-post-message{display:none;margin:0}.comments{clear:both;margin-top:10px;margin-bottom:0}.comments .comments-content{font-size:13px;margin-bottom:8px}.comments .comments-content .comment-thread ol{text-align:left;margin:13px 0;padding:0}.comments .avatar-image-container{background:#f9fafb;overflow:hidden;padding:6px}.comments .comment-block{position:relative;background:#f9fafb;padding:15px;margin-left:60px}.comments .comment-block:before{content:"";width:0;height:0;position:absolute;right:100%;top:15px;border-width:10px;border-style:solid;border-color:transparent #f9fafb transparent transparent;display:block}.comments .comments-content .comment-replies{margin:8px 0;margin-left:60px}.comments .comments-content .comment-thread:empty{display:none}.comments .comment-replybox-single{background:#f9fafb;padding:0;margin:8px 0;margin-left:60px}.comments .comment-replybox-thread{background:#f9fafb;margin:8px 0 0 0;padding:0}.blogger-iframe-colorize{display:block!important}.comments .comments-content .comment{margin-bottom:6px;padding:0}.comments .comments-content .comment:first-child{padding:0;margin:0}.comments .comments-content .comment:last-child{padding:0;margin:0}.comments .comment-thread.inline-thread .comment,.comments .comment-thread.inline-thread .comment:last-child{margin:0 0 5px 30%}.comment .comment-thread.inline-thread .comment:nth-child(6){margin:0 0 5px 25%}.comment .comment-thread.inline-thread .comment:nth-child(5){margin:0 0 5px 20%}.comment .comment-thread.inline-thread .comment:nth-child(4){margin:0 0 5px 15%}.comment .comment-thread.inline-thread .comment:nth-child(3){margin:0 0 5px 10%}.comment .comment-thread.inline-thread .comment:nth-child(2){margin:0 0 5px 5%}.comment .comment-thread.inline-thread .comment:nth-child(1){margin:0 0 5px 0}.comments .comments-content .comment-thread{margin:0;padding:0}.comments .comments-content .inline-thread{padding:10px 0;margin:0}.comments .comments-content .icon.blog-author{position:absolute;top:-2px;right:-2px;margin:0;background-image:url(https://1.bp.blogspot.com/-o6Tdk7WBxk8/WpEhtNhV6QI/AAAAAAAAGvg/bqC6omQilrYamiRHSGT07pXz5YfL0ngpQCLcBGAs/s1600/author.png);width:59px;height:43px}.comments .comment .comment-actions a{background:#ba0000;display:inline-block;color:#fff;font-weight:bold;font-size:10px;line-height:15px;padding:4px 8px;margin:4px 8px 0 0}.comments .comment .comment-actions a:hover,.comments .continue a:hover{text-decoration:none;background:#333}.comments .continue a{background:#ba0000;color:#fff;display:inline-block;padding:4px 8px;font-size:10px}.pesan-komentar{background:#333;position:relative;color:#fff;padding:10px 20px;margin:8px;font-weight:600;}.pesan-komentar p{line-height:normal;margin:0}.pesan-komentar:before{content:"";width:0;height:0;position:absolute;top:100%;left:30px;border-width:10px;border-style:solid;border-color:#333 transparent transparent transparent;display:block}</style>
+<style>.post-footer{margin-left:0!important;margin-bottom:20px!important}</style>
+<script type="text/javascript">
+//<![CDATA[
+function bp_thumbnail_resize(image_url,blog_title)
+{
+var image_width=200;
+var image_height=130;
+image_tag='<img width="'+image_width+'" height="'+image_height+'" src="'+image_url.replace('/s72-c/','/w'+image_width+'-h'+image_height+'-c/')+'" alt="'+blog_title+'" title="'+blog_title+'"/>';
+if(image_url!="") return image_tag;
+else return "";
+}
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+var loadCss = function(){
+    var cssLink = document.createElement('link');
+    cssLink.rel = 'stylesheet';
+    cssLink.href = 'https://fonts.googleapis.com/css?family=Roboto:400,700|Oswald&display=swap';
+    var head = document.getElementsByTagName('head')[0];
+    head.parentNode.insertBefore(cssLink, head);
+};
+ 
+//call function on window load
+window.addEventListener('load', loadCss);
+//]]>
+</script>
+<script type="text/javascript">
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-76384860-1', 'auto', 'blogger');
+        ga('blogger.send', 'pageview');
+      </script>
+<style>
+.header-left{
+display: inline-block;
+float: left;
+}
+#header-right {
+display:inline-block;
+float:right;
+margin-top: 10px;
+margin-right: 0px;
+}
+</style>
+<link href="./Support Vector Machine Simplified using R_files/authorization.css" media="all" onload="if(media!=&#39;all&#39;)media=&#39;all&#39;" rel="stylesheet"><noscript><link href='https://www.blogger.com/dyn-css/authorization.css?targetBlogID=7958828565254404797&amp;zx=00ce0a8c-f81a-46f5-b66e-994ab60a7917' rel='stylesheet'/></noscript>
+
+<link rel="preload" href="./Support Vector Machine Simplified using R_files/f(12).txt" as="script"><script type="text/javascript" src="./Support Vector Machine Simplified using R_files/f(12).txt"></script><link rel="preload" href="./Support Vector Machine Simplified using R_files/f(13).txt" as="script"><script type="text/javascript" src="./Support Vector Machine Simplified using R_files/f(13).txt"></script></head>
+<body class="loading" data-gr-c-s-loaded="true">
+<div id="wrapper" style="height: auto !important;">
+<nav id="nav-bar1">
+<a class="toggleMenu1" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html#">Menu</a>
+<ul class="nav-menu1">
+<li><a href="https://www.listendata.com/p/about-listen-data.html">About</a></li>
+<li><a href="https://www.listendata.com/p/site-map.html">Index</a></li>
+<li><a href="https://www.listendata.com/p/contact-us.html">Contact</a></li>
+</ul>
+</nav>
+<header id="header-wrapper">
+<div class="header header-left section" id="header"><div class="widget Header" data-version="1" id="Header1">
+<div id="header-inner">
+<a href="https://www.listendata.com/" style="display: block">
+<img alt="ListenData" height="95px; " id="Header1_headerimg" src="./Support Vector Machine Simplified using R_files/listendata-logo.png" style="display: block" width="309px; ">
+</a>
+</div>
+</div></div>
+<!--- <b:if cond='data:blog.pageType == &quot;index&quot; || data:blog.searchQuery'> <b:section class='header-right crosscol' id='header-right' maxwidgets='1' showaddelement='yes'> <b:widget id='HTML2' locked='false' mobile='no' title='' type='HTML' version='1'> <b:widget-settings> <b:widget-setting name='content'>&lt;a href=&#39;http://www.listendata.com/2017/12/predictive-modeling-sas-r-training.html&#39;&gt;&lt;img border=&#39;0&#39; data-original-height=&#39;90&#39; data-original-widh=&#39;728&#39; src=&#39; https://4.bp.blogspot.com/-EodX0JzLRQs/WkZDDAlI0YI/AAAAAAAAGkw/Z7hPy-9smDs6FxOr2id1xps5kt_a_o-_wCLcBGAs/s1600/listendata%2B%25284%2529.png &#39;/&gt; &lt;/a&gt;</b:widget-setting> </b:widget-settings> <b:includable id='main'> <b:if cond='data:blog.url == data:blog.homepageUrl'> <b:if cond='data:title != &quot;&quot;'> <h2 class='title'><data:title/></h2> </b:if> <div class='widget-content'> <data:content/> </div> </b:if> </b:includable> </b:widget> </b:section> </b:if> -->
+<div style="clear:both;"></div>
+<div class="header-cap-bottom cap-bottom">
+<div class="cap-left"></div>
+<div class="cap-right"></div>
+</div>
+</header>
+<nav id="nav-bar">
+<a class="toggleMenu" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html#" style="display: none;">Menu</a>
+<ul class="nav-menu">
+<li class="selected"><a href="https://www.listendata.com/">Home</a></li>
+<li>
+<a href="https://www.listendata.com/p/sas-tutorials.html" class="parent">
+SAS
+</a>
+<ul>
+<li>
+<a href="https://www.listendata.com/p/sas-tutorials.html">
+Tutorials
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/search/label/SAS%20Certification">
+SAS Certification
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/2013/09/sas-interview-questions.html">
+Interview Questions
+</a>
+</li><li>
+<a href="https://www.listendata.com/p/resume-templates.html">
+Resumes
+</a>
+</li>
+</ul></li>
+<li>
+<a href="https://www.listendata.com/p/r-programming-tutorials.html">
+R
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/search/label/Python">
+Python
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/statistics-tutorials.html">
+Data Science
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/search/label/Credit%20Risk%20Modeling">Credit Risk</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/proc-sql.html">
+SQL
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/excel-tutorials.html" class="parent">Excel</a>
+<ul>
+<li><a href="https://www.listendata.com/p/excel-for-beginners.html">Functions</a></li>
+<li>
+<a href="https://www.listendata.com/p/advanced-excel-tutorials.html">
+Advanced
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/search/label/Excel%20Charts">
+ Dashboard / Charts
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/excel-vba-tutorials.html">
+ VBA / Macros
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/statistical-analysis-using-excel.html">
+Statistical Analysis
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/p/mathematics-with-excel.html">
+Mathematical Analysis
+</a>
+</li><li>
+<a href="https://www.listendata.com/2014/05/mis-developer-senior-reporting-analyst.html">
+Resumes
+</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="https://www.listendata.com/p/spss-tutorials.html">
+SPSS
+</a>
+</li>
+<li>
+<a href="https://www.listendata.com/search/label/Infographics">
+Infographics
+</a>
+</li>
+</ul>
+<form action="https://www.listendata.com/search" id="search-form" method="get" style="display: inline;"><input id="search-box" name="q" onblur="if(this.value==&#39;&#39;)this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue)this.value=&#39;&#39;;" type="text" value="Search..." vinput="">
+<input id="search-button" type="submit" value="Go"></form>
+</nav>
+<div class="clear"></div>
+<div id="content-wrapper" style="height: auto !important;">
+<div id="post-wrapper">
+<div class="post-container">
+<!--- <div id='bottombar-wrapper'> <b:if cond='data:blog.url == data:blog.homepageUrl'> <b:section class='kiri' id='kiri' preferred='yes'> <b:widget id='HTML4' locked='false' mobile='no' title='Online Courses' type='HTML'> <b:widget-settings> <b:widget-setting name='content'>&lt;style type=&#39;text/css&#39;&gt; #f-pricing-table { margin:0 auto; text-align: center; width: 650px; /* total computed width */ zoom: 1; } #f-pricing-table:before, #f-pricing-table:after { content: &amp;quot;&amp;quot;; display: table } #f-pricing-table:after { clear: both } #f-pricing-table .plan { font: 13px &amp;#39;Lucida Sans&amp;#39;, &amp;#39;trebuchet MS&amp;#39;, Arial, Helvetica; background: #fff; border: 1px solid #ddd; color: #333; padding: 15px; width: 165px; float: left; _display: inline; /* IE6 double margin fix */ position: relative; margin: 0 5px; -moz-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3); -webkit-box-shadow: 0 2px 2px -1px rgba(0,0,0,.3); box-shadow: 0 2px 2px -1px rgba(0,0,0,.3); } #f-pricing-table .plan:after { z-index: -1; position: absolute; content: &amp;quot;&amp;quot;; bottom: 10px; right: 4px; width: 80%; top: 80%; -webkit-box-shadow: 0 12px 5px rgba(0, 0, 0, .3); -moz-box-shadow: 0 12px 5px rgba(0, 0, 0, .3); box-shadow: 0 12px 5px rgba(0, 0, 0, .3); -webkit-transform: rotate(3deg); -moz-transform: rotate(3deg); -o-transform: rotate(3deg); -ms-transform: rotate(3deg); transform: rotate(3deg); } #f-pricing-table .header { font-size: 18px; font-weight: normal; border-bottom: 3px solid; } #f-pricing-table .header:after { position: absolute; bottom: -8px; left: 0; height: 3px; width: 100%; content: &amp;#39;&amp;#39;; } #f-pricing-table .plan1 .header{ border-bottom-color: #B3E03F; } #f-pricing-table .plan2 .header{ border-bottom-color: #7BD553; } #f-pricing-table .plan3 .header{ border-bottom-color: #3AD5A0; } #f-pricing-table .plan4 .header{ border-bottom-color: #990000; } #f-pricing-table .price{ font-size: 25px; } #f-pricing-table .monthly{ font-size: 18px; margin-bottom: 20px; text-transform: uppercase; color: #666; } #f-pricing-table ul { margin: 20px 0; padding: 0; list-style: none; } #f-pricing-table li { padding: 10px 0; } #f-pricing-table .signup { position: relative; padding: 10px 20px; color: #fff; font: bold 15px Arial, Helvetica; text-decoration: none; display: inline-block; background-color: #72ce3f; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; text-shadow: 0 -1px 0 rgba(0,0,0,.15); opacity: .9; } #f-pricing-table .signup:hover { opacity: 1; } #f-pricing-table .signup:active { -moz-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset; -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.3) inset; box-shadow: 0 2px 2px rgba(0,0,0,.3) inset; } #f-pricing-table .plan1 .signup{ background: #B3E03F; } #f-pricing-table .plan2 .signup{ background: #7BD553; } #f-pricing-table .plan3 .signup{ background: #3AD5A0; } #f-pricing-table .plan4 .signup{ background: #990000; } @media only screen and (max-width: 600px) { #f-pricing-table { width: 100%; } } &lt;/style&gt; &lt;div id=&quot;f-pricing-table&quot;&gt; &lt;div class=&quot;plan plan1&quot;&gt; &lt;div class=&quot;header&quot;&gt; Practical SAS Programming &lt;/div&gt; &lt;a class=&quot;signup&quot; href=&quot;http://www.listendata.com/2017/12/predictive-modeling-sas-r-training.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;DETAILS&lt;/a&gt;&lt;br/&gt; &lt;/div&gt; &lt;/div&gt; &lt;div id=&quot;f-pricing-table&quot;&gt; &lt;div class=&quot;plan plan2&quot;&gt; &lt;div class=&quot;header&quot;&gt; Predictive Modeling with SAS&lt;/div&gt; &lt;a class=&quot;signup&quot; href=&quot;http://www.listendata.com/2017/12/predictive-modeling-sas-r-training.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;DETAILS&lt;/a&gt; &lt;br/&gt; &lt;/div&gt; &lt;/div&gt; &lt;div id=&quot;f-pricing-table&quot;&gt; &lt;div class=&quot;plan plan3&quot;&gt; &lt;div class=&quot;header&quot;&gt; Data Science with R&amp;nbsp;&amp;nbsp;&lt;/div&gt; &lt;a class=&quot;signup&quot; href=&quot;http://www.listendata.com/2017/12/predictive-modeling-sas-r-training.html&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;DETAILS&lt;/a&gt; &lt;br/&gt; &lt;/div&gt; &lt;/div&gt;</b:widget-setting> </b:widget-settings> <b:includable id='main'> <b:if cond='data:title != &quot;&quot;'> <h2 class='title'><data:title/></h2> </b:if> <div class='widget-content'> <data:content/> </div> <b:include name='quickedit'/> </b:includable> </b:widget> </b:section> </b:if> </div>l -->
+<div class="clear"></div>
+<div class="main section" id="main"><div class="widget Blog" data-version="1" id="Blog1">
+<div class="breadcrumbs"><span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://www.listendata.com/" itemprop="url"><span itemprop="title">Home</span></a></span> » <span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://www.listendata.com/search/label/R?&amp;max-results=8" itemprop="url"><span itemprop="title">R</span></a></span> » 
+<span itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb"><a href="https://www.listendata.com/search/label/SVM?&amp;max-results=8" itemprop="url"><span itemprop="title">SVM</span></a></span>
+ » <span>Support Vector Machine Simplified using R</span>
+</div>
+<div class="blog-posts hfeed">
+<!--Can't find substitution for tag [defaultAdStart]-->
+
+<div class="date-outer">
+
+<div class="date-posts">
+<div class="post-outer">
+<meta content="summary" name="twitter:card">
+<meta content="@ListenData" name="twitter:site">
+<meta content="@DeepanshuBhall1" name="twitter:creator">
+<meta content="https://www.listendata.com/" name="twitter:domain">
+<meta content="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" name="twitter:url">
+<meta content="Support Vector Machine Simplified using R" name="twitter:title">
+<meta content="https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s1600/SVM%2Bwith%2Br.png" name="twitter:image:src">
+<meta content="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" name="twitter:url">
+<div class="post hentry uncustomized-post-template" itemscope="itemscope" itemtype="https://schema.org/BlogPosting">
+<meta itemtype="https://schema.org/WebPage" itemid="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" itemprop="mainEntityOfPage" itemscope="itemscope">
+<meta content="https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s1600/SVM%2Bwith%2Br.png" itemprop="image">
+<a name="6763939167167291207"></a>
+<h1 class="post-title entry-title" itemprop="headline">
+Support Vector Machine Simplified using R
+</h1>
+<div class="post-footer">
+<span class="admin-meta vcard">
+<span class="fn" itemprop="author" itemscope="itemscope" itemtype="https://schema.org/Person">
+<meta content="https://www.blogger.com/profile/09802839558125192674" itemprop="url">
+<a href="https://www.linkedin.com/in/deepanshubhalla" rel="author" target="_blank" title="author profile">
+<span itemprop="name">Deepanshu Bhalla</span>
+</a>
+</span>
+</span>
+<span class="comment-meta">
+<a href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html#comment-form" onclick="">
+4 Comments 
+</a>
+</span>
+<span class="label-meta">
+<a href="https://www.listendata.com/search/label/R" rel="tag">R</a>,
+<a href="https://www.listendata.com/search/label/SVM" rel="tag">SVM</a>
+</span>
+</div>
+<ins class="adsbygoogle" data-ad-client="ca-pub-4695912699318711" data-ad-slot="4202636189" style="display: inline-block; min-width: 600px; max-width: 900px; width: 858px; height: 90px;" data-adsbygoogle-status="done" data-overlap-observer-io="false"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><iframe width="858" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;border:0px;width:858px;height:90px;" src="./Support Vector Machine Simplified using R_files/saved_resource(4).html"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class="post-body entry-content" id="post-body-6763939167167291207" itemprop="description articleBody">
+
+<div id="adsense-target">
+<div dir="ltr" style="text-align: left;" trbidi="on">
+This tutorial describes theory and practical application of Support Vector Machines (SVM) with R code. It's a popular supervised learning algorithm (i.e. classify or predict target variable). <b>It works both for classification and regression problems. </b>It's one of the sought-after machine learning algorithm that is widely used in data science competitions.<br>
+<b><br></b>
+<br>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="./Support Vector Machine Simplified using R_files/SVM with r.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./Support Vector Machine Simplified using R_files/SVM with r.png"></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">SVM with R</td></tr>
+</tbody></table>
+<b><br></b>
+<b><span style="color: #990000; font-size: x-large;">What is Support Vector Machine?</span></b><br>
+<br>
+The main idea of support vector machine is to find the <b>optimal hyperplane</b> (line in 2D, plane in 3D and hyperplane in more than 3 dimensions) which <b>maximizes the margin between two classes</b>. In this case, two classes are red and blue balls. In layman's term, it is finding the optimal separating boundary to separate two classes (events and non-events).<br>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="./Support Vector Machine Simplified using R_files/SVM in R.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./Support Vector Machine Simplified using R_files/SVM in R.png"></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Support Vector Machine (SVM)</td></tr>
+</tbody></table>
+<div>
+<div>
+<b>Support Vectors</b> are observations that supports hyperplane on either sides. In the image above, <b>filled </b>red and blue boxes and circles are <b>support vectors</b>.<br>
+<br></div>
+</div>
+<b><span style="color: #990000; font-size: x-large;">Why Hyperplane?</span></b><br>
+<div>
+<br></div>
+<b>Hyperplane</b> is just a line in 2D and plane in 3D. In higher dimensions (more than 3D), it's called hyperplane. SVM help us to find a hyperplane (or separating boundary) that can separate two classes (red and blue dots).<br>
+<br>
+<b><span style="color: #990000; font-size: x-large;">What is Margin?</span></b><br>
+<br>
+It is the distance between the hyperplane and the closest data point. If we double it, it would be equal to the margin.<br>
+<blockquote class="tr_bq">
+<b>Objective</b> <b>:</b> Maximize the margin between two categories</blockquote>
+<br>
+<b><span style="color: #990000; font-size: x-large;">How to find the optimal hyperplane?</span></b><br>
+<br>
+In your dataset, select two hyperplanes which separate the data with no points between them and maximize the distance between these two hyperplanes. The distance here is <b>'margin'</b>.<br>
+<div>
+<br>
+<div>
+<b><span style="color: #990000; font-size: x-large;">How to treat Non-linear Separable Data?</span></b></div>
+<div>
+Imagine a case - if there is no straight line (or hyperplane) which can separate two classes? In the image shown below, there is a circle in 2D with red and blue data points all over it such that adjacent data points are of different colors.</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="./Support Vector Machine Simplified using R_files/SVM Non separable.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./Support Vector Machine Simplified using R_files/SVM Non separable.png"></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">SVM : Nonlinear Separable Data</td></tr>
+</tbody></table>
+<div>
+<br></div>
+<div>
+<div>
+SVM handles the above case by using a <b>kernel function</b>&nbsp;to handle non-linear separable data. It is explained in the next section.</div>
+<div>
+<b><span style="color: #990000; font-size: x-large;"><br></span></b></div>
+<div>
+<b><span style="color: #990000; font-size: x-large;">What is Kernel?</span></b></div>
+<div>
+<br></div>
+<div>
+In simple words, it is a method to make SVM run in case of non-linear separable data points. The kernel function transforms the data into a higher dimensional feature space to make it possible to perform the linear separation. See the image below -</div>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="./Support Vector Machine Simplified using R_files/SVM Kernel.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./Support Vector Machine Simplified using R_files/SVM Kernel.png"></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">SVM Kernel</td></tr>
+</tbody></table>
+In this case, we have transformed our data into a 3 dimensional space. Now data points are separated by a simple plane. It is possible by <b>kernel function</b>. We can say a nonlinear function is learned by a support vector (linear learning) machine in a high-dimensional feature space.</div>
+<div>
+<br></div>
+<div>
+<div>
+<b><span style="color: #990000; font-size: large;">Different Kernels</span></b></div>
+<div>
+<br></div>
+<div>
+1. <b>linear</b>: u'*v</div>
+<div>
+2. <b>polynomial</b>: (gamma*u'*v + coef0)^degree</div>
+<div>
+3. <b>radial basis</b> (RBF) : exp(-gamma*|u-v|^2)</div>
+<div>
+4. <b>sigmoid&nbsp;</b>: tanh(gamma*u'*v + coef0)</div>
+</div>
+<div>
+<br></div>
+<div>
+RBF is generally the most popular one.</div>
+<div>
+<br>
+<b><span style="color: #990000; font-size: x-large;">How SVM works?</span></b><br>
+<ol style="text-align: left;">
+<li>Choose an optimal hyperplane which maximize margin</li>
+<li>Applies penalty for misclassification (<b>cost 'c' tuning parameter</b>).</li>
+<li>If non-linearly separable data points, transform data to high dimensional space where it is easier to classify with linear decision surfaces (<b>Kernel trick</b>)</li>
+</ol>
+<div>
+<br></div>
+<span style="color: #990000; font-size: x-large;"><b>Advantages of SVM</b></span><br>
+<ol style="text-align: left;">
+<li>SVM performs well in case of non-linear separable data using kernel trick.</li>
+<li>It works well in high dimensional space (i.e. large number of predictors)&nbsp;</li>
+<li>It works well in case of text or image classification.</li>
+<li>It does not suffer multicollinearity problem</li>
+</ol>
+<div>
+<br></div>
+<div>
+<b style="color: #990000;"><span style="font-size: x-large;">Disadvantages of SVM</span></b></div>
+<ol style="text-align: left;">
+<li>It takes a lot of time on large sized data sets</li>
+<li>It does not directly return probability estimates.</li>
+<li>The linear kernel is almost similar to logistic regression in case of linear separable data.</li>
+</ol>
+<br>
+<br>
+<b><span style="color: #990000; font-size: x-large;">Multi-Category Classes and SVM</span></b><br>
+<blockquote class="tr_bq">
+Multi-category classes can be split into multiple one-versus-one or one-versus-rest binary classes.</blockquote>
+<br>
+<b><span style="color: #990000; font-size: x-large;">Support Vector Machine - Regression</span></b><br>
+<br>
+Yes, Support Vector Machine can also be used for regression problem wherein dependent or target variable is continuous.</div>
+<div>
+<br></div>
+<div>
+The goal of SVM regression is same as classification problem i.e. to find maximum margin. Here, it means <b>minimize error</b>.&nbsp;In the case of regression, a margin of tolerance (<b>epsilon</b>) is set in approximation to the SVM. The primary goal is to minimize error, individualizing the hyperplane which maximizes the margin, keeping in mind that part of the error is tolerated.</div>
+</div><div class="google-auto-placed ap_container" style="width: 100%; height: auto; clear: none; text-align: center;"><ins data-ad-format="auto" class="adsbygoogle adsbygoogle-noablate" data-ad-client="ca-pub-4695912699318711" data-adsbygoogle-status="done" style="display: block; margin: auto; background-color: transparent;" data-overlap-observer-io="false"><ins id="aswift_5_expand" style="display:inline-table;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><ins id="aswift_5_anchor" style="display:block;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><iframe width="858" height="200" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_5" name="aswift_5" style="left:0;position:absolute;top:0;border:0px;width:858px;height:200px;" src="./Support Vector Machine Simplified using R_files/saved_resource(5).html"></iframe></ins></ins></ins></div>
+<div>
+<br>
+<b><span style="color: #990000; font-size: x-large;">SVM - Standardization</span></b><br>
+<br>
+All kernel methods are based on distance. Hence, it is required to scale our variables. If we do not standardize our variables to comparable ranges, the variable with the largest range will completely dominate in the computation of the kernel matrix. For example, we have two variables - X1 and X2. Values of variable X1 lies between 0 and 100 whereas values of X2 lies in range of 100 and 10000. In this case, variable X2 would dominate variable X1. It is recommended to standardize each variables to the range [-1.1] or [0,1]. The z-score and min-max are the two popular methods to standardize variables.<br><br>
+Another reason of standardization is to avoid numerical difficulties during computation. Because kernel values usually depend on the inner products of feature vectors, e.g. the linear kernel and the polynomial kernel, large attribute values might cause numerical problems.<br>
+<br>
+<br></div>
+<div>
+<b><span style="color: #990000; font-size: x-large;">Tuning Parameters of SVM</span></b></div>
+<div>
+<br></div>
+<div>
+<b><span style="font-size: x-large;">If Linear Kernel SVM</span></b></div>
+<div>
+<br></div>
+<div>
+There is only one parameter in linear kernel - <b>Cost </b>(C). It implies misclassification cost on training data.</div>
+<ol style="text-align: left;">
+<li>A <b>large C</b> gives you low bias and high variance. Low bias because you penalize the cost of misclassification a lot.  Large C makes the cost of misclassification high, thus forcing the algorithm to explain the input data stricter and potentially overfit.</li>
+<li>A <b>small C</b> gives you higher bias and lower variance. Small C makes the cost of misclassification low, thus allowing more of them for the sake of wider "cushion"</li>
+</ol>
+<blockquote class="tr_bq">
+The goal is to find the balance between "not too strict" and "not too loose". Cross-validation and resampling, along with grid search, are good ways to finding the best C.</blockquote>
+<br>
+<div>
+<b><span style="font-size: x-large;">If Non-Linear Kernel (Radial)</span></b></div>
+<div>
+<br></div>
+<div>
+Two parameters for fine tuning in radial kernel - <b>Cost </b>and <b>Gamma</b></div>
+<div>
+<i><b><span style="color: blue;"><br></span></b></i></div>
+<div>
+<i><b><span style="color: blue;">The parameter cost is already explained above (See the 'Linear Kernel' section).</span></b></i></div><div class="google-auto-placed ap_container" style="width: 100%; height: auto; clear: none; text-align: center;"><ins data-ad-format="auto" class="adsbygoogle adsbygoogle-noablate" data-ad-client="ca-pub-4695912699318711" data-adsbygoogle-status="done" style="display: block; margin: auto; background-color: transparent;" data-overlap-observer-io="false"><ins id="aswift_6_expand" style="display:inline-table;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><ins id="aswift_6_anchor" style="display:block;border:none;height:200px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><iframe width="858" height="200" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_6" name="aswift_6" style="left:0;position:absolute;top:0;border:0px;width:858px;height:200px;" src="./Support Vector Machine Simplified using R_files/saved_resource(6).html"></iframe></ins></ins></ins></div>
+<br>
+<b>Gamma&nbsp;</b>explains how far the influence of a single training example reaches.&nbsp;When gamma is very small, the model is too constrained and cannot capture the complexity or “shape” of the data.<br>
+<div>
+<b><br></b></div>
+<div>
+<span style="color: #990000;"><b>R : Grid Search</b></span><br>
+<blockquote class="tr_bq">
+cost=10^(-1:2), gamma=c(.5, 1, 2)</blockquote>
+</div>
+<div>
+<div>
+<b><span style="font-size: x-large;">Polynomial kernel Tuning Parameters:</span></b></div>
+<div>
+<ol style="text-align: left;">
+<li>degree (Polynomial Degree)</li>
+<li>scale (Scale)</li>
+<li>C (Cost)</li>
+</ol>
+<div>
+<br></div>
+</div>
+</div>
+<div>
+<b><span style="font-size: x-large;">Support Vector Regression Tuning Parameters:</span></b></div>
+<div>
+<ol style="text-align: left;">
+<li>Epsilon (e)</li>
+<li>Cost (c)</li>
+</ol>
+<blockquote class="tr_bq">
+epsilon = seq(0, 0.9, 0.1), &nbsp;cost = 2^(2:8)</blockquote>
+<br>
+<b><span style="color: #990000; font-size: x-large;">R Code : Support Vector Machine (SVM)</span></b><br>
+<br>
+<b><span style="font-size: large;">Load R Packages</span></b><br>
+<br>
+Make sure you have the following packages already installed. If not, install them by using install.packages() function.<br>
+<blockquote class="tr_bq">
+library(caret)<br>
+library(kernlab)<br>
+library(ROCR)</blockquote><div id="adsense-content" style="display:block;text-align: center">
+<ins class="adsbygoogle" data-ad-client="ca-pub-4695912699318711" data-ad-slot="2904501385" style="display: inline-block; min-width: 336px; max-width: 600px; width: 600px; height: 280px;" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:600px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:600px;background-color:transparent;"><iframe width="600" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;border:0px;width:600px;height:280px;" src="./Support Vector Machine Simplified using R_files/saved_resource(7).html"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<br>
+<b><span style="font-size: large;">Read Data</span></b><br>
+<br>
+In this case, we are using segmentation data which is already loaded in caret package.<br>
+<blockquote class="tr_bq">
+data(segmentationData)</blockquote>
+</div>
+<div>
+<br></div>
+<div>
+<span style="font-size: large;"><b>Data Exploration</b></span><br>
+<blockquote>
+#Number of rows and columns<br>
+dim(segmentationData)<br>
+<div>
+[1] 2019 &nbsp; 61</div>
+<div>
+<br></div>
+<div>
+<div>
+#Distribution of Target Variable</div>
+<div>
+table(segmentationData$Class)</div>
+<div>
+<div>
+&nbsp; PS &nbsp; WS&nbsp;</div>
+<div>
+1300 &nbsp;719</div>
+</div>
+<div>
+<br></div>
+<div>
+table(segmentationData$Class) / length(segmentationData$Class)</div>
+</div>
+<div>
+<div>
+&nbsp; &nbsp; &nbsp; &nbsp;PS &nbsp; &nbsp; &nbsp; &nbsp;WS&nbsp;</div>
+<div>
+0.6438831 0.3561169&nbsp;</div>
+</div>
+</blockquote>
+</div>
+<div>
+<br></div>
+<br>
+<b><span style="font-size: large;">Split Data into Training and Validation</span></b><br>
+<blockquote class="tr_bq">
+Index &lt;- createDataPartition(segmentationData$Class,p=.7,list=FALSE)<br>
+svm.train &lt;- segmentationData[Index,]<br>
+svm.validate &nbsp;&lt;- segmentationData[-Index,]<br>
+trainX &lt;-svm.train[,4:61]&nbsp;</blockquote>
+<div>
+<br></div>
+<div>
+<b><span style="font-size: large;">Build SVM model in R</span></b></div>
+<div>
+<br></div>
+<div>
+<blockquote>
+# Setup for cross validation<br>
+set.seed(123)<br>
+ctrl &lt;- trainControl(method="cv",<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;number = 2,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;summaryFunction=twoClassSummary,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;classProbs=TRUE)<br>
+<br>
+# Grid search to fine tune SVM<br>
+grid &lt;- expand.grid(sigma = c(.01, .015, 0.2),<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; C = c(0.75, 0.9, 1, 1.1, 1.25)<br>
+)<br>
+<br>
+#Train SVM<br>
+svm.tune &lt;- train(x=trainX,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; y= svm.train$Class,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; method = "svmRadial",<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; metric="ROC",<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; tuneGrid = grid,<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; trControl=ctrl)<br>
+<br>
+svm.tune<br>
+<br>
+# Predict Target Label<br>
+valX &lt;-svm.validate[,4:61]<br>
+pred &lt;- predict(svm.tune, valX, type="prob")[2]<br>
+<br>
+# Model Performance Statistics<br>
+pred_val &lt;-prediction(pred[,2], svm.validate$Class)<br>
+<br>
+# Calculating Area under Curve<br>
+perf_val &lt;- performance(pred_val,"auc")<br>
+perf_val<br>
+<br>
+# Calculating True Positive and False Positive Rate<br>
+perf_val &lt;- performance(pred_val, "tpr", "fpr")<br>
+<br>
+# Plot the ROC curve<br>
+plot(perf_val, col = "green", lwd = 1.5)<br>
+<br>
+#Calculating KS statistics<br>
+ks &lt;- max(attr(perf_val, "y.values")[[1]] - (attr(perf_val, "x.values")[[1]]))<br>
+ks</blockquote>
+<b><br></b>
+<b><span style="font-size: large;">Model Performance Metrics -</span></b><br>
+<br>
+1. AUC on validation = &nbsp;0.9168<br>
+<table align="center" cellpadding="0" cellspacing="0" class="tr-caption-container" style="margin-left: auto; margin-right: auto; text-align: center;"><tbody>
+<tr><td style="text-align: center;"><a href="./Support Vector Machine Simplified using R_files/ROC SVM.png" imageanchor="1" style="margin-left: auto; margin-right: auto;"><img border="0" src="./Support Vector Machine Simplified using R_files/ROC SVM.png"></a></td></tr>
+<tr><td class="tr-caption" style="text-align: center;">Area under Curve</td></tr>
+</tbody></table>
+2. KS on validation = 0.68<br>
+<b><span style="color: #990000; font-size: x-large;"><br></span></b>
+<b><span style="color: #990000; font-size: x-large;">How to choose the right Kernel</span></b><br>
+<blockquote class="tr_bq">
+There is no thumb rule of choosing the best kernel. The only solution is <b>Cross-validation</b>. &nbsp;Try several different Kernels, and evaluate their performance metrics such as AUC and select the one with highest AUC. If you want to compare in terms of speed, linear kernels usually compute much faster than radial or polynomial kernels.</blockquote>
+</div>
+<div>
+</div>
+</div>
+</div>
+<ins class="adsbygoogle" data-ad-client="ca-pub-4695912699318711" data-ad-slot="6854563099" style="display: inline-block; min-width: 600px; max-width: 900px; width: 858px; height: 90px;" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:858px;background-color:transparent;"><iframe width="858" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;border:0px;width:858px;height:90px;" src="./Support Vector Machine Simplified using R_files/saved_resource(8).html"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div itemprop="publisher" itemscope="itemscope" itemtype="https://schema.org/Organization">
+<div itemprop="logo" itemscope="itemscope" itemtype="https://schema.org/ImageObject">
+<img src="./Support Vector Machine Simplified using R_files/listendata-logo.png" style="display:none;">
+<meta content="http://3.bp.blogspot.com/-2Wo3BMlnbkQ/XNhsyip6vxI/AAAAAAAAHi4/V4KiHKF9Bb0mObnxgu0EqwjtFSWWkBVjwCK4BGAYYCw/s1600/listendata-logo.png" itemprop="url">
+<meta content="309" itemprop="width">
+<meta content="95" itemprop="height">
+</div>
+<meta content="ListenData" itemprop="name">
+</div>
+<div id="related-box">R Tutorials : <a href="https://www.listendata.com/p/r-programming-tutorials.html">75 Free R Tutorials</a>
+</div>
+<a class="smGlobalBtn3 emailBtn" href="https://feedburner.google.com/fb/a/mailverify?uri=listendata" rel="nofollow" target="_blank" title="Subscribe"><span>Subscribe to get Email Updates!</span></a>
+<div id="related-post">
+<span>Related Posts</span>
+<script src="./Support Vector Machine Simplified using R_files/R" type="text/javascript"></script>
+<script type="text/javascript">
+var currentposturl='https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html';
+var maxresults=6;
+removeRelatedDuplicates(); printRelatedLabels();
+</script><ul><li><a href="https://www.listendata.com/2019/05/create-animation-in-r-learn-with.html">Create Animation in R : Learn by Examples</a></li><li><a href="https://www.listendata.com/2018/12/install-load-multiple-r-packages.html">Install and Load Multiple R Packages</a></li><li><a href="https://www.listendata.com/2018/05/take-screenshot-of-webpage-using-r.html">Take Screenshot of Webpage using R</a></li><li><a href="https://www.listendata.com/2019/10/amortisation-schedule-r-python.html">Loan Amortisation Schedule using R and Python</a></li><li><a href="https://www.listendata.com/2019/06/create-infographics-with-r.html">Create Infographics with R</a></li><li><a href="https://www.listendata.com/2019/06/how-to-add-login-page-in-shiny-r.html">How to build login page in R Shiny App</a></li></ul>
+</div>
+<div class="about-author">
+<span style="font-size:18px; margin:9px 0px 0px 140px;  border-bottom:2px solid #666; font-weight:bold;"> About Author:</span>
+<br>
+<img align="left" src="./Support Vector Machine Simplified using R_files/author_tn.jpg"><p>Deepanshu founded ListenData with a simple objective - Make analytics easy to understand and follow. He has over 8 years of experience in data science. During his tenure, he has worked with global clients in various domains like Banking, Insurance, Telecom and Human Resource.
+</p>
+<div class="social_menu">
+While I love having friends who agree, I only learn from those who don't<br>
+Let's Get Connected: <a href="mailto:deepanshu.bhalla@outlook.com?Subject=Hi" rel="nofollow" target="_top">
+<font color="#00aced">Email</font></a>  | <a href="https://www.linkedin.com/in/deepanshubhalla" rel="nofollow" target="_blank"><font color="#dd4b39">LinkedIn</font>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="comments" id="comments">
+<a name="comments"></a>
+<span style="font-size: large;">
+4 Responses to "Support Vector Machine Simplified using R" </span>
+<div class="comments-content">
+<script async="async" src="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" type="text/javascript"></script>
+<script type="text/javascript">
+(function() {
+var items = null;
+var msgs = null;
+var config = {};
+// <![CDATA[
+var cursor = null;
+if (items && items.length > 0) {
+cursor = parseInt(items[items.length - 1].timestamp) + 1;
+}
+var bodyFromEntry = function(entry) {
+if (entry.gd$extendedProperty) {
+for (var k in entry.gd$extendedProperty) {
+if (entry.gd$extendedProperty[k].name == 'blogger.contentRemoved') {
+return '<span class="deleted-comment">' + entry.content.$t + '</span>';
+}
+}
+}
+return entry.content.$t;
+}
+var parse = function(data) {
+cursor = null;
+var comments = [];
+if (data && data.feed && data.feed.entry) {
+for (var i = 0, entry; entry = data.feed.entry[i]; i++) {
+var comment = {};
+// comment ID, parsed out of the original id format
+var id = /blog-(\d+).post-(\d+)/.exec(entry.id.$t);
+comment.id = id ? id[2] : null;
+comment.body = bodyFromEntry(entry);
+comment.timestamp = Date.parse(entry.published.$t) + '';
+if (entry.author && entry.author.constructor === Array) {
+var auth = entry.author[0];
+if (auth) {
+comment.author = {
+name: (auth.name ? auth.name.$t : undefined),
+profileUrl: (auth.uri ? auth.uri.$t : undefined),
+avatarUrl: (auth.gd$image ? auth.gd$image.src : undefined)
+};
+}
+}
+if (entry.link) {
+if (entry.link[2]) {
+comment.link = comment.permalink = entry.link[2].href;
+}
+if (entry.link[3]) {
+var pid = /.*comments\/default\/(\d+)\?.*/.exec(entry.link[3].href);
+if (pid && pid[1]) {
+comment.parentId = pid[1];
+}
+}
+}
+comment.deleteclass = 'item-control blog-admin';
+if (entry.gd$extendedProperty) {
+for (var k in entry.gd$extendedProperty) {
+if (entry.gd$extendedProperty[k].name == 'blogger.itemClass') {
+comment.deleteclass += ' ' + entry.gd$extendedProperty[k].value;
+}
+}
+}
+comments.push(comment);
+}
+}
+return comments;
+};
+var paginator = function(callback) {
+if (hasMore()) {
+var url = config.feed + '?alt=json&v=2&orderby=published&reverse=false&max-results=50';
+if (cursor) {
+url += '&published-min=' + new Date(cursor).toISOString();
+}
+window.bloggercomments = function(data) {
+var parsed = parse(data);
+cursor = parsed.length < 50 ? null
+: parseInt(parsed[parsed.length - 1].timestamp) + 1
+callback(parsed);
+window.bloggercomments = null;
+}
+url += '&callback=bloggercomments';
+var script = document.createElement('script');
+script.type = 'text/javascript';
+script.src = url;
+document.getElementsByTagName('head')[0].appendChild(script);
+}
+};
+var hasMore = function() {
+return !!cursor;
+};
+var getMeta = function(key, comment) {
+if ('iswriter' == key) {
+var matches = !!comment.author
+&& comment.author.name == config.authorName
+&& comment.author.profileUrl == config.authorUrl;
+return matches ? 'true' : '';
+} else if ('deletelink' == key) {
+return config.baseUri + '/delete-comment.g?blogID='
++ config.blogId + '&postID=' + comment.id;
+} else if ('deleteclass' == key) {
+return comment.deleteclass;
+}
+return '';
+};
+var replybox = null;
+var replyUrlParts = null;
+var replyParent = undefined;
+var onReply = function(commentId, domId) {
+if (replybox == null) {
+// lazily cache replybox, and adjust to suit this style:
+replybox = document.getElementById('comment-editor');
+if (replybox != null) {
+replybox.height = '250px';
+replybox.style.display = 'block';
+replyUrlParts = replybox.src.split('#');
+}
+}
+if (replybox && (commentId !== replyParent)) {
+document.getElementById(domId).insertBefore(replybox, null);
+replybox.src = replyUrlParts[0]
++ (commentId ? '&parentID=' + commentId : '')
++ '#' + replyUrlParts[1];
+replyParent = commentId;
+}
+};
+var hash = (window.location.hash || '#').substring(1);
+var startThread, targetComment;
+if (/^comment-form_/.test(hash)) {
+startThread = hash.substring('comment-form_'.length);
+} else if (/^c[0-9]+$/.test(hash)) {
+targetComment = hash.substring(1);
+}
+// Configure commenting API:
+var configJso = {
+'maxDepth': config.maxThreadDepth
+};
+var provider = {
+'id': config.postId,
+'data': items,
+'loadNext': paginator,
+'hasMore': hasMore,
+'getMeta': getMeta,
+'onReply': onReply,
+'rendered': true,
+'initComment': targetComment,
+'initReplyThread': startThread,
+'config': configJso,
+'messages': msgs
+};
+var render = function() {
+if (window.goog && window.goog.comments) {
+var holder = document.getElementById('comment-holder');
+window.goog.comments.render(holder, provider);
+}
+};
+// render now, or queue to render when library loads:
+if (window.goog && window.goog.comments) {
+render();
+} else {
+window.goog = window.goog || {};
+window.goog.comments = window.goog.comments || {};
+window.goog.comments.loadQueue = window.goog.comments.loadQueue || [];
+window.goog.comments.loadQueue.push(render);
+}
+})();
+// ]]>
+</script>
+<div id="comment-holder">
+<div class="comment-thread toplevel-thread"><ol id="top-ra"><li class="comment" id="c2118770127765171842"><div class="avatar-image-container"><img src="./Support Vector Machine Simplified using R_files/blank.gif" alt=""></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonymous</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html?showComment=1493353407329#c2118770127765171842">27 April 2017 at 21:23</a></span></div><p class="comment-content">Hi, <br>Can you explain how to do grid search in R and tune the parameters for svm ?<br>Thanks </p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="2118770127765171842" href="javascript:;">Reply</a><span class="item-control blog-admin blog-admin pid-869472480"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=7958828565254404797&amp;postID=2118770127765171842">Delete</a></span></span></div><div class="comment-replies"><div id="c2118770127765171842-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self" href="javascript:;">Replies</a></span></span><ol id="c2118770127765171842-ra" class="thread-chrome thread-expanded"><div></div><div id="c2118770127765171842-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="2118770127765171842" href="javascript:;">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c2118770127765171842-ce"></div><div class="google-auto-placed" style="width: 100%; height: auto; clear: both; text-align: center;"><ins data-ad-format="auto" class="adsbygoogle adsbygoogle-noablate" data-ad-client="ca-pub-4695912699318711" data-adsbygoogle-status="done" style="display: block; margin: 10px auto; background-color: transparent; height: 280px;"><ins id="aswift_7_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:880px;background-color:transparent;"><ins id="aswift_7_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:880px;background-color:transparent;"><iframe width="880" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_7" name="aswift_7" style="left:0;position:absolute;top:0;border:0px;width:880px;height:280px;" src="./Support Vector Machine Simplified using R_files/saved_resource(9).html"></iframe></ins></ins></ins></div></li><li class="comment" id="c6344237632111983109"><div class="avatar-image-container"><img src="./Support Vector Machine Simplified using R_files/unnamed.png" alt=""></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/12063596801166833379" rel="nofollow">Unknown</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html?showComment=1493420935202#c6344237632111983109">28 April 2017 at 16:08</a></span></div><p class="comment-content">très bon article, qui simplifie très bien la complexité des SVM</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6344237632111983109" href="javascript:;">Reply</a><span class="item-control blog-admin blog-admin pid-280823339"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=7958828565254404797&amp;postID=6344237632111983109">Delete</a></span></span></div><div class="comment-replies"><div id="c6344237632111983109-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self" href="javascript:;">Replies</a></span></span><ol id="c6344237632111983109-ra" class="thread-chrome thread-expanded"><div></div><div id="c6344237632111983109-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6344237632111983109" href="javascript:;">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c6344237632111983109-ce"></div></li><li class="comment" id="c6572752520808748414"><div class="avatar-image-container"><img src="./Support Vector Machine Simplified using R_files/quote-wallpaper34.jpg" alt=""></div><div class="comment-block"><div class="comment-header"><cite class="user"><a href="https://www.blogger.com/profile/00607525948272576649" rel="nofollow">kanika</a></cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html?showComment=1510677043058#c6572752520808748414">14 November 2017 at 08:30</a></span></div><p class="comment-content">&gt; svm.tune &lt;- train(x=trainX,<br>+                   y= svm.train$sex,<br>+                   method = "svmRadial",<br>+                   metric="ROC",<br>+                   tuneGrid = grid,<br>+                   trControl=ctrl)<br>Error in evalSummaryFunction(y, wts = weights, ctrl = trControl, lev = classLevels,  : <br>  train()'s use of ROC codes requires class probabilities. See the classProbs option of trainControl()<br>In addition: Warning messages:<br>1: In train.default(x = trainX, y = svm.train$sex, method = "svmRadial",  :<br>  You are trying to do regression and your outcome only has two possible values Are you trying to do classification? If so, use a 2 level factor as your outcome column.<br>2: In train.default(x = trainX, y = svm.train$sex, method = "svmRadial",  :<br>  cannnot compute class probabilities for regression</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="6572752520808748414" href="javascript:;">Reply</a><span class="item-control blog-admin blog-admin pid-623717940"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=7958828565254404797&amp;postID=6572752520808748414">Delete</a></span></span></div><div class="comment-replies"><div id="c6572752520808748414-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self" href="javascript:;">Replies</a></span></span><ol id="c6572752520808748414-ra" class="thread-chrome thread-expanded"><div></div><div id="c6572752520808748414-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="6572752520808748414" href="javascript:;">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c6572752520808748414-ce"></div></li><li class="comment" id="c4557931879381527728"><div class="avatar-image-container"><img src="./Support Vector Machine Simplified using R_files/blank.gif" alt=""></div><div class="comment-block"><div class="comment-header"><cite class="user">Anonymous</cite><span class="icon user "></span><span class="datetime secondary-text"><a rel="nofollow" href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html?showComment=1515408226720#c4557931879381527728">8 January 2018 at 02:43</a></span></div><p class="comment-content">Can you please explain how to calculate the distance of support vector to hyperplane using R</p><span class="comment-actions secondary-text"><a class="comment-reply" target="_self" data-comment-id="4557931879381527728" href="javascript:;">Reply</a><span class="item-control blog-admin blog-admin pid-930210177"><a target="_self" href="https://www.blogger.com/delete-comment.g?blogID=7958828565254404797&amp;postID=4557931879381527728">Delete</a></span></span></div><div class="comment-replies"><div id="c4557931879381527728-rt" class="comment-thread inline-thread hidden"><span class="thread-toggle thread-expanded"><span class="thread-arrow"></span><span class="thread-count"><a target="_self" href="javascript:;">Replies</a></span></span><ol id="c4557931879381527728-ra" class="thread-chrome thread-expanded"><div></div><div id="c4557931879381527728-continue" class="continue"><a class="comment-reply" target="_self" data-comment-id="4557931879381527728" href="javascript:;">Reply</a></div></ol></div></div><div class="comment-replybox-single" id="c4557931879381527728-ce"></div></li></ol><div id="top-continue" class="continue hidden"><a class="comment-reply" target="_self" href="javascript:;">Add comment</a></div><div class="comment-replybox-thread" id="top-ce"><iframe allowtransparency="true" class="blogger-iframe-colorize blogger-comment-from-post" frameborder="0" height="195px" id="comment-editor" name="comment-editor" src="./Support Vector Machine Simplified using R_files/comment-iframe.html" width="100%" style="display: block;" data-resized="true"></iframe></div><div class="loadmore hidden" data-post-id="6763939167167291207"><a target="_self">Load more...</a></div></div>
+</div>
+</div>
+<p class="comment-footer">
+</p><div class="comment-form">
+<a name="comment-form"></a>
+<div class="pesan-komentar"><p>
+</p></div>
+<a href="https://www.blogger.com/comment-iframe.g?blogID=7958828565254404797&amp;postID=6763939167167291207&amp;blogspotRpcToken=1557534" id="comment-editor-src"></a>
+
+<!--Can't find substitution for tag [post.friendConnectJs]-->
+<script src="./Support Vector Machine Simplified using R_files/114029842-comment_from_post_iframe.js.download" type="text/javascript"></script>
+<script type="text/javascript">BLOG_CMT_createIframe("https://www.blogger.com/rpc_relay.html","0");</script>
+</div>
+<p></p>
+<div id="backlinks-container">
+<div id="Blog1_backlinks-container">
+</div>
+</div>
+</div>
+</div>
+
+</div></div>
+<!--Can't find substitution for tag [adEnd]-->
+</div>
+<a class="recent-post-older-link" href="https://www.listendata.com/2017/01/data-analyst-interview-questions.html" id="Blog1_blog-pager-older-link" title="Older Post">Next →</a>
+<a class="recent-post-newer-link" href="https://www.listendata.com/2017/01/calculating-driving-distance-with-sas.html" id="Blog1_blog-pager-newer-link" title="Newer Post"> ← Prev</a>
+<div class="blog-pager" id="blog-pager">
+<span id="blog-pager-newer-link">
+<a class="blog-pager-newer-link" href="https://www.listendata.com/2017/01/calculating-driving-distance-with-sas.html" id="Blog1_blog-pager-newer-link" title="Newer Post">Newer Post</a>
+</span>
+<span id="blog-pager-older-link">
+<a class="blog-pager-older-link" href="https://www.listendata.com/2017/01/data-analyst-interview-questions.html" id="Blog1_blog-pager-older-link" title="Older Post">Older Post</a>
+</span>
+<a class="home-link" href="https://www.listendata.com/">Home</a>
+</div>
+<div class="clear"></div>
+<div class="post-feeds">
+<div class="feed-links">
+Subscribe to:
+<a class="feed-link" href="https://www.listendata.com/feeds/6763939167167291207/comments/default" target="_blank" type="application/atom+xml">Post Comments (Atom)</a>
+</div>
+</div>
+</div></div>
+</div>
+</div>
+<aside id="sidebar-wrapper" style="height: auto !important;">
+<div class="sidebar-container" style="height: auto !important;">
+<div class="sidebar section" id="sidebar" style="height: auto !important;"><div class="widget ContactForm" data-version="1" id="ContactForm1">
+<h2 class="title">Contact Form</h2>
+<div class="contact-form-widget">
+<div class="form">
+<form name="contact-form">
+<p></p>
+Name
+<br>
+<input class="contact-form-name" id="ContactForm1_contact-form-name" name="name" size="30" type="text" value="">
+<p></p>
+Email
+<span style="font-weight: bolder;">*</span>
+<br>
+<input class="contact-form-email" id="ContactForm1_contact-form-email" name="email" size="30" type="text" value="">
+<p></p>
+Message
+<span style="font-weight: bolder;">*</span>
+<br>
+<textarea class="contact-form-email-message" cols="25" id="ContactForm1_contact-form-email-message" name="email-message" rows="5"></textarea>
+<p></p>
+<input class="contact-form-button contact-form-button-submit" id="ContactForm1_contact-form-submit" type="button" value="Send">
+<p></p>
+<div style="text-align: center; max-width: 222px; width: 100%">
+<p class="contact-form-error-message" id="ContactForm1_contact-form-error-message"></p>
+<p class="contact-form-success-message" id="ContactForm1_contact-form-success-message"></p>
+</div>
+</form>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="https://www.blogger.com/rearrange?blogID=7958828565254404797&amp;widgetType=ContactForm&amp;widgetId=ContactForm1&amp;action=editWidget&amp;sectionId=sidebar" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;ContactForm1&quot;));" rel="nofollow" target="configContactForm1" title="Edit">
+<img alt="" height="18" src="./Support Vector Machine Simplified using R_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget HTML" data-version="1" id="HTML1">
+<div class="widget-content">
+<style>  
+ .sbox {background:#f74848; width:100%; box-shadow: 0 0 5px #EEE inset;}
+ .sbox {border-radius:4px;padding:0;border:none;} 
+
+.techornate-socials a{display:block;color:#fff;padding:5px 10px;position:relative;margin-bottom:3px;}
+.techornate-socials span{color:#fff;font-family:roboto;font-size:20px;}
+
+.techornate-socials a span,.techornate-socials a:before{z-index:2;position:relative}
+
+.techornate-socials a:after{content:&quot; &quot;;height:100%;width:0;top:0;left:0;position:absolute;background:#252b42;z-index:1}
+
+.fa-facebook:before{display:inline-block;width:16px;font-family:FontAwesome;margin-right:10px;padding-right:10px;font-size:18px;border-right:1px solid rgba(255,255,255,.3)}.fa-facebook:before{content:&quot;\f09a&quot;}
+
+.fa-envelope:before{display:inline-block;width:16px;font-family:FontAwesome;margin-right:10px;padding-right:10px;font-size:18px;border-right:1px solid rgba(255,255,255,.3)}
+.fa-envelope:before{content:&quot;\f0e0&quot;}
+
+</style>  
+<div class="sbox">
+<div class="techornate-socials">
+<a target="_blank" href="https://feedburner.google.com/fb/a/mailverify?uri=listendata" class="fa-envelope"><span>Get <strong>Free Email Updates</strong></span>
+</a>
+</div>
+</div>
+
+<div class="sbox">
+<div class="techornate-socials">
+<a target="_blank" href="https://www.facebook.com/ListenData/" class="fa-facebook"><span>Follow us on <strong>Facebook</strong></span></a>
+</div>
+</div>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="https://www.blogger.com/rearrange?blogID=7958828565254404797&amp;widgetType=HTML&amp;widgetId=HTML1&amp;action=editWidget&amp;sectionId=sidebar" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML1&quot;));" rel="nofollow" target="configHTML1" title="Edit">
+<img alt="" height="18" src="./Support Vector Machine Simplified using R_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div><div class="widget HTML" data-version="1" id="HTML4" style="height: auto !important;">
+<div class="widget-content">
+<ins class="adsbygoogle" style="display: block; height: 600px;" data-ad-client="ca-pub-4695912699318711" data-ad-slot="3886411561" data-ad-format="auto" data-full-width-responsive="true" data-adsbygoogle-status="done" data-overlap-observer-io="false"><ins id="aswift_3_expand" style="display:inline-table;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><ins id="aswift_3_anchor" style="display:block;border:none;height:600px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent;"><iframe width="300" height="600" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_3" name="aswift_3" style="left: 0px; position: absolute; top: 0px; border: 0px; width: 300px; height: 600px; overflow: visible;" src="./Support Vector Machine Simplified using R_files/saved_resource(10).html"></iframe></ins></ins></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+<div class="clear"></div>
+<span class="widget-item-control">
+<span class="item-control blog-admin">
+<a class="quickedit" href="https://www.blogger.com/rearrange?blogID=7958828565254404797&amp;widgetType=HTML&amp;widgetId=HTML4&amp;action=editWidget&amp;sectionId=sidebar" onclick="return _WidgetManager._PopupConfig(document.getElementById(&quot;HTML4&quot;));" rel="nofollow" target="configHTML4" title="Edit">
+<img alt="" height="18" src="./Support Vector Machine Simplified using R_files/icon18_wrench_allbkg.png" width="18">
+</a>
+</span>
+</span>
+<div class="clear"></div>
+</div></div>
+<div class="clear"></div>
+</div>
+</aside>
+</div>
+<div class="clear"></div>
+<div class="social2">
+<a class="boxclose" id="boxclose"></a>
+<i class="fa fa-heart" style="font-size:16px;color:#be1931;"></i><span style="font-size:16px; font-weight:600; color:#666;line-height:24px;"> Love this Post? Spread the Word!</span><br>
+<a class="smGlobalBtn2 facebookBtn" href="https://www.facebook.com/sharer.php?u=https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" rel="nofollow" target="_blank" title="Facebook Share"><span>Share</span></a>
+<a class="smGlobalBtn2 linkedinBtn" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html&amp;title=&amp;summary=" rel="nofollow" target="_blank" title="Linkedin Share"><span>Share</span></a>
+<a class="smGlobalBtn2 twitterBtn" href="https://twitter.com/share?url=https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html" rel="nofollow" target="_blank" title="Twitter Tweet"><span>Tweet</span></a>
+<a class="smGlobalBtn2 emailBtn" href="https://feedburner.google.com/fb/a/mailverify?uri=listendata" rel="nofollow" target="_blank" title="Subscribe"><span>Subscribe</span></a>
+</div>
+<footer id="footer-wrapper">
+<div class="footer-left">
+Copyright 2019 <a href="https://www.listendata.com/" rel="copyright">ListenData</a>
+</div>
+</footer>
+</div>
+<script type="text/javascript">$(function(){$(".set-1").mtabs()});</script>
+<script type="text/javascript">
+/*! Matt Tabs v2.2.1 | https://github.com/matthewhall/matt-tabs */
+!function(d){var c=function(a,f){var e=this;e.element=a,e.$element=d(a),e.tabs=e.$element.children(),e.options=d.extend({},d.fn.mtabs.defaults,f),e.current_tab=0,e.init()};c.prototype={init:function(){var b=this;b.tabs.length&&(b.build(),b.buildTabMenu())},build:function(){var a=this,h=a.options,g=h.tab_text_el,f=h.container_class;a.tab_names=[],a.$wrapper=a.$element.wrapInner('<div class="'+f+'" />').find("."+f),a.tabs.wrapAll('<div class="'+h.tabs_container_class+'" />'),a.tabs.each(function(l,k){var j,i=d(k),b=g;j=i.find(b).filter(":first").hide().text(),a.tab_names.push(j)}),d.isFunction(h.onReady)&&h.onReady.call(a.element)},buildTabMenu:function(){for(var r,q=this,p=q.options,o=p.tabsmenu_el,n=q.tab_names,m="<"+o+' class="'+p.tabsmenu_class+'">',l=0,k=n.length,a=function(){var b=arguments;return p.tmpl.tabsmenu_tab.replace(/\{[0-9]\}/g,function(e){var f=Number(e.replace(/\D/g,""));return b[f]||""})};k>l;l++){m+=a(l+1,n[l])}m+="</"+o+">",q.$tabs_menu=d(m).prependTo(q.$wrapper),r=q.$tabs_menu.find(":first")[0].nodeName.toLowerCase(),q.$tabs_menu.on("click",r,function(f){var h=d(this),g=h.index();q.show(g),f.preventDefault()}).find(":first").trigger("click")},show:function(a){var h=this,g=h.options,f=g.active_tab_class;h.tabs.hide().filter(":eq("+a+")").show(),h.$tabs_menu.children().removeClass(f).filter(":eq("+a+")").addClass(f),d.isFunction(g.onTabSelect)&&a!==h.current_tab&&g.onTabSelect.call(h.element,a),h.current_tab=a},destroy:function(){var f=this,e=f.options.tab_text_el;f.$tabs_menu.remove(),f.tabs.unwrap().unwrap(),f.tabs.removeAttr("style"),f.tabs.children(e+":first").removeAttr("style"),f.$element.removeData("mtabs")}},d.fn.mtabs=function(b,a){return this.each(function(){var j,i=d(this),h=i.data("mtabs");j="object"==typeof b&&b,h||i.data("mtabs",h=new c(this,j)),"string"==typeof b&&h[b](a)})},d.fn.mtabs.defaults={container_class:"tabs",tabs_container_class:"tabs-content",active_tab_class:"active-tab",tab_text_el:"h1, h2, h3, h4, h5, h6, p",tabsmenu_class:"tabs-menu",tabsmenu_el:"ul",tmpl:{tabsmenu_tab:'<li class="tab-{0}"><span>{1}</span></li>'},onTabSelect:null}}(window.jQuery,window,document);</script>
+<script>
+//<![CDATA[
+
+$(window).scroll(function() {
+    if ($(this).scrollTop() >= 50) {        
+        $('#return-to-top').fadeIn(200);
+    } else {
+        $('#return-to-top').fadeOut(200);
+    }
+});
+$('#return-to-top').click(function() {
+    $('body,html').animate({
+        scrollTop : 0
+    }, 500);
+});
+
+
+//]]>
+</script>
+<!-- <script> /*<![CDATA[*/ // Sticky Plugin // ============= // Author: Syed Faizan Ali (function($) { var defaults = { topSpacing: 0, bottomSpacing: 0, className: 'is-sticky', center: false }, $window = $(window), $document = $(document), sticked = [], windowHeight = $window.height(), scroller = function() { var scrollTop = $window.scrollTop(), documentHeight = $document.height(), dwh = documentHeight - windowHeight, extra = (scrollTop > dwh) ? dwh - scrollTop : 0; for (var i = 0; i < sticked.length; i++) { var s = sticked[i], elementTop = s.stickyWrapper.offset().top, etse = elementTop - s.topSpacing - extra; if (scrollTop <= etse) { if (s.currentTop !== null) { s.stickyElement.css('position', '').css('top', '').removeClass(s.className); s.currentTop = null; } } else { var newTop = documentHeight - s.elementHeight - s.topSpacing - s.bottomSpacing - scrollTop - extra; if (newTop < 0) { newTop = newTop + s.topSpacing; } else { newTop = s.topSpacing; } if (s.currentTop != newTop) { s.stickyElement.css('position', 'fixed').css('top', newTop).addClass(s.className); s.currentTop = newTop; } } } }, resizer = function() { windowHeight = $window.height(); }; // should be more efficient than using $window.scroll(scroller) and $window.resize(resizer): if (window.addEventListener) { window.addEventListener('scroll', scroller, false); window.addEventListener('resize', resizer, false); } else if (window.attachEvent) { window.attachEvent('onscroll', scroller); window.attachEvent('onresize', resizer); } $.fn.sticky = function(options) { var o = $.extend(defaults, options); return this.each(function() { var stickyElement = $(this); if (o.center) var centerElement = "margin-left:auto;margin-right:auto;"; stickyId = stickyElement.attr('id'); stickyElement .wrapAll('<div id="' + stickyId + 'StickyWrapper" style="' + centerElement + '"></div>') .css('width', stickyElement.width()); var elementHeight = stickyElement.outerHeight(), stickyWrapper = stickyElement.parent(); stickyWrapper .css('width', stickyElement.outerWidth()) .css('height', elementHeight) .css('clear', stickyElement.css('clear')); sticked.push({ topSpacing: o.topSpacing, bottomSpacing: o.bottomSpacing, stickyElement: stickyElement, currentTop: null, stickyWrapper: stickyWrapper, elementHeight: elementHeight, className: o.className }); }); }; })(jQuery); /*]]>*/ </script> -->
+<!-- <script type='text/javascript'> $(document).ready(function(){ $(&quot;.bsdsharepost&quot;).sticky({topSpacing:0}); }); </script> -->
+<script>
+//<![CDATA[
+
+$(function() {
+    $('#boxclose').click(function(){
+        $('.social2').fadeOut(200);
+        });
+    });
+ 
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+
+(() => {
+
+    var toc = "";
+    var level = 0;
+    var maxLevel = 3;
+
+    document.getElementById("contents").innerHTML =
+        document.getElementById("contents").innerHTML.replace(
+            /<h([\d]).*>\s*[\d]*\s?[.]?\s?([^<]+)<\/h([\d])>/gi,
+            function (str, openLevel, titleText, closeLevel) {
+
+				if (openLevel > maxLevel) {return str;}
+
+                if (openLevel > level) {
+                    toc += (new Array(2)).join("<ol>");
+                } else if (openLevel < level) {
+                    toc += (new Array(level - openLevel + 1)).join("</ol>");
+                }
+
+                level = parseInt(openLevel);
+
+				var anchor = titleText.replace(/[^a-zA-Z]+/g, "-");
+
+                toc += "<li><a href=\"#" + anchor + "\">" + titleText
+                    + "</a></li>";
+
+                return "<a name=\"" + anchor + "\">"
+                    + "<h" + openLevel + "\">"+ str + "</h" + closeLevel + ">" +"</a>";
+            }
+        );
+
+    if (level) {
+        toc += (new Array(level + 1)).join("</ol>");
+    }
+
+    document.getElementById("toc").innerHTML += toc;
+})();
+
+//]]>
+</script>
+<script type="text/javascript">
+function insertAfter(addition,target) {
+var parent = target.parentNode;
+if (parent.lastChild == target) {
+parent.appendChild(addition); 
+} else {
+parent.insertBefore(addition,target.nextSibling);
+}
+}
+var adscont = document.getElementById("adsense-content");
+var target = document.getElementById("adsense-target");
+var linebreak = target.querySelectorAll("blockquote,pre");
+var linebreak2 = target.querySelectorAll("img");
+if (linebreak.length == 0){
+insertAfter(adscont,linebreak2[0]);
+} else {
+insertAfter(adscont,linebreak[Math.floor(linebreak.length/2)]);
+}
+</script>
+<script type="text/javascript">
+//<![CDATA[
+var ww = $(window).width();
+
+$(document).ready(function() {
+	$(".nav-menu li a").each(function() {
+		if ($(this).next().length > 0) {
+			$(this).addClass("parent");
+		};
+	})
+
+	$(".toggleMenu").click(function(e) {
+		e.preventDefault();
+		$(this).toggleClass("active");
+		$(".nav-menu").toggle();
+	});
+	adjustMenu();
+})
+
+$(window).bind('resize orientationchange', function() {
+    ww = $(window).width();
+	adjustMenu();
+});
+
+var adjustMenu = function() {
+	if (ww <= 768) {
+		$(".toggleMenu").css("display", "inline-block");
+		if (!$(".toggleMenu").hasClass("active")) {
+			$(".nav-menu").hide();
+		} else {
+			$(".nav-menu").show();
+		}
+		$(".nav-menu li").unbind('mouseenter mouseleave');
+		$(".nav-menu li a.parent").unbind('click').bind('click', function(e) {
+			// must be attached to anchor element to prevent bubbling
+			e.preventDefault();
+			$(this).parent("li").toggleClass("hover");
+		});
+	} 
+	else if (ww > 768) {
+		$(".toggleMenu").css("display", "none");
+		$(".nav-menu").show();
+		$(".nav-menu li").removeClass("hover");
+		$(".nav-menu li a").unbind('click');
+		$(".nav-menu li").unbind('mouseenter mouseleave').bind('mouseenter mouseleave', function() {
+		 	// must be attached to li so that mouseleave is not triggered when hover over submenu
+		 	$(this).toggleClass('hover');
+		});
+	}
+}
+
+//]]>
+</script>
+<a href="https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html#" id="return-to-top" style=""><i class="fa fa-angle-up" style="font-size:36px; padding-top: 1px;margin-left: 12px;"></i></a>
+
+<script type="text/javascript" src="./Support Vector Machine Simplified using R_files/3236635003-widgets.js.download"></script>
+<script type="text/javascript">
+window['__wavt'] = 'AOuZoY5espoNrSyuzybanhreVfPA41VEDQ:1582615975563';_WidgetManager._Init('//www.blogger.com/rearrange?blogID\x3d7958828565254404797','//www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html','7958828565254404797');
+_WidgetManager._SetDataContext([{'name': 'blog', 'data': {'blogId': '7958828565254404797', 'title': 'ListenData', 'url': 'https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html', 'canonicalUrl': 'https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html', 'homepageUrl': 'https://www.listendata.com/', 'searchUrl': 'https://www.listendata.com/search', 'canonicalHomepageUrl': 'https://www.listendata.com/', 'blogspotFaviconUrl': 'https://www.listendata.com/favicon.ico', 'bloggerUrl': 'https://www.blogger.com', 'hasCustomDomain': true, 'httpsEnabled': true, 'enabledCommentProfileImages': true, 'gPlusViewType': 'FILTERED_POSTMOD', 'adultContent': false, 'analyticsAccountNumber': 'UA-76384860-1', 'encoding': 'UTF-8', 'locale': 'en-GB', 'localeUnderscoreDelimited': 'en_gb', 'languageDirection': 'ltr', 'isPrivate': false, 'isMobile': false, 'isMobileRequest': false, 'mobileClass': '', 'isPrivateBlog': false, 'feedLinks': '\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22ListenData - Atom\x22 href\x3d\x22https://www.listendata.com/feeds/posts/default\x22 /\x3e\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/rss+xml\x22 title\x3d\x22ListenData - RSS\x22 href\x3d\x22https://www.listendata.com/feeds/posts/default?alt\x3drss\x22 /\x3e\n\x3clink rel\x3d\x22service.post\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22ListenData - Atom\x22 href\x3d\x22https://www.blogger.com/feeds/7958828565254404797/posts/default\x22 /\x3e\n\n\x3clink rel\x3d\x22alternate\x22 type\x3d\x22application/atom+xml\x22 title\x3d\x22ListenData - Atom\x22 href\x3d\x22https://www.listendata.com/feeds/6763939167167291207/comments/default\x22 /\x3e\n', 'meTag': '', 'adsenseClientId': 'ca-pub-4695912699318711', 'adsenseHostId': 'ca-host-pub-1556223355139109', 'adsenseHasAds': false, 'ieCssRetrofitLinks': '\x3c!--[if IE]\x3e\x3cscript type\x3d\x22text/javascript\x22 src\x3d\x22https://www.blogger.com/static/v1/jsbin/2786782378-ieretrofit.js\x22\x3e\x3c/script\x3e\n\x3c![endif]--\x3e', 'view': '', 'dynamicViewsCommentsSrc': '//www.blogblog.com/dynamicviews/4224c15c4e7c9321/js/comments.js', 'dynamicViewsScriptSrc': '//www.blogblog.com/dynamicviews/5fe7c3d9dc4d8303', 'plusOneApiSrc': 'https://apis.google.com/js/plusone.js', 'disableGComments': true, 'sharing': {'platforms': [{'name': 'Get link', 'key': 'link', 'shareMessage': 'Get link', 'target': ''}, {'name': 'Facebook', 'key': 'facebook', 'shareMessage': 'Share to Facebook', 'target': 'facebook'}, {'name': 'BlogThis!', 'key': 'blogThis', 'shareMessage': 'BlogThis!', 'target': 'blog'}, {'name': 'Twitter', 'key': 'twitter', 'shareMessage': 'Share to Twitter', 'target': 'twitter'}, {'name': 'Pinterest', 'key': 'pinterest', 'shareMessage': 'Share to Pinterest', 'target': 'pinterest'}, {'name': 'Email', 'key': 'email', 'shareMessage': 'Email', 'target': 'email'}], 'disableGooglePlus': true, 'googlePlusShareButtonWidth': 300, 'googlePlusBootstrap': '\x3cscript type\x3d\x22text/javascript\x22\x3ewindow.___gcfg \x3d {\x27lang\x27: \x27en_GB\x27};\x3c/script\x3e'}, 'hasCustomJumpLinkMessage': true, 'jumpLinkMessage': 'READ MORE &#187;', 'pageType': 'item', 'postId': '6763939167167291207', 'postImageThumbnailUrl': 'https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s72-c/SVM%2Bwith%2Br.png', 'postImageUrl': 'https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s1600/SVM%2Bwith%2Br.png', 'pageName': 'Support Vector Machine Simplified using R', 'pageTitle': 'ListenData: Support Vector Machine Simplified using R', 'metaDescription': ''}}, {'name': 'features', 'data': {'sharing_get_link_dialog': 'true', 'sharing_native': 'false'}}, {'name': 'messages', 'data': {'edit': 'Edit', 'linkCopiedToClipboard': 'Link copied to clipboard', 'ok': 'Ok', 'postLink': 'Post link'}}, {'name': 'template', 'data': {'name': 'custom', 'localizedName': 'Custom', 'isResponsive': false, 'isAlternateRendering': false, 'isCustom': true}}, {'name': 'view', 'data': {'classic': {'name': 'classic', 'url': '?view\x3dclassic'}, 'flipcard': {'name': 'flipcard', 'url': '?view\x3dflipcard'}, 'magazine': {'name': 'magazine', 'url': '?view\x3dmagazine'}, 'mosaic': {'name': 'mosaic', 'url': '?view\x3dmosaic'}, 'sidebar': {'name': 'sidebar', 'url': '?view\x3dsidebar'}, 'snapshot': {'name': 'snapshot', 'url': '?view\x3dsnapshot'}, 'timeslide': {'name': 'timeslide', 'url': '?view\x3dtimeslide'}, 'isMobile': false, 'title': 'Support Vector Machine Simplified using R', 'description': 'Listen Data offers data science tutorials covering a wide range of topics such as SAS, Python, R, SPSS, Advanced Excel, VBA, SQL, Machine Learning', 'featuredImage': 'https://3.bp.blogspot.com/-Xc0O852zrjU/WHuo58bedtI/AAAAAAAAF0k/0q1mptMAb-AWk9DEjHLk1jRVjRX4QA1pACLcB/s1600/SVM%2Bwith%2Br.png', 'url': 'https://www.listendata.com/2017/01/support-vector-machine-in-r-tutorial.html', 'type': 'item', 'isSingleItem': true, 'isMultipleItems': false, 'isError': false, 'isPage': false, 'isPost': true, 'isHomepage': false, 'isArchive': false, 'isLabelSearch': false, 'postId': 6763939167167291207}}]);
+_WidgetManager._RegisterWidget('_HeaderView', new _WidgetInfo('Header1', 'header', document.getElementById('Header1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML3', 'header10', document.getElementById('HTML3'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML2', 'header11', document.getElementById('HTML2'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML22', 'header12', document.getElementById('HTML22'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML23', 'header13', document.getElementById('HTML23'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML24', 'header14', document.getElementById('HTML24'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_BlogView', new _WidgetInfo('Blog1', 'main', document.getElementById('Blog1'), {'cmtInteractionsEnabled': false, 'lightboxEnabled': true, 'lightboxModuleUrl': 'https://www.blogger.com/static/v1/jsbin/4041415790-lbx__en_gb.js', 'lightboxCssUrl': 'https://www.blogger.com/static/v1/v-css/368954415-lightbox_bundle.css'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_ContactFormView', new _WidgetInfo('ContactForm1', 'sidebar', document.getElementById('ContactForm1'), {'contactFormMessageSendingMsg': 'Sending...', 'contactFormMessageSentMsg': 'Your message has been sent.', 'contactFormMessageNotSentMsg': 'Message could not be sent. Please try again later.', 'contactFormInvalidEmailMsg': 'A valid email address is required.', 'contactFormEmptyMessageMsg': 'Message field cannot be empty.', 'title': 'Contact Form', 'blogId': '7958828565254404797', 'contactFormNameMsg': 'Name', 'contactFormEmailMsg': 'Email', 'contactFormMessageMsg': 'Message', 'contactFormSendMsg': 'Send', 'submitUrl': 'https://www.blogger.com/contact-form.do'}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML1', 'sidebar', document.getElementById('HTML1'), {}, 'displayModeFull'));
+_WidgetManager._RegisterWidget('_HTMLView', new _WidgetInfo('HTML4', 'sidebar', document.getElementById('HTML4'), {}, 'displayModeFull'));
+</script>
+
+<ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none !important;"><ins id="aswift_4_expand" style="display:inline-table;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><ins id="aswift_4_anchor" style="display:block;border:none;height:0px;margin:0;padding:0;position:relative;visibility:visible;width:0px;background-color:transparent;"><iframe frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_4" name="aswift_4" style="left:0;position:absolute;top:0;border:0px;width:0px;height:0px;" src="./Support Vector Machine Simplified using R_files/saved_resource(11).html"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_5802978277216" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Support Vector Machine Simplified using R_files/saved_resource(12).html"></iframe><link type="text/css" rel="stylesheet" href="./Support Vector Machine Simplified using R_files/368954415-lightbox_bundle.css"><script type="text/javascript" src="./Support Vector Machine Simplified using R_files/4041415790-lbx__en_gb.js.download"></script></body><iframe id="google_esf" name="google_esf" src="./Support Vector Machine Simplified using R_files/zrt_lookup.html" data-ad-client="ca-pub-4695912699318711" style="display: none;"></iframe></html>

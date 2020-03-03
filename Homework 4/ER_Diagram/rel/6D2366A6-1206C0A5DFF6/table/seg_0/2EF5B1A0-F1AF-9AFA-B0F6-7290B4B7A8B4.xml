@@ -1,0 +1,60 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2EF5B1A0-F1AF-9AFA-B0F6-7290B4B7A8B4" name="DRIVER">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:13:13 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<ordsAlias>table_4</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="driverLicence" id="1A2C8E69-F0E3-D446-1D71-5D84FC89CC55">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:15:07 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="driverName" id="E15CB97C-2FD9-0914-B62E-09BA35305D4E">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:15:07 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>250</dataTypeSize>
+<ownDataTypeParameters>250,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="driverAddress" id="87C3C61A-DFA1-715D-9814-93D6A6EE7642">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:15:07 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>25o</dataTypeSize>
+<ownDataTypeParameters>25o,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4A253CB6-BEA8-3F46-0450-71895D9B6D27" name="DRIVER_PK">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-27 08:16:41 UTC</createdTime>
+<ownerDesignName>ER_Diagram</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1A2C8E69-F0E3-D446-1D71-5D84FC89CC55"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>
