@@ -1,0 +1,343 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4DCF87B4-77D8-F16C-3442-96C9C47F924B" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PERFOMANCE_FACT">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PERFOMANCE_FACT</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="PERFOMANCEID" id="28D8AEBB-258D-9D62-8570-85BB6E661F02">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>PERFOMANCEID</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="STUDENTID" id="EE0B5732-D8E2-5A5D-EE7C-280B0EBEAEDE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>STUDENTID</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9BBA6224-2005-DF9B-69BD-D2ACE56DAEC7" referredColumn="779E90BB-ACB7-4954-82EB-58E9859E898D"/>
+</associations>
+</Column>
+<Column name="COURSECODE" id="14F1951C-182C-C57F-F6C8-240260B9C6B9">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>COURSECODE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="5299759C-5945-78C9-2737-CDC68D89D245" referredColumn="5482326D-7F9B-B564-A8D3-F8822753BBB6"/>
+</associations>
+</Column>
+<Column name="UNITCODE" id="A33C0083-82DB-8C9D-0AB7-66D03086F219">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>UNITCODE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="201F8377-6A84-4B63-2F37-87BED534A741" referredColumn="7BD84C83-D214-5624-6CE4-6D5F8A5B8832"/>
+</associations>
+</Column>
+<Column name="ENROLNUMBER" id="3C4BFE3B-4307-9044-92E4-0A848BDC4C71">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>ENROLNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="8A976780-EC3F-ECB2-1A82-400B90BCF1DE" referredColumn="A8849CC4-B871-CFD2-B28D-D526E70C8965"/>
+</associations>
+</Column>
+<Column name="OFFERINGNUMBER" id="2CB7019B-6567-498B-ED26-88C9690F746A">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>OFFERINGNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="B65E16A2-1499-AF89-990C-F3E0EEC3692E" referredColumn="522FC1B0-3BC0-D3C2-802B-C780DE442D6A"/>
+</associations>
+</Column>
+<Column name="STAFFNUMBER" id="2FE26FC2-C529-C50B-98E9-18A857169D74">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>STAFFNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="9ED8A637-E38C-F427-D60E-EA1EAA1E6247" referredColumn="44D8C203-69C4-CDD2-0CBC-CAF928A3F090"/>
+</associations>
+</Column>
+<Column name="SCHOOLCODE" id="9E1352B4-0353-1193-B169-9E353B7D6D5B">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>SCHOOLCODE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E457E17E-ED69-4FAE-4096-7AEDA061AA47" referredColumn="01AA4B2F-483B-3B91-8512-FC879D84DFA1"/>
+</associations>
+</Column>
+<Column name="STAFFID" id="6F34AC97-4291-A990-3FC5-A2FFEE0278D5">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>STAFFID</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="STUDENTNUMBER" id="D9997754-E7F1-7ABB-BE0C-C5261F5650D7">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>STUDENTNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="66688EDB-603B-52AB-8DF5-1F10E912650E" referredColumn="EA0380E3-A774-0161-08B9-EBB2A5BB16E7"/>
+</associations>
+</Column>
+<Column name="COUNT_STUDENTS" id="0B060A09-69EC-C5AC-B528-20F690AA1DE2">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>COUNT_STUDENTS</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="COUNT_GRADE" id="BD67E8E0-1562-F964-6DD1-B33F28304C71">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PERFOMANCE_FACT</sourceObjSchema>
+<sourceObjName>COUNT_GRADE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="258D9812-8677-7CC5-0767-2B5E1F9717EF" name="PK_PERFORMANCE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_PERFORMANCE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="28D8AEBB-258D-9D62-8570-85BB6E661F02"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="D1699428-111E-E31B-66D9-5A33ED8E1738" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PK_PERFORMANCE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_PERFORMANCE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="28D8AEBB-258D-9D62-8570-85BB6E661F02"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E2F02752-72FC-9230-5BED-06319344BFB5" name="FK_COODINATOR">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="6F34AC97-4291-A990-3FC5-A2FFEE0278D5"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="BE2C1624-F8D1-B3A7-1B66-64900EA0CE96" name="FK_COURSE">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="14F1951C-182C-C57F-F6C8-240260B9C6B9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="FF570423-4127-3FC7-B8CC-E123C5136F58" name="FK_ENROLL">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="3C4BFE3B-4307-9044-92E4-0A848BDC4C71"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="01F7D4D3-B501-71C1-9046-DAEFFF2EF635" name="FK_PREVIOUS">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D9997754-E7F1-7ABB-BE0C-C5261F5650D7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="152A9E36-2130-E390-D829-47A15F02CA34" name="FK_SCHOOL">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9E1352B4-0353-1193-B169-9E353B7D6D5B"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F0679CF8-9942-BCDA-D9EE-CAB35A975052" name="FK_STAFF">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="2FE26FC2-C529-C50B-98E9-18A857169D74"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="E6A4ED8C-3138-B353-D62C-7D2114DDEF01" name="FK_STUDENT">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="EE0B5732-D8E2-5A5D-EE7C-280B0EBEAEDE"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="3C09D57F-C49C-E296-0351-58C3E9D0FEF7" name="FK_UNIT">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A33C0083-82DB-8C9D-0AB7-66D03086F219"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="6E876789-C454-1989-CE45-213D5CB7E99E" name="FK_UNIT_OFFERING">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="2CB7019B-6567-498B-ED26-88C9690F746A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

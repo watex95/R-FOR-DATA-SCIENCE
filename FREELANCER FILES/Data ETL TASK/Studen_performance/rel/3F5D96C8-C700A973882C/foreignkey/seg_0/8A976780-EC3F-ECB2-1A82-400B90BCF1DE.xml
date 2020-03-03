@@ -1,0 +1,19 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="8A976780-EC3F-ECB2-1A82-400B90BCF1DE" containerWithKeyObject="4DCF87B4-77D8-F16C-3442-96C9C47F924B" localFKIndex="FF570423-4127-3FC7-B8CC-E123C5136F58" name="FK_ENROLL">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>FK_ENROLL</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:47:57 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<referredTableLongName>SYSTEM.ENROLLMENT_DIM</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>F7EFDBE1-0263-9F9F-CE90-4C359B523AAF</referredTableID>
+<keyObject>0C1DC2D9-C2A0-B9E8-E8A2-BD4F9E9C1984</keyObject>
+<referredKeyID>0C1DC2D9-C2A0-B9E8-E8A2-BD4F9E9C1984</referredKeyID>
+<mandatory>false</mandatory>
+<refColNames>ENROLNUMBER</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

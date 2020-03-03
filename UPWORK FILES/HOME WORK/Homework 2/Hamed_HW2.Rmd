@@ -1,0 +1,327 @@
+---
+title: "Hamed_HW2"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+# Load the cpus dataset from the MASS package
+```{r}
+library(MASS)
+library(leaps)
+data(cpus)
+attach(cpus)
+library(caret)
+```
+
+# Use syct, mmin , mmax , cach , chmin, chmax as the predictors (independent variables) to predict performance (perf)
+# Perform best subset selection in order to choose the best predictors from the above predictors
+```{r}
+regfit.full <- regsubsets(perf ~ syct + mmin + mmax + cach + chmin + chmax,data=cpus,nvmax = 6)
+summary(regfit.full)
+```
+
+# What is the best model obtained according to Cp, BIC, and adjusted R2?
+```{r}
+reg.summary_sub <- summary(regfit.full)
+reg.summary_sub$cp
+reg.summary_sub$bic
+reg.summary_sub$adjr2
+```
+
+# Show some plots to provide evidence for your answer, 
+# and report the coefficients of the best model obtained for each criteria.
+```{r}
+plot(reg.summary_sub$cp,xlab="number of variables" ,ylab="cp" ,type="l")
+plot(reg.summary_sub$bic,xlab="number of variables" ,ylab="bic" ,type="l")
+plot(reg.summary_sub$adjr2,xlab="number of variables" ,ylab="adjr2" ,type="l")
+```
+
+# Repeat using forward stepwise selection and also using backwards stepwise selection. 
+# How does your answer compare to the best subset results?
+```{r}
+# Forward Stepwise Selection
+regfit.fwd <- regsubsets(perf ~ syct + mmin + mmax + cach + chmin + chmax,data=cpus,nvmax = 6, method = "forward")
+summary(regfit.fwd)
+
+reg.summary_fwd <- summary(regfit.fwd)
+reg.summary_fwd$cp
+reg.summary_fwd$bic
+reg.summary_fwd$adjr2
+
+plot(reg.summary_fwd$cp,xlab="number of variables" ,ylab="cp" ,type="l")
+plot(reg.summary_fwd$bic,xlab="number of variables" ,ylab="bic" ,type="l")
+plot(reg.summary_fwd$adjr2,xlab="number of variables" ,ylab="adjr2" ,type="l")
+```
+
+```{r}
+# Backward Stepwise Selection
+regfit.bwd <- regsubsets(perf ~ syct + mmin + mmax + cach + chmin + chmax,data=cpus,nvmax = 6, method = "backward")
+summary(regfit.bwd)
+
+reg.summary_bwd <- summary(regfit.fwd)
+reg.summary_bwd$cp
+reg.summary_bwd$bic
+reg.summary_bwd$adjr2
+
+plot(reg.summary_bwd$cp,xlab="number of variables" ,ylab="cp" ,type="l")
+plot(reg.summary_bwd$bic,xlab="number of variables" ,ylab="bic" ,type="l")
+plot(reg.summary_bwd$adjr2,xlab="number of variables" ,ylab="adjr2" ,type="l")
+
+```
+
+
+
+```{r}
+library(ISLR)
+data(College)
+attach(College)
+head(College)
+library(caret)
+```
+
+# Predict the number of applications received using the other variables in the College data set in library ISLR
+```{r}
+colnames(College)
+```
+
+# (a) Split the data set into a training set and a test set using caret library and 
+# fit each of the following models using caret and ten fold cross validation.
+```{r}
+intrain <- createDataPartition(College$Apps,p=0.75,list = FALSE)
+train1 <- College[intrain,]
+test1 <- College[-intrain,]
+
+trctrl <- trainControl(method= "cv", number=10)
+
+nrow(train1)
+nrow(test1)
+```
+
+# (b) Fit a linear model using ordinary least squares on the training set, 
+# and report the test mean squared error obtained.
+```{r}
+ols <- train(Apps ~., data = train1, 
+             trControl=trctrl,
+             preProcess=c('scale','center'))
+ols
+# Report  test mean squared
+ols$results
+ols$results$RMSE^2
+cat("test mean squared error")
+
+# Predict for the test dataset
+ln_pred <-predictions <- predict(ols, newdata= test1)
+# Mean squared error in the test dataset
+ln_mse <- mean(( predictions - test1$Apps)^2)
+ln_mse
+```
+
+# (c) Fit a ridge regression model on the training set, with λ chosen by cross-validation. 
+# Report the test mean squared  error obtained. Report the value of λ used in the mode
+```{r message=TRUE}
+ridge_fit <- train(Apps ~., data = train1,
+                   method="ridge",
+                   trControl=trctrl,
+                   preProcess=c('scale','center'))
+ridge_fit
+
+ridgeGrid <- data.frame(lambda = seq(0, .2, length = 15))
+ridge_fit <- train(Apps~.,data=train1,
+                 method="ridge",
+                 tuneGrid=ridgeGrid, 
+                 trControl=trctrl,
+                 preProcess=c('scale','center')) 
+ridge_fit
+
+# Generate predictions with test dataset
+ridge_pred <- predict(ridge_fit, newdata = test1) 
+head(ridge_pred)
+
+# Calculate Mean Square Error (MSE) ridge_mse
+ridge_mse <- mean((ridge_pred - test1$Apps)^2) 
+ridge_mse
+
+# Predicting the ridge_fit 
+predict(ridge_fit$finalModel, type='coef', mode='norm')$coefficients
+
+# See what lambda was used in the ridge 
+ridge_fit$bestTune$lambda
+
+# Plot the lambdas to see how the lambda was chosen (minimum RMSE) 
+plot(ridge_fit)
+```
+
+# (d) Fit a lasso model on the training set, with fraction chosen by cross validation. 
+# Report the test mean squared error obtained, along with the number of non-zero coefficient estimates and the fraction.
+```{r}
+lasso <- train(Apps ~., data = train1, 
+               method= 'lasso',
+               preProc=c('scale','center'),
+               trControl=trctrl)
+lasso
+lassoGrid <- data.frame(fraction = seq(0.05, .8, length = 15))
+lasso <- train(Apps ~., data = train1,
+               method='lasso',
+               preProc=c('scale','center'),
+               tuneGrid = lassoGrid,
+               trControl=trctrl)
+# Generate predictions with test dataset
+lasso_pred <- predict(lasso, newdata = test1)
+
+# Calculate Mean Square Error (MSE)
+lasso_mse <- mean(lasso_pred - test1$Apps)^2
+lasso_mse
+
+# See the coefficients of the regression (the last row is the final coeffcients)
+predict(lasso$finalModel, type='coefficients', mode='norm')$coefficients
+
+# See what fraction was used in the lasso regression
+lasso$bestTune$fraction
+
+# Plot the fractions to see how the fraction was chosen (minimum RMSE)
+plot(lasso)
+```
+
+# (e) Fit a PCR model on the training set, with no. of principal components M chosen by cross-validation. 
+# Report the test mean squared error obtained, along with the value of M selected by cross-validation.
+```{r}
+pcr_fit <- train(Apps ~., data=train1,
+                 preProc = c('center', 'scale'),
+                 method='pcr',
+                 trControl=trctrl)
+pcr_fit
+# Generate predictions with test dataset
+pcr_pred <- predict(pcr_fit, test1)
+
+# Calculate Mean Square Error (MSE)
+pcr_mse <- mean(pcr_pred - test1$Apps)^2
+pcr_mse
+
+# See the coefficients of the regression 
+pcr_fit$finalModel$coefficients
+
+# See the number of principal components used in the regression
+pcr_fit$bestTune$ncomp
+
+# Plot principal components vs RMSE to see how the no of components was chosen
+plot(pcr_fit)
+```
+
+# (f) Fit a PLS model on the training set, with M chosen by cross validation. 
+# Report the test error obtained, along with the value of M selected by cross-validation.
+```{r}
+pls_fit <- train(Apps ~., data=train1,
+                 preProc = c('center', 'scale'),
+                 method='kernelpls',
+                 trControl=trctrl)
+pls_fit
+
+pls.pred <- predict(pls_fit, test1)
+
+# Calculate Mean Square Error (MSE)
+pls_fit_mse <-mean(pcr_pred - test1$Apps)^2
+pls_fit_mse
+
+# Plot principal components vs RMSE to see how the no of components was chosen
+pls_fit$finalModel$coefficients
+
+# See the number of principal components used in the regression
+pls_fit$bestTune$ncomp
+
+plot(pls_fit)
+```
+
+# (g) Comment on the results obtained. 
+# Is there much difference among the test errors resulting from these five approaches?
+```{r}
+avg_test <- mean(test1[,"Apps"]) 
+
+linear_r2 <- -1-mean((test1[,"Apps"]-ln_pred)^2)/mean((test1[,"Apps"]-avg_test)^2) 
+
+ridge_r2 <- 1 - mean((test1[, "Apps"] -ridge_pred)^2) /mean((test1[, "Apps"] - avg_test)^2) 
+lasso_r2 <- 1 - mean((test1[, "Apps"] -lasso_pred)^2) /mean((test1[, "Apps"] - avg_test)^2) 
+
+pcr_r2 <- 1 - mean((test1[, "Apps"] -(pcr_mse))^2) /mean((test1[, "Apps"] -avg_test)^2) 
+
+pls_r2 <- 1 - mean((test1[, "Apps"] -(pls_fit_mse))^2) /mean((test1[, "Apps"] -avg_test)^2) 
+
+par(mfrow <- c(1,2)) 
+barplot(c(linear_r2,ridge_r2,lasso_r2,pcr_r2,pls_r2),col="blue",
+        names.arg = c("OLS","Ridge","Lasso","PCR","PLS"),main="Test R-Squared", ylab="Test R-Squared") 
+
+barplot(c(ln_mse,ridge_mse, lasso_mse, pcr_mse, pls_fit_mse), col="red",                                             
+
+names.arg=c("OLS","Ridge", "Lasso", "PCR", "PLS"), main = "Test MSE", ylab = "Test MSE")
+```
+
+
+
+
+# 1.Load the Cars93 dataset in the MASS package in R
+```{r}
+library(MASS)
+data(Cars93)
+attach(Cars93)
+head(Cars93)
+cars_data <- na.omit(Cars93)
+```
+
+# 2.Run a principal component analysis on columns 4 through 8 in the dataset
+```{r}
+cars_pca <- prcomp(cars_data[4:8], scale=TRUE)
+summary(cars_pca)
+
+cars_pca$center
+
+
+# The scaling factor that was used to scale the variables
+cars_pca$scale
+
+# To see the eigen vectors (loadings for each variable for each PC)
+cars_pca$rotation
+
+# To see the square root of the eigen values
+cars_pca$sdev
+
+# To see the rotated data (i.e the centered/scaled data multiplied by the rotation matrix)
+cars_pca$x
+```
+
+# 3.Plot the biplot
+```{r}
+biplot(cars_pca,xlab="Std PC1 80% explained var",ylab="Std PC2 17% explained var", scale=0)
+```
+
+# 4.Calculate the percent of variance explained
+```{r}
+cars_pca$sdev
+cars_var <- cars_pca$sdev^2 
+cars_var
+
+cars_ve <- cars_var/sum(cars_var) 
+cars_ve
+
+# Change the direction of the plot.  Does not alter the values.
+cars_pca$rotation=-cars_pca$rotation
+cars_pca$x=-cars_pca$x
+biplot(cars_pca, scale=0)
+```
+
+# 5.Plot the percent of variance explained
+# Compute percentage variance explained
+```{r}
+plot(cars_ve, xlab="Principal Component", ylab="Proportion of Variance Explained", ylim=c(0,1),type='b')
+
+# Compute percentage variance explained
+plot(cumsum(cars_ve), xlab="Principal Component", ylab="Cumulative Proportion of Variance Explained", ylim=c(0,1),type='b')
+
+```
+
+
+# 6.How much of the variance does the first two principal components explain?
+```{r}
+summary(cars_pca)
+```
+
+

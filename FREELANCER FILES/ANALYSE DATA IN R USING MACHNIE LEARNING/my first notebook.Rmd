@@ -1,0 +1,163 @@
+---
+title: 'GVault QDMS Post Go-Live Survey: R Notebook'
+output:
+  word_document: default
+  html_notebook: default
+  pdf_document: default
+---
+
+#### Initialize the packages
+Remove comments if you haven't installed the packages in R yet. 
+```{r}
+# install.packages("RcURL")
+# install.packages("randomForest") 
+# install.packages("e1071")
+# install.packages("caret")
+# install.packages("ggplot2")
+
+library(RCurl)
+library(randomForest)  
+library(e1071)  
+library(caret)  
+library(ggplot2)  
+set.seed(123) 
+
+```
+
+Load dataset
+```{r}
+
+df1<-read.csv("Gvault_survey_raw.csv",header = T)
+```
+
+#### Data exploration
+
+Drop irrelevant columns
+```{r}
+df1 = subset(df1, select = -c(Respondent.ID,Collector.ID,Start.Date,
+          End.Date,explain_training_effectiveness,explain_support,
+          explain_complete_without_help,explain_easy_access_documents,
+          explain_satisfaction,explain_Gvault_efficiency,explain_Gvault_improved, explain_office_location,explain_job_level) )
+head(df1)
+```
+
+
+Explore the data before fitting a model to get an idea of what to expect. I am plotting a variable on two axes and using colors to see the relationship
+among the levels of satisfaction. Lets explore the relationship between satisfaction and frequency of use
+
+```{r}
+p=ggplot(df1,aes(x=df1$freq_use,y=df1$satisfaction,
+                 color=df1$satisfaction),width=120,height=60)+
+  theme(axis.text.x = element_text(angle = 90))
+
+p + geom_jitter(alpha=0.3) +  
+  scale_color_manual(breaks = c('Satisfied','Very Unsatisfied','Very Satisfied','Slightly Unsatisfied'),
+                     values=c('darkgreen','red','blue','yellow'))
+```
+
+
+A comparison of Frequency of use (freq_use) & effectiveness of training to satisfaction shows us: Users who used Gvault daily were more likely to be satisfied or very satisfied.
+I’m looking for spots where there exists an overwhelming majority of one color.
+```{r}
+
+p1=ggplot(df1,aes(y=df1$freq_use,x=df1$training_effectiveness,color=df1$satisfaction),width=120,height=60)+theme(axis.text.x = element_text(angle = 90))
+p1 + geom_jitter(alpha=0.3) +  
+  scale_color_manual(breaks = c('Satisfied','Very Unsatisfied','Very Satisfied','Slightly Unsatisfied'),
+                     values=c('darkgreen','red','blue','yellow'))
+```
+
+
+A comparison of role and the rate of completing work without help in terms likelihood of satisfaction show that: Reveiwer/Approver role users completed work in Gvault without help all the time and were more likely to be satisfied
+```{r}
+p1=ggplot(df1,aes(x=df1$role,y=df1$complete_without_help,
+color=df1$satisfaction),width=120,height=60)+theme(axis.text.x = element_text(angle = 90))
+p1 + geom_jitter(alpha=0.3) +  
+  scale_color_manual(breaks = c('Satisfied','Very Unsatisfied','Very Satisfied','Slightly Unsatisfied'),
+                 values=c('darkgreen','red','blue','yellow'))
+```
+
+
+#### Train test split
+
+Create data for training
+```{r}
+sample.ind = sample(2,nrow(df1),replace = T,prob = c(0.9,0.1))
+data.dev = df1[sample.ind==1,]  
+data.val = df1[sample.ind==2,]
+```
+
+I wanted to know the split of satisfaction levels in the data set and compare it between the training and test data.
+```{r}
+
+# Original Data
+table(df1$satisfaction)/nrow(df1)
+
+```
+
+```{r}
+# Training Data
+table(data.dev$satisfaction)/nrow(data.dev)
+```
+
+```{r}
+# Testing Data
+table(data.val$satisfaction)/nrow(data.val) 
+
+```
+
+#### Model Training: Fit Random Forest Model
+
+I finally fit the random forest model to the training data. Plotting the model shows us that after about 20 trees, not much changes in terms of error. It fluctuates a bit but not to a large degree.
+
+```{r}
+rf = randomForest(satisfaction ~ .,ntree = 100,data = data.dev)
+plot(rf)
+
+```
+
+
+#### Feature selection: Variable Importance
+Training effectiveness is the most important variable in terms of “Mean Decreasing Gini” – a similar term for information gain.
+
+
+```{r}
+varImpPlot(rf, sort = T, n.var=10,main="Top 10 - Variable Importance")
+var.imp = data.frame(importance(rf, type=2))
+# make row names as columns
+var.imp$Variables = row.names(var.imp)  
+print(var.imp[order(var.imp$MeanDecreaseGini,decreasing = T),])
+
+```
+
+
+#### Prediction and Model Evaluation
+
+I decided to use the model to attempt to predict the satisfaction level based off of the training data set. It predicted the response variable perfectly – having zero false positives or false negatives.
+
+```{r}
+# Predicting response variable
+data.dev$predicted.response = predict(rf , data.dev)
+
+# Create Confusion Matrix
+print(confusionMatrix(data = data.dev$predicted.response,  
+                  reference = data.dev$satisfaction,
+                  positive ='Very Satisfied'))
+```
+
+
+#### Model Testing
+Now it was time to see how the model did with data it had not seen before– making predictions on the test data.
+
+```{r}
+
+# Predicting response variable
+data.val$predicted.response <- predict(rf ,data.val)
+
+# Create Confusion Matrix
+print(confusionMatrix(data=data.val$predicted.response,  
+                  reference=data.val$satisfaction,
+                  positive='Very Satisfied'))
+```
+
+
+

@@ -1,0 +1,235 @@
+---
+title: "Untitled"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+####The analysis include exploratoray data analysis and an ordinal logistic regression model.
+```{r}
+
+require("RCurl")
+```
+### Load the data
+```{r}
+#Raw dataset
+newdata1<-getURL("https://raw.githubusercontent.com/watex95/R-FOR-DATA-SCIENCE/master/DATASETS/Gvault_survey_raw.csv")
+df1<-read.csv(text=newdata1)
+```
+
+### EXPLORATORY DATA ANALYSIS
+Load packages
+```{r}
+require("plotrix")
+```
+
+#### Lets explore the frequency of single choice questions
+How frequently do you use GVault QDMS?
+```{r}
+table(df1$freq_use)
+barplot(table(df1$freq_use),ylab = "responses",col = "light green",
+      ,srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+What is your role within GVault QDMS?
+```{r}
+table(df1$role)
+barplot(table(df1$role),ylab = "responses",col = "light green",
+        srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+How would you describe the effectiveness of training you received?
+```{r}
+table(df1$training_effectiveness)
+barplot(table(df1$training_effectiveness),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+
+Are you able to complete work in the system without 'help' or 'intervention'?
+```{r}
+require(plotrix)
+mytable=table(df1$complete_without_help)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+Do you find it easy to search for and access documents in GVault QDMS?
+```{r}
+mytable=table(df1$easy_access_documents)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+How satisfied are you with the overall experience of GVault QDMS?
+```{r}
+mytable=table(df1$satisfaction)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+How would you describe your efficiency with GVault as compared to GDocs?
+```{r}
+table(df1$Gvault_efficiency)
+barplot(table(df1$Gvault_efficiency),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+Do you find GVault has improved features and functionality compared to GDocs?
+```{r}
+table(df1$Gvault_improved)
+barplot(table(df1$Gvault_improved),ylab="responses",
+        col="light green",las=2, yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+
+###Demographics analysis
+What is your functional area?
+```{r}
+table(df1$functional_area)
+barplot(table(df1$functional_area),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+What is your office location?
+```{r}
+table(df1$office_location)
+barplot(table(df1$office_location),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+
+
+
+What is your Job Level?
+```{r}
+table(df1$job_level)
+barplot(table(df1$job_level),ylab = "responses",col = "light green",
+        srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+How long have you worked at Gilead?
+```{r}
+table(df1$time_worked_Glead)
+barplot(table(df1$time_worked_Glead),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+
+
+
+
+
+
+###Ordinal Logistic Regression (OLR)
+##### Load the Libraries
+```{r}
+require(foreign)
+require(ggplot2)
+require(MASS)
+require(Hmisc)
+require(reshape2)
+```
+
+For building this model, we will be using the polr command to estimate an ordered logistic regression. Then, we'll specify Hess=TRUE to let the model output show the observed information matrix from optimization which is used to get standard errors.
+
+```{r}
+m<-polr(df1$satisfaction ~ df1$freq_use + df1$role
+          +df1$training_instructor_led + df1$training_web_based
+          + df1$training_read+ df1$no_training+df1$training_effectiveness
+          + df1$support_Gnet + df1$support_inapplication
+          +df1$support_ref_doc + df1$support_SOP + df1$support_contacted
+          +df1$support_IT + df1$complete_without_help
+          +df1$easy_access_documents + df1$Gvault_efficiency
+          +df1$Gvault_improved,data=df1,Hess=TRUE)
+summary(m)
+```
+
+
+We see the usual regression output coefficient table including the value of each coefficient, standard errors, t values, estimates for the two intercepts, residual deviance and AIC. AIC is the information criteria. Lesser the better.
+
+Now we'll calculate some essential metrics such as p-Value, CI, Odds ratio. The output displayed next are values: log odds(coefficients of estimation), t values are the t-distribution test statistic values, and finally the p-values are the probability of error.
+
+```{r}
+ctable <- coef(summary(m))
+p <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+ctable <- cbind(ctable, "p value" = p)
+ctable
+```
+
+
+
+#### Odds Ratios and their Confidence Intervals
+```{r}
+ci <- confint(m)
+exp(cbind(OR = coef(m), ci))
+```
+
+
+
+####Interpretation at a glance: The effect of one predictor on the odds/likelihood of satisfaction
+When Gvault is used atleast once a week versus atleast once a month, the odds of satisfaction being very satisfied are 0.9 greater than the odds of either "satisfied" , "slightly unsatisfied" or "very unsatisfied" combined. NOTE: The reference level selected was "atleast once a month" 
+
+When the training is very effective versus effective training, the odds of a user being very satisfied are 4.38 greater than the odds of being either "satisfied" , "slightly unsatisfied" or "very unsatisfied" combined. NOTE: The reference level selected was "effective"
+
+### Summary
+Most of the predictor variables were not statistically significant in predicting the level of satisfaction with the overall experience of GVault QDMS. Training effectiveness (p-value=0.04688), Support for In application(p-value=0.00401), complete work without(p-value=0.000395) help,and whether Gvault improved features(p-value=0.0.00479) were the variables that significantly affected satisfaction of a user.
+

@@ -1,0 +1,102 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4774E3A3-FD10-25A2-C6DE-1D57E3C8F18F" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="COURSE_DIM">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>COURSE_DIM</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="COURSECODE" id="5482326D-7F9B-B564-A8D3-F8822753BBB6">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>COURSE_DIM</sourceObjSchema>
+<sourceObjName>COURSECODE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="VERSION" id="0605A244-5803-D5AF-5FD1-FDCD14BB59B0">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>COURSE_DIM</sourceObjSchema>
+<sourceObjName>VERSION</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="COURSENAME" id="661EEF6A-5EEF-7232-B14B-68A9FDDE84C2">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>COURSE_DIM</sourceObjSchema>
+<sourceObjName>COURSENAME</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 BYTE</dataTypeSize>
+<ownDataTypeParameters>200 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="SCHOOLNAME" id="2659F49B-139B-41F7-A344-3503F5414A0C">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>COURSE_DIM</sourceObjSchema>
+<sourceObjName>SCHOOLNAME</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 BYTE</dataTypeSize>
+<ownDataTypeParameters>200 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="738FD258-B931-83DC-1C82-29A6D6A2F746" name="PK_COURSE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_COURSE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5482326D-7F9B-B564-A8D3-F8822753BBB6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B23BB36E-99C8-59D5-E9A5-73D262369A17" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PK_COURSE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_COURSE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:40:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="5482326D-7F9B-B564-A8D3-F8822753BBB6"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,73 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="531664CB-289A-3E0B-158A-587A0F11BEEA" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="STAFF_MEMBER_DIM">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>STAFF_MEMBER_DIM</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:44:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="STAFFNUMBER" id="44D8C203-69C4-CDD2-0CBC-CAF928A3F090">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>STAFF_MEMBER_DIM</sourceObjSchema>
+<sourceObjName>STAFFNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:44:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="STAFFNAME" id="CF5ED743-7540-36A3-F345-D70B7A1C0D78">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>STAFF_MEMBER_DIM</sourceObjSchema>
+<sourceObjName>STAFFNAME</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:44:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 BYTE</dataTypeSize>
+<ownDataTypeParameters>200 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="F8DD4BF1-E00A-C75D-9887-CAE15158F583" name="PK_STAFF">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_STAFF</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:44:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="44D8C203-69C4-CDD2-0CBC-CAF928A3F090"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="29A1FFCD-3B4B-F44E-395D-043EFB26D427" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PK_STAFF">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_STAFF</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:44:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="44D8C203-69C4-CDD2-0CBC-CAF928A3F090"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

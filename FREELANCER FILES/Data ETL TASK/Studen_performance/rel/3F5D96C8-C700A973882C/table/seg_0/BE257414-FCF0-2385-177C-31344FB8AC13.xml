@@ -1,0 +1,118 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="BE257414-FCF0-2385-177C-31344FB8AC13" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PREVIOUS_DIM">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PREVIOUS_DIM</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="STUDENTNUMBER" id="EA0380E3-A774-0161-08B9-EBB2A5BB16E7">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PREVIOUS_DIM</sourceObjSchema>
+<sourceObjName>STUDENTNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="STUDENT_NAME" id="2F95CA93-F02F-8E5C-1C48-F968F466FE43">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PREVIOUS_DIM</sourceObjSchema>
+<sourceObjName>STUDENT_NAME</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>200 BYTE</dataTypeSize>
+<ownDataTypeParameters>200 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INSTITUTION_CODE" id="F5C3F866-8FE4-80CE-DF04-AD5652BCC76D">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PREVIOUS_DIM</sourceObjSchema>
+<sourceObjName>INSTITUTION_CODE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="INSTITUTION_NAME" id="5B544AB9-E51D-2EDA-AA48-93B9631B90EE">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PREVIOUS_DIM</sourceObjSchema>
+<sourceObjName>INSTITUTION_NAME</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="COUNTRY" id="704F7C3D-74F6-6B7E-F03B-4ED234D3BB8E">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>PREVIOUS_DIM</sourceObjSchema>
+<sourceObjName>COUNTRY</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="67C6E54E-FF0A-7247-EC48-5DA4373C062D" name="PK_PREVIOUS">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_PREVIOUS</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="EA0380E3-A774-0161-08B9-EBB2A5BB16E7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="AE384D98-F4A9-9344-E09F-21BEC122A69D" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PK_PREVIOUS">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_PREVIOUS</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:35 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="EA0380E3-A774-0161-08B9-EBB2A5BB16E7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

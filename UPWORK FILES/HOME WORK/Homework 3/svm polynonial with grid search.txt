@@ -1,0 +1,31 @@
+# Grid search to fine tune SVM
+grid <- expand.grid(sigma = c(.01, .015, 0.2),
+                    C = c(0.75, 0.9, 1, 1.1, 1.25))
+
+
+set.seed(45)
+mod <- train(Purchase ~ ., data = train.OJ, 
+             kernel = "polynomial",
+             preProc = c("center", "scale"),
+             tuneGrid = grid,
+             metric = "ROC",
+             trControl = trainControl(method = "cv", 
+                                      classProbs = TRUE, 
+                                      summaryFunction = twoClassSummary))
+
+
+
+
+
+
+
+#Train SVM
+svm.tune <- train(x=train.OJ,y= train.OJ$Purchase,kernel= "polynomial",
+                 tuneGrid = grid,trControl = trControl,
+                 preProcess = c("center","scale"),
+                 tuneLength = 4)
+svm.tune
+
+
+
+

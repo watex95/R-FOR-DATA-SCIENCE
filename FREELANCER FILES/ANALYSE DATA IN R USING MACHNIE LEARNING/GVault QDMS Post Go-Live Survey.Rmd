@@ -1,0 +1,338 @@
+---
+title: "GVault QDMS Post Go-Live Survey"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The analysis include exploratoray data analysis, correlation analysis, tests of association, a multinomial logistic regression model and an ordinal logistic regression model.
+
+Let's begin by loading RCurl package to retrieve dataset from Github repositoory.
+
+
+Load the data
+```{r}
+#Raw dataset
+df1<-read.csv("Gvault_survey_raw.csv",header=T)
+```
+
+
+### EXPLORATORY DATA ANALYSIS
+
+Load package plotrix for ploting 3D pie charts
+```{r}
+require("plotrix")
+```
+
+Lets explore the frequency of single choice questions.
+
+1. How frequently do you use GVault QDMS?
+
+```{r}
+mytable=table(df1$freq_use)
+mytable
+barplot(mytable,ylab = "responses",col = "light green",
+      ,srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+2. What is your role within GVault QDMS?
+```{r}
+mytable=table(df1$role)
+barplot(mytable,ylab = "responses",col = "light green",
+        srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+3. How would you describe the effectiveness of training you received?
+```{r}
+table(df1$training_effectiveness)
+barplot(table(df1$training_effectiveness),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+
+
+```
+
+4. Are you able to complete work in the system without 'help' or 'intervention'?
+```{r}
+require(plotrix)
+mytable=table(df1$complete_without_help)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+5. Do you find it easy to search for and access documents in GVault QDMS?
+```{r}
+mytable=table(df1$easy_access_documents)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+6. How satisfied are you with the overall experience of GVault QDMS?
+```{r}
+mytable=table(df1$satisfaction)
+lbls <- paste(names(mytable), "\n", mytable, sep="")
+pie3D(mytable, labels = lbls,explode=0.3)
+```
+
+7. How would you describe your efficiency with GVault as compared to GDocs?
+```{r}
+table(df1$Gvault_efficiency)
+barplot(table(df1$Gvault_efficiency),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+8. Do you find GVault has improved features and functionality compared to GDocs?
+```{r}
+table(df1$Gvault_improved)
+barplot(table(df1$Gvault_improved),ylab="responses",
+        col="light green",las=2, yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+### Demographics analysis
+
+1. What is your functional area?
+```{r}
+table(df1$functional_area)
+barplot(table(df1$functional_area),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+2. What is your office location?
+```{r}
+table(df1$office_location)
+barplot(table(df1$office_location),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+3. What is your Job Level?
+```{r}
+table(df1$job_level)
+barplot(table(df1$job_level),ylab = "responses",col = "light green",
+        srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+4. How long have you worked at Gilead?
+```{r}
+table(df1$time_worked_Glead)
+barplot(table(df1$time_worked_Glead),ylab = "responses",col = "light green",srt=45,las=2,yaxt='n',cex.names = 0.65,cex.lab=0.65)
+```
+
+
+####  Correlation analysis: Spearman's Rank test
+
+The variables involved are made up of ordered data and thus Spearman's rank orrelation test would be the best correlation type to use.
+
+```{r}
+require("pspearman")
+```
+
+#### Decision rule: If the p-value < 0.05 then the null hypothesis is rejected, else it is upheld.
+
+#### Correlation test between frequency of use and satisfaction
+Null hypothesis: There was no statistically significant relationship between median frequency of use and the median satisfaction.
+
+Alternative hypothesis: There was statistically significant relationship between median frequency of use and the median satisfaction.
+
+```{r}
+# Spearman test 
+library(pspearman)
+spearman.test(df1$satisfaction, df1$freq_use, alternative = c("two.sided", "less", "greater"), approximation = c("exact", "AS89", "t-distribution"))
+```
+
+
+#### Correlation test between satisfaction and effectiveness of training
+Null hypothesis: There was no statistically significant relationship between median training effectiveness and the median satisfaction.
+
+Alternative hypothesis: There was statistically significant relationship between median training effectiveness and the median satisfaction. 
+```{r}
+library(pspearman)
+spearman.test(df1$satisfaction, df1$training_effectiveness, alternative = c("two.sided", "less", "greater"), approximation = c("exact", "AS89", "t-distribution"))
+
+```
+
+
+
+#### Correlation test between satisfaction and the extend by which users complete work in the system without help/intervention
+
+##### Null hypothesis: 
+There was no statistically significant relationship between median of the rank in completing workwithout help and the median rank in satisfaction.
+
+##### Alternative hypothesis:  
+There was statistically significant relationship between median of the rank in completing workwithout help and the median rank in satisfaction.
+
+```{r}
+library(pspearman)
+spearman.test(df1$satisfaction, df1$complete_without_help, alternative = c("two.sided", "less", "greater"), approximation = c("exact", "AS89", "t-distribution"))
+
+```
+
+
+#### Test of Association: Chi-square test of independence
+The variables that were tested for association with the satisfaction variable had nominal data, thus Chi-square test of independence was the best test to use. 
+
+#### Decision rule: If the p-value < 0.05 then the null hypothesis is rejected, else it is upheld.
+
+#### Test of association between satisfction and the role of a user in Gvault.
+
+##### Null hypothesis: 
+There was no association between ease of a user to search for and access documents in Gvault and satisfaction of the user with Gvault.
+
+##### Alternative hypothesis: 
+There was association between role of a user in Gvault and satisfaction of the user with Gvault.
+
+```{r}
+chisq.test(df1$satisfaction,df1$role)
+```
+
+#### Test of association between satisfction and the ease of a user to search and access documents in Gvault.
+
+##### Null hypothesis:
+There was no association between satisfction and the ease of a user to search and access documents in Gvault.
+
+##### Alternative hypothesis: 
+There was association between satisfction and the ease of a user to search and access documents in Gvault.
+
+```{r}
+chisq.test(df1$satisfaction,df1$easy_access_documents)
+```
+
+
+
+#### Findings and Summary of the correlation and association tests 
+#### Finding 1
+There was a significant relationship between effectiveness of training and satisfaction of users, wherease frequency of use and the extent of completing work without help were not related to satisfaction. This is because their p-values were greater than 0.05 while that of effective training was less than 0.05 
+
+#### Finding 2
+The role of a user was in any way related to satisfaction whereas the ease of access to documents in Gvault has a high association with satisfaction. This is also attributed to the szize of their p-values.
+
+
+### Multinomial logistic regression
+
+This model is selected when the response variable is categorical with more than one class/level. In our case the satisfaction variable is categorical with 4 classes. Thus we fit a multinomial logistic regssion model.
+
+Load required packages  first.
+```{r}
+require(foreign)
+require(nnet)
+require(ggplot2)
+require(reshape2)
+```
+First, we need to choose the level of our outcome that we wish to use as our baseline and specify this in the relevel function. Then, we run our model using multinom. The multinom package does not include p-value calculation for the regression coefficients, so we calculate p-values using Wald tests (here z-tests).
+
+```{r}
+#Render the variables available in R environment
+attach(df1)
+
+#Specify the reference level in satisfiaction variable
+df1$satisfaction2 <- relevel(df1$satisfaction, ref="Very Unsatisfied")
+
+#Fit the model to the data
+test <- multinom(satisfaction2 ~ freq_use + role + training_instructor_led + training_web_based + training_read + no_training + training_effectiveness + support_Gnet + support_inapplication + support_ref_doc + support_SOP + support_contacted + support_IT + complete_without_help + easy_access_documents + easy_access_documents + Gvault_efficiency + Gvault_improved, data =df1)
+
+#Explore the model
+summary(test)
+```
+
+#### P-values to show which predictors were significant in explaining variation in the model
+```{r}
+z <- summary(test)$coefficients/summary(test)$standard.errors
+# 2-tailed z test
+p <- (1 - pnorm(abs(z), 0, 1)) * 2
+p
+
+```
+
+#### Finding from the p-values
+The variable Gvault_improved was significant in predicting the odds of a user being very satisfied. Document stewart for a functional area and Document control group member were the roles that influence the odds of satisfaction.
+Most predictor variables had an effect on the odds of a user being very satisfied vs being very unsatisfied.
+
+#### ODDS Ratios
+Extract the coefficients from the model and exponentiate to get the ODD ratios
+```{r}
+exp(coef(test))
+```
+
+####  Interpretation of the odds ratios
+For instance the ease of access to documents increased the odds of satisfaction by 39.11 times. 
+
+#### Probabilities of satisfaction
+You can also use predicted probabilities to help you understand the model. You can calculate predicted probabilities for each of our outcome levels using the fitted function. We can start by generating the predicted probabilities for the observations in our dataset and viewing the first few rows
+
+```{r}
+head(pp <- fitted(test))
+```
+
+
+#### Interpretation at a glance
+
+
+#### Summary
+
+
+
+### Ordinal Logistic Regression (OLR)
+This model was selected also because the response variable can be measure on an ordinal scale. We begin by Loading the packages.
+
+```{r}
+require(foreign)
+require(ggplot2)
+require(MASS)
+require(Hmisc)
+require(reshape2)
+```
+
+For building this model, we will be using the polr command to estimate an ordered logistic regression. Then, we'll specify Hess=TRUE to let the model output show the observed information matrix from optimization which is used to get standard errors.
+
+####  Fit the Ordinal logistic regression model
+```{r}
+m<-polr(df1$satisfaction ~ df1$freq_use + df1$role
+          +df1$training_instructor_led + df1$training_web_based
+          + df1$training_read+ df1$no_training+df1$training_effectiveness
+          + df1$support_Gnet + df1$support_inapplication
+          +df1$support_ref_doc + df1$support_SOP + df1$support_contacted
+          +df1$support_IT + df1$complete_without_help
+          +df1$easy_access_documents + df1$Gvault_efficiency
+          +df1$Gvault_improved,data=df1,Hess=TRUE)
+summary(m)
+```
+
+
+We see the usual regression output coefficient table including the value of each coefficient, standard errors, t values, estimates for the two intercepts, residual deviance and AIC. AIC is the information criteria. Lesser the better.
+
+#### Model parameters
+Now we'll calculate some essential metrics such as p-Value, CI, Odds ratio. The output displayed next are values: log odds(coefficients of estimation), t values are the t-distribution test statistic values, and finally the p-values are the probability of error.
+
+```{r}
+ctable <- coef(summary(m))
+p <- pnorm(abs(ctable[, "t value"]), lower.tail = FALSE) * 2
+ctable <- cbind(ctable, "p value" = p)
+ctable
+```
+
+
+#### Odds Ratios and their Confidence Intervals
+```{r}
+ci <- confint(m)
+exp(cbind(OR = coef(m), ci))
+```
+
+#### Interpretation at a glance: The effect of one predictor on the odds/likelihood of satisfaction
+When Gvault is used atleast once a week versus atleast once a month, the odds of satisfaction being very satisfied are 0.9 greater than the odds of either "satisfied" , "slightly unsatisfied" or "very unsatisfied" combined. NOTE: The reference level selected was "atleast once a month" 
+
+When the training is very effective versus effective training, the odds of a user being very satisfied are 4.38 greater than the odds of being either "satisfied" , "slightly unsatisfied" or "very unsatisfied" combined. NOTE: The reference level selected was "effective"
+
+### Summary
+Most of the predictor variables were not statistically significant in predicting the level of satisfaction with the overall experience of GVault QDMS. Training effectiveness (p-value=0.04688), Support for In application(p-value=0.00401), complete work without(p-value=0.000395) help,and whether Gvault improved features(p-value=0.0.00479) were the variables that significantly affected satisfaction of a user.
+
+
+
+
+
+
+
+

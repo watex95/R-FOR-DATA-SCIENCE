@@ -1,0 +1,89 @@
+---
+title: "Graphs and plots HW"
+author: "HILLARY"
+date: "1/31/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+#### 1. Use the diamonds dataset that comes with R
+
+```{r}
+library(ggplot2)
+data("diamonds")
+attach(diamonds)
+head(diamonds)
+```
+
+#### 2. Count the number of rows by clarity
+
+```{r}
+table(diamonds$clarity)
+```
+
+#### 3. What are the unique values for cut?
+
+```{r}
+unique(cut)
+```
+
+
+#### 4. Tabulate the frequency (no of diamonds) by cut
+
+```{r}
+table(diamonds$cut)
+
+```
+
+
+#### 5. Find the mean carat size by color
+
+```{r}
+library(dplyr)
+diamonds %>%
+  group_by(color) %>%
+  summarise_at(vars(carat), funs(mean(., na.rm=TRUE)))
+
+```
+
+#### 6. Use a bar chart to find which cut has the most amount of diamonds
+
+```{r}
+require(lattice)
+barchart(table(diamonds$cut),main="Number of diamonds per cut")
+
+```
+
+#### 7. Check the distribution of the carat size.  How can you describe the distribution?
+
+- According to the plots the data is mostly found around the mean which is 0.79 but has a lot of outliers and thus the data is rightly skewed.  
+
+```{r}
+# Histogram plot
+hist(diamonds$carat,main = "Histogram for carat size")
+
+# Boxplot
+boxplot(diamonds$carat,main="Boxplot for carat size")
+
+#Density plot
+d <- density(diamonds$carat)
+plot(d, type="n", main="Density plot for carat size")
+polygon(d, col="red", border="gray")
+
+```
+
+#### 8. Is there a relationship between carat size and price?  Check using a graph.
+- From the graph the there is a positive slope showing carat size has a positive relationship with price.
+```{r}
+ggplot(diamonds, aes(carat,price)) + geom_point(alpha=0.3,col="#0000ff22", pch=16,cex=3)
+
+```
+
+#### 9. Which color has the maximum variability in the price?  Use a graph to find out.
+
+-From the boxplots the color E shows higher variability in price.
+```{r}
+qplot(color,price,data=diamonds, geom = "boxplot")
+
+```

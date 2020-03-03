@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="Studen_performance" id="C8E46276-3C18-94FC-DC8B-F74EC8B97AC8" version="3.5">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 05:37:06 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>C8E46276-3C18-94FC-DC8B-F74EC8B97AC8</designId>
+</OSDM_Design>

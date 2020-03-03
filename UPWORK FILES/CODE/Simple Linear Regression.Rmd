@@ -1,0 +1,168 @@
+---
+title: "Simple Linear Regression"
+author: "Hillary"
+date: "1/21/2020"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+  powerpoint_presentation: default
+  beamer_presentation: default
+---
+
+### Introduction
+Simple Linear regression is used to predict the value of an outcome variable Y based on one input predictor variable X. The aim is to establish a linear relationship between the predictor variable and the response variable, so that, we can use this formula to estimate the value of the response Y, when only the predictor (X) values are known. 
+For this example we will use the 'cars' dataset.
+
+```{r}
+head(cars)  # display the first 6 observations
+```
+
+
+## Outline
+- Graphical Analysis
+- Correlation
+- Build Linear Model
+- Model Diagnostics
+- Machine learning
+
+## Graphical Analysis
+- Scatter plot: Visualize the linear relationship between the predictor and response.
+- Box plot: To spot any outlier observations in the variable. Having outliers in your predictor can drastically affect the predictions as they can easily affect the direction/slope of the line of best fit.
+- Density plot: To see the distribution of the predictor variable. Ideally, a close to normal distribution (a bell shaped curve), without being skewed to the left or right is preferred. Let us see how to make each one of them.
+
+## Scatter plot
+```{r cars, echo = TRUE}
+# Visualize the relationship between response and predictor
+scatter.smooth(x=cars$speed,y=cars$dist,main="dist~speed")
+```
+
+## Box plot
+```{r}
+# Spot any outlier that might affect the direction of the slope
+par(mfrow=c(1,2))
+boxplot(cars$speed,main="speed",sub=paste("Outlier rows: ",
+        boxplot.stats(cars$speed)$out))
+boxplot(cars$dist,main="Distance",sub=paste("Outlier rows: ",
+              boxplot.stats(cars$dist)$out))
+```
+
+## Density plot
+```{r pressure}
+library(e1071)
+par(mfrow=c(1,2))
+plot(density(cars$speed),main="Density plot: speed",ylab="Frequency",
+sub=paste("Skewness: ",round(e1071::skewness(cars$speed),2)))
+polygon(density(cars$speed),col="red")
+plot(density(cars$dist),main="Density plot: dist",ylab = "Frequency",
+sub=paste(":Skewness: ",round(e1071::skewness(cars$dist),2)))
+polygon(density(cars$dist),col = "red")
+```
+
+## Correlation
+- This measure will show the level of linear dependence between response and predictor variable.
+- A value closer to 0 suggests a weak relationship between the variables, while a value closer to 1 suggests strong relationship. A low correlation (-0.2 < x < 0.2) probably suggests that much of variation of the response variable (Y) is unexplained by the predictor (X), in which case, we should probably look for better explanatory variables.
+```{r}
+cor(cars$speed,cars$dist)
+```
+
+## Build Linear model
+Now, we have to establish the mathematical relationship between response and predictor variable using the beta coefficient and the intercept to for the simple linear equation: dist = Intercept + (β∗speed)
+```{r}
+LinearMod=lm(cars$dist~cars$speed)
+LinearMod
+```
+
+## Model Diagnostics
+Here, we have to ensure the model is statistically significant, by checking the size of the p-value, t-value, f-statistic, R-squared, Adjusted R-squared, AIC,BIC Mean Absolute Percentage Error (MAPE), Mean Squared Error (MSE)
+```{r}
+modelSummary=summary(LinearMod)
+modelSummary #whole model diagnostic
+
+#Break down of indiviadual elements
+names(modelSummary) #view the objects in the model
+
+modelCoeffs=modelSummary$coefficients #model coefficients
+modelCoeffs
+
+beta_estimate <-modelCoeffs[2,1]  # get beta estimate for speed
+beta_estimate
+
+std.error <-modelCoeffs[2,2]  # Closer to zero the better
+std.error
+
+MSE<-(std.error)^2 #get mse for speed
+MSE
+
+t_value <- beta_estimate/std.error #Should be greater 1.96 for p-value to be less than 0.05
+t_value
+
+p_value <- 2*pt(-abs(t_value), df=nrow(cars)-ncol(cars))  # calc p Value
+p_value
+
+f_statistic <- modelSummary$fstatistic  # parameters for model p-value calc
+f_statistic
+
+R_squared<-modelSummary$r.squared #Higher the better (> 0.70)
+R_squared
+
+adj_R_squared<-modelSummary$adj.r.squared #Higher the better (> 0.70)
+adj_R_squared
+
+AIC(LinearMod)  #Lower the better
+BIC(LinearMod) #Lower the better
+```
+
+
+
+## Machine learning
+- Create a training and a test data
+- Build the model on training data
+- Model evaluation: Review diagnostic measures
+- Model testing: Calculate prediction accuracy and error rates
+
+## Create a training and a test data
+```{r}
+#Create Training and Test data
+set.seed(100)  # setting seed to reproduce results of random sampling
+trainingRowIndex <- sample(1:nrow(cars), 0.8*nrow(cars))# row indices for training data
+trainingData <- cars[trainingRowIndex, ]  # model training data
+dim(trainingData)
+testData  <- cars[-trainingRowIndex, ]# test data
+dim(testData)
+```
+
+## Build the model on training data
+```{r}
+lmMod <- lm(dist ~ speed, data=trainingData)  # build the model
+lmMod
+distPred <- predict(lmMod, testData)  # predict distance
+head(distPred)
+```
+
+## Model evaluation: Review diagnostic measures
+```{r}
+summary(lmMod)
+```
+
+## Model testing: Calculate prediction accuracy
+Correlation accuracy
+```{r}
+actuals_preds <- data.frame(cbind(actuals=testData$dist, predicteds=distPred))  # make actuals_predicteds dataframe.
+correlation_accuracy <- cor(actuals_preds) 
+head(actuals_preds)
+```
+
+Min-max accuracy and Mean absolute percentage error
+```{r}
+min_max_accuracy <- mean(apply(actuals_preds, 1, min)/apply(actuals_preds, 1, max))  
+min_max_accuracy
+mape <- mean(abs((actuals_preds$predicteds-actuals_preds$actuals))/actuals_preds$actuals)  
+mape
+
+```
+
+
+```{r}
+
+
+```

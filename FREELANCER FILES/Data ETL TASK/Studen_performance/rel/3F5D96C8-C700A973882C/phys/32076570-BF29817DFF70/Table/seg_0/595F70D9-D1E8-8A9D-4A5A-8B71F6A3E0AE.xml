@@ -1,0 +1,49 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev11g class="oracle.dbtools.crest.model.design.storage.oracle.v11g.TableProxyOraclev11g" name="UNIT_DIM" directorySegmentName="seg_0" id="595F70D9-D1E8-8A9D-4A5A-8B71F6A3E0AE">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:42:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<schemaObject>2496CEDE-DA0B-94F3-071B-A7EB110E685B</schemaObject>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<segment>98F8BCD4-B07C-CCB2-6C72-103AAE5857D3</segment>
+<tableSpace>EC1057DB-8EAD-4FC7-CAFE-44BEF0AA8365</tableSpace>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="UNITCODE" id="7BD84C83-D214-5624-6CE4-6D5F8A5B8832">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:42:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="UNITNAME" id="F0A4C240-5E45-E459-D57A-8A9D7E63F074">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:42:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<indexProxies>
+<IndexProxy class="oracle.dbtools.crest.model.design.storage.oracle.v10g.IndexProxyOraclev10g" name="PK_UNIT" id="FA1BB65A-B6D1-DEE0-06FF-8285A921D03D">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:42:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<schemaObject>2496CEDE-DA0B-94F3-071B-A7EB110E685B</schemaObject>
+<segment>78306746-1F83-E9FF-6066-2007E48CA97F</segment>
+<tableSpace>EC1057DB-8EAD-4FC7-CAFE-44BEF0AA8365</tableSpace>
+</IndexProxy>
+</indexProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PK_UNIT" id="80EA7132-0BD3-62E8-B9E1-E9F2613D6536">
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:42:12 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<segment>78306746-1F83-E9FF-6066-2007E48CA97F</segment>
+<tableSpace>EC1057DB-8EAD-4FC7-CAFE-44BEF0AA8365</tableSpace>
+<existingIndex>FA1BB65A-B6D1-DEE0-06FF-8285A921D03D</existingIndex>
+<indexSegment>78306746-1F83-E9FF-6066-2007E48CA97F</indexSegment>
+<indexSort>SORTED</indexSort>
+<usingIndex>BY INDEX NAME</usingIndex>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev11g>

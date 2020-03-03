@@ -1,0 +1,937 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={GVault QDMS Post Go-Live Survey},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{GVault QDMS Post Go-Live Survey}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\#\#\#\#The analysis include exploratoray data analysis and an ordinal
+logistic regression model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(}\StringTok{"RCurl"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: RCurl
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: bitops
+\end{verbatim}
+
+\hypertarget{load-the-data}{%
+\subsubsection{Load the data}\label{load-the-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Raw dataset}
+\NormalTok{newdata1<-}\KeywordTok{getURL}\NormalTok{(}\StringTok{"https://raw.githubusercontent.com/watex95/R-FOR-DATA-SCIENCE/master/DATASETS/Gvault_survey_raw.csv"}\NormalTok{)}
+\NormalTok{df1<-}\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{text=}\NormalTok{newdata1)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{exploratory-data-analysis}{%
+\subsubsection{EXPLORATORY DATA
+ANALYSIS}\label{exploratory-data-analysis}}
+
+Load packages
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(}\StringTok{"plotrix"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: plotrix
+\end{verbatim}
+
+\hypertarget{lets-explore-the-frequency-of-single-choice-questions}{%
+\paragraph{Lets explore the frequency of single choice
+questions}\label{lets-explore-the-frequency-of-single-choice-questions}}
+
+How frequently do you use GVault QDMS?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{freq_use)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  At least once a month   At least once a week                  Daily 
+##                     51                    144                    245 
+## Less than once a month 
+##                     35
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{freq_use),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}
+\NormalTok{      ,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-4-1.pdf}
+
+What is your role within GVault QDMS?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{role)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                   Consumer - Read Only          Document Control Group Member 
+##                                    153                                     16 
+## Document Steward for a functional area                               Not Sure 
+##                                     16                                     18 
+##                         Owner / Author                    Reviewer / Approver 
+##                                    142                                    130
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{role),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}
+        \DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+How would you describe the effectiveness of training you received?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{training_effectiveness)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##               Effective I did not take training    Not effective enough 
+##                     291                      29                      72 
+##          Very effective 
+##                      83
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{training_effectiveness),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+Are you able to complete work in the system without `help' or
+`intervention'?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(plotrix)}
+\NormalTok{mytable=}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{complete_without_help)}
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\KeywordTok{names}\NormalTok{(mytable), }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, mytable, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie3D}\NormalTok{(mytable, }\DataTypeTok{labels =}\NormalTok{ lbls,}\DataTypeTok{explode=}\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+Do you find it easy to search for and access documents in GVault QDMS?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mytable=}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{easy_access_documents)}
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\KeywordTok{names}\NormalTok{(mytable), }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, mytable, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie3D}\NormalTok{(mytable, }\DataTypeTok{labels =}\NormalTok{ lbls,}\DataTypeTok{explode=}\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-8-1.pdf}
+
+How satisfied are you with the overall experience of GVault QDMS?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mytable=}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{satisfaction)}
+\NormalTok{lbls <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(}\KeywordTok{names}\NormalTok{(mytable), }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, mytable, }\DataTypeTok{sep=}\StringTok{""}\NormalTok{)}
+\KeywordTok{pie3D}\NormalTok{(mytable, }\DataTypeTok{labels =}\NormalTok{ lbls,}\DataTypeTok{explode=}\FloatTok{0.3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-9-1.pdf}
+
+How would you describe your efficiency with GVault as compared to GDocs?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gvault_efficiency)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                                         Decreased                Increased 
+##                       18                       75                      270 
+## No noticeable difference 
+##                      112
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gvault_efficiency),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+Do you find GVault has improved features and functionality compared to
+GDocs?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gvault_improved)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##      No Yes 
+##  28  81 366
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{Gvault_improved),}\DataTypeTok{ylab=}\StringTok{"responses"}\NormalTok{,}
+        \DataTypeTok{col=}\StringTok{"light green"}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{, }\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\#\#\#Demographics analysis What is your functional area?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{functional_area)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                                                    
+##                                                  6 
+##                                         Commercial 
+##                                                 12 
+##                          Facilities and Operations 
+##                                                 13 
+##                                            Finance 
+##                                                  1 
+##                        Information Technology (IT) 
+##                                                 70 
+##                             Other (please specify) 
+##                                                 37 
+## Pharmaceutical Development and Manufacturing (PDM) 
+##                                                217 
+##                     Research and Development (R&D) 
+##                                                119
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{functional_area),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+What is your office location?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{office_location)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                                       Alberta              Cambridge 
+##                      6                     39                     15 
+##            Cork/Dublin            Foster City              Oceanside 
+##                     25                    244                     22 
+## Other (please specify)     San Dimas/La Verne                Seattle 
+##                     70                     34                     11 
+##          Stockley Park 
+##                      9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{office_location),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-13-1.pdf}
+
+What is your Job Level?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{job_level)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                                      Director   Executive Leadership 
+##                      6                     72                      4 
+## Individual Contributor Manager / Group Leader Other (please specify) 
+##                    208                    133                     52
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{job_level),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}
+        \DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-14-1.pdf}
+
+How long have you worked at Gilead?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{time_worked_Glead)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##                          >7 Years     1 to 2 years        3-4 years 
+##                6              123               73              128 
+##        5-7 years Less than a year 
+##               84               61
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{barplot}\NormalTok{(}\KeywordTok{table}\NormalTok{(df1}\OperatorTok{$}\NormalTok{time_worked_Glead),}\DataTypeTok{ylab =} \StringTok{"responses"}\NormalTok{,}\DataTypeTok{col =} \StringTok{"light green"}\NormalTok{,}\DataTypeTok{srt=}\DecValTok{45}\NormalTok{,}\DataTypeTok{las=}\DecValTok{2}\NormalTok{,}\DataTypeTok{yaxt=}\StringTok{'n'}\NormalTok{,}\DataTypeTok{cex.names =} \FloatTok{0.65}\NormalTok{,}\DataTypeTok{cex.lab=}\FloatTok{0.65}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{GVault-QDMS-Post-Go-Live-Survey_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+\#\#\#Ordinal Logistic Regression (OLR) \#\#\#\#\# Load the Libraries
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(foreign)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: foreign
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: ggplot2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(MASS)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: MASS
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(Hmisc)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: Hmisc
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: lattice
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: survival
+\end{verbatim}
+
+\begin{verbatim}
+## Loading required package: Formula
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'Hmisc'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, units
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{require}\NormalTok{(reshape2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Loading required package: reshape2
+\end{verbatim}
+
+For building this model, we will be using the polr command to estimate
+an ordered logistic regression. Then, we'll specify Hess=TRUE to let the
+model output show the observed information matrix from optimization
+which is used to get standard errors.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m<-}\KeywordTok{polr}\NormalTok{(df1}\OperatorTok{$}\NormalTok{satisfaction }\OperatorTok{~}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{freq_use }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{role}
+          \OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{training_instructor_led }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{training_web_based}
+          \OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{training_read}\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{no_training}\OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{training_effectiveness}
+          \OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{support_Gnet }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{support_inapplication}
+          \OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{support_ref_doc }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{support_SOP }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{support_contacted}
+          \OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{support_IT }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{complete_without_help}
+          \OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{easy_access_documents }\OperatorTok{+}\StringTok{ }\NormalTok{df1}\OperatorTok{$}\NormalTok{Gvault_efficiency}
+          \OperatorTok{+}\NormalTok{df1}\OperatorTok{$}\NormalTok{Gvault_improved,}\DataTypeTok{data=}\NormalTok{df1,}\DataTypeTok{Hess=}\OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{summary}\NormalTok{(m)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Call:
+## polr(formula = df1$satisfaction ~ df1$freq_use + df1$role + df1$training_instructor_led + 
+##     df1$training_web_based + df1$training_read + df1$no_training + 
+##     df1$training_effectiveness + df1$support_Gnet + df1$support_inapplication + 
+##     df1$support_ref_doc + df1$support_SOP + df1$support_contacted + 
+##     df1$support_IT + df1$complete_without_help + df1$easy_access_documents + 
+##     df1$Gvault_efficiency + df1$Gvault_improved, data = df1, 
+##     Hess = TRUE)
+## 
+## Coefficients:
+##                                                                                                  Value
+## df1$freq_useAt least once a week                                                             -0.061256
+## df1$freq_useDaily                                                                            -0.225149
+## df1$freq_useLess than once a month                                                           -0.298138
+## df1$roleDocument Control Group Member                                                        -0.035346
+## df1$roleDocument Steward for a functional area                                                0.839250
+## df1$roleNot Sure                                                                             -0.710795
+## df1$roleOwner / Author                                                                        0.232541
+## df1$roleReviewer / Approver                                                                   0.149034
+## df1$training_instructor_ledInstructor Led                                                    -0.014088
+## df1$training_web_basedWeb/Computer Based                                                     -0.201767
+## df1$training_readRead & Understood of Procedural Document(s)                                  0.233305
+## df1$no_trainingI did not take training                                                       -2.164934
+## df1$training_effectivenessI did not take training                                             2.662338
+## df1$training_effectivenessNot effective enough                                                0.418935
+## df1$training_effectivenessVery effective                                                      1.469944
+## df1$support_GnetGNet                                                                          0.007038
+## df1$support_inapplicationIn-Application (GVault)                                              0.672101
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  0.349751
+## df1$support_SOPSOPs and Work Instructions                                                     0.112311
+## df1$support_contactedContacted my Document Control or Training Group                         -0.224774
+## df1$support_ITIT Support / SPARC                                                              0.062084
+## df1$complete_without_helpMost of the time                                                    -0.900815
+## df1$complete_without_helpNever                                                                0.499156
+## df1$complete_without_helpSome of the time                                                    -0.261270
+## df1$easy_access_documentsYes                                                                 -0.162641
+## df1$Gvault_efficiencyDecreased                                                                0.925684
+## df1$Gvault_efficiencyIncreased                                                                0.813776
+## df1$Gvault_efficiencyNo noticeable difference                                                 0.107436
+## df1$Gvault_improvedNo                                                                         1.889843
+## df1$Gvault_improvedYes                                                                        0.539834
+##                                                                                              Std. Error
+## df1$freq_useAt least once a week                                                                 0.3640
+## df1$freq_useDaily                                                                                0.3642
+## df1$freq_useLess than once a month                                                               0.5118
+## df1$roleDocument Control Group Member                                                            0.5846
+## df1$roleDocument Steward for a functional area                                                   0.5561
+## df1$roleNot Sure                                                                                 0.6216
+## df1$roleOwner / Author                                                                           0.2884
+## df1$roleReviewer / Approver                                                                      0.2782
+## df1$training_instructor_ledInstructor Led                                                        0.2450
+## df1$training_web_basedWeb/Computer Based                                                         0.2269
+## df1$training_readRead & Understood of Procedural Document(s)                                     0.2339
+## df1$no_trainingI did not take training                                                           1.3209
+## df1$training_effectivenessI did not take training                                                1.3396
+## df1$training_effectivenessNot effective enough                                                   0.2972
+## df1$training_effectivenessVery effective                                                         0.2688
+## df1$support_GnetGNet                                                                             0.2210
+## df1$support_inapplicationIn-Application (GVault)                                                 0.2336
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)     0.2145
+## df1$support_SOPSOPs and Work Instructions                                                        0.2152
+## df1$support_contactedContacted my Document Control or Training Group                             0.2209
+## df1$support_ITIT Support / SPARC                                                                 0.3173
+## df1$complete_without_helpMost of the time                                                        0.2542
+## df1$complete_without_helpNever                                                                   0.6184
+## df1$complete_without_helpSome of the time                                                        0.3708
+## df1$easy_access_documentsYes                                                                     0.2574
+## df1$Gvault_efficiencyDecreased                                                                   0.8537
+## df1$Gvault_efficiencyIncreased                                                                   0.8234
+## df1$Gvault_efficiencyNo noticeable difference                                                    0.8297
+## df1$Gvault_improvedNo                                                                            0.6701
+## df1$Gvault_improvedYes                                                                           0.6258
+##                                                                                               t value
+## df1$freq_useAt least once a week                                                             -0.16828
+## df1$freq_useDaily                                                                            -0.61814
+## df1$freq_useLess than once a month                                                           -0.58252
+## df1$roleDocument Control Group Member                                                        -0.06046
+## df1$roleDocument Steward for a functional area                                                1.50921
+## df1$roleNot Sure                                                                             -1.14345
+## df1$roleOwner / Author                                                                        0.80632
+## df1$roleReviewer / Approver                                                                   0.53578
+## df1$training_instructor_ledInstructor Led                                                    -0.05751
+## df1$training_web_basedWeb/Computer Based                                                     -0.88939
+## df1$training_readRead & Understood of Procedural Document(s)                                  0.99730
+## df1$no_trainingI did not take training                                                       -1.63898
+## df1$training_effectivenessI did not take training                                             1.98735
+## df1$training_effectivenessNot effective enough                                                1.40961
+## df1$training_effectivenessVery effective                                                      5.46838
+## df1$support_GnetGNet                                                                          0.03184
+## df1$support_inapplicationIn-Application (GVault)                                              2.87713
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  1.63043
+## df1$support_SOPSOPs and Work Instructions                                                     0.52185
+## df1$support_contactedContacted my Document Control or Training Group                         -1.01772
+## df1$support_ITIT Support / SPARC                                                              0.19564
+## df1$complete_without_helpMost of the time                                                    -3.54343
+## df1$complete_without_helpNever                                                                0.80717
+## df1$complete_without_helpSome of the time                                                    -0.70457
+## df1$easy_access_documentsYes                                                                 -0.63187
+## df1$Gvault_efficiencyDecreased                                                                1.08428
+## df1$Gvault_efficiencyIncreased                                                                0.98825
+## df1$Gvault_efficiencyNo noticeable difference                                                 0.12949
+## df1$Gvault_improvedNo                                                                         2.82023
+## df1$Gvault_improvedYes                                                                        0.86269
+## 
+## Intercepts:
+##                                     Value   Std. Error t value
+## Satisfied|Slightly Unsatisfied       1.6519  0.7826     2.1109
+## Slightly Unsatisfied|Very Satisfied  2.4814  0.7885     3.1472
+## Very Satisfied|Very Unsatisfied      4.7798  0.8193     5.8342
+## 
+## Residual Deviance: 914.5326 
+## AIC: 980.5326
+\end{verbatim}
+
+We see the usual regression output coefficient table including the value
+of each coefficient, standard errors, t values, estimates for the two
+intercepts, residual deviance and AIC. AIC is the information criteria.
+Lesser the better.
+
+Now we'll calculate some essential metrics such as p-Value, CI, Odds
+ratio. The output displayed next are values: log odds(coefficients of
+estimation), t values are the t-distribution test statistic values, and
+finally the p-values are the probability of error.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ctable <-}\StringTok{ }\KeywordTok{coef}\NormalTok{(}\KeywordTok{summary}\NormalTok{(m))}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{pnorm}\NormalTok{(}\KeywordTok{abs}\NormalTok{(ctable[, }\StringTok{"t value"}\NormalTok{]), }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{*}\StringTok{ }\DecValTok{2}
+\NormalTok{ctable <-}\StringTok{ }\KeywordTok{cbind}\NormalTok{(ctable, }\StringTok{"p value"}\NormalTok{ =}\StringTok{ }\NormalTok{p)}
+\NormalTok{ctable}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                                                                     Value
+## df1$freq_useAt least once a week                                                             -0.061255520
+## df1$freq_useDaily                                                                            -0.225148789
+## df1$freq_useLess than once a month                                                           -0.298137738
+## df1$roleDocument Control Group Member                                                        -0.035346366
+## df1$roleDocument Steward for a functional area                                                0.839250212
+## df1$roleNot Sure                                                                             -0.710794769
+## df1$roleOwner / Author                                                                        0.232540770
+## df1$roleReviewer / Approver                                                                   0.149033738
+## df1$training_instructor_ledInstructor Led                                                    -0.014088132
+## df1$training_web_basedWeb/Computer Based                                                     -0.201766655
+## df1$training_readRead & Understood of Procedural Document(s)                                  0.233305064
+## df1$no_trainingI did not take training                                                       -2.164933941
+## df1$training_effectivenessI did not take training                                             2.662337561
+## df1$training_effectivenessNot effective enough                                                0.418934925
+## df1$training_effectivenessVery effective                                                      1.469944319
+## df1$support_GnetGNet                                                                          0.007037608
+## df1$support_inapplicationIn-Application (GVault)                                              0.672101137
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  0.349751351
+## df1$support_SOPSOPs and Work Instructions                                                     0.112310847
+## df1$support_contactedContacted my Document Control or Training Group                         -0.224773958
+## df1$support_ITIT Support / SPARC                                                              0.062083893
+## df1$complete_without_helpMost of the time                                                    -0.900814906
+## df1$complete_without_helpNever                                                                0.499156305
+## df1$complete_without_helpSome of the time                                                    -0.261270473
+## df1$easy_access_documentsYes                                                                 -0.162640886
+## df1$Gvault_efficiencyDecreased                                                                0.925683533
+## df1$Gvault_efficiencyIncreased                                                                0.813775704
+## df1$Gvault_efficiencyNo noticeable difference                                                 0.107435707
+## df1$Gvault_improvedNo                                                                         1.889843138
+## df1$Gvault_improvedYes                                                                        0.539833742
+## Satisfied|Slightly Unsatisfied                                                                1.651903387
+## Slightly Unsatisfied|Very Satisfied                                                           2.481428832
+## Very Satisfied|Very Unsatisfied                                                               4.779807594
+##                                                                                              Std. Error
+## df1$freq_useAt least once a week                                                              0.3640076
+## df1$freq_useDaily                                                                             0.3642379
+## df1$freq_useLess than once a month                                                            0.5118063
+## df1$roleDocument Control Group Member                                                         0.5846309
+## df1$roleDocument Steward for a functional area                                                0.5560856
+## df1$roleNot Sure                                                                              0.6216254
+## df1$roleOwner / Author                                                                        0.2883987
+## df1$roleReviewer / Approver                                                                   0.2781638
+## df1$training_instructor_ledInstructor Led                                                     0.2449576
+## df1$training_web_basedWeb/Computer Based                                                      0.2268604
+## df1$training_readRead & Understood of Procedural Document(s)                                  0.2339372
+## df1$no_trainingI did not take training                                                        1.3209057
+## df1$training_effectivenessI did not take training                                             1.3396388
+## df1$training_effectivenessNot effective enough                                                0.2971996
+## df1$training_effectivenessVery effective                                                      0.2688082
+## df1$support_GnetGNet                                                                          0.2210034
+## df1$support_inapplicationIn-Application (GVault)                                              0.2336016
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  0.2145142
+## df1$support_SOPSOPs and Work Instructions                                                     0.2152168
+## df1$support_contactedContacted my Document Control or Training Group                          0.2208596
+## df1$support_ITIT Support / SPARC                                                              0.3173358
+## df1$complete_without_helpMost of the time                                                     0.2542211
+## df1$complete_without_helpNever                                                                0.6184067
+## df1$complete_without_helpSome of the time                                                     0.3708206
+## df1$easy_access_documentsYes                                                                  0.2573965
+## df1$Gvault_efficiencyDecreased                                                                0.8537290
+## df1$Gvault_efficiencyIncreased                                                                0.8234482
+## df1$Gvault_efficiencyNo noticeable difference                                                 0.8296784
+## df1$Gvault_improvedNo                                                                         0.6701029
+## df1$Gvault_improvedYes                                                                        0.6257589
+## Satisfied|Slightly Unsatisfied                                                                0.7825531
+## Slightly Unsatisfied|Very Satisfied                                                           0.7884581
+## Very Satisfied|Very Unsatisfied                                                               0.8192696
+##                                                                                                  t value
+## df1$freq_useAt least once a week                                                             -0.16828087
+## df1$freq_useDaily                                                                            -0.61813665
+## df1$freq_useLess than once a month                                                           -0.58252067
+## df1$roleDocument Control Group Member                                                        -0.06045929
+## df1$roleDocument Steward for a functional area                                                1.50921053
+## df1$roleNot Sure                                                                             -1.14344556
+## df1$roleOwner / Author                                                                        0.80631711
+## df1$roleReviewer / Approver                                                                   0.53577681
+## df1$training_instructor_ledInstructor Led                                                    -0.05751253
+## df1$training_web_basedWeb/Computer Based                                                     -0.88938675
+## df1$training_readRead & Understood of Procedural Document(s)                                  0.99729791
+## df1$no_trainingI did not take training                                                       -1.63897685
+## df1$training_effectivenessI did not take training                                             1.98735477
+## df1$training_effectivenessNot effective enough                                                1.40960810
+## df1$training_effectivenessVery effective                                                      5.46837694
+## df1$support_GnetGNet                                                                          0.03184388
+## df1$support_inapplicationIn-Application (GVault)                                              2.87712521
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  1.63043451
+## df1$support_SOPSOPs and Work Instructions                                                     0.52184971
+## df1$support_contactedContacted my Document Control or Training Group                         -1.01772325
+## df1$support_ITIT Support / SPARC                                                              0.19564098
+## df1$complete_without_helpMost of the time                                                    -3.54343092
+## df1$complete_without_helpNever                                                                0.80716509
+## df1$complete_without_helpSome of the time                                                    -0.70457384
+## df1$easy_access_documentsYes                                                                 -0.63186911
+## df1$Gvault_efficiencyDecreased                                                                1.08428267
+## df1$Gvault_efficiencyIncreased                                                                0.98825372
+## df1$Gvault_efficiencyNo noticeable difference                                                 0.12949078
+## df1$Gvault_improvedNo                                                                         2.82022827
+## df1$Gvault_improvedYes                                                                        0.86268647
+## Satisfied|Slightly Unsatisfied                                                                2.11091543
+## Slightly Unsatisfied|Very Satisfied                                                           3.14719184
+## Very Satisfied|Very Unsatisfied                                                               5.83423013
+##                                                                                                   p value
+## df1$freq_useAt least once a week                                                             8.663623e-01
+## df1$freq_useDaily                                                                            5.364853e-01
+## df1$freq_useLess than once a month                                                           5.602160e-01
+## df1$roleDocument Control Group Member                                                        9.517898e-01
+## df1$roleDocument Steward for a functional area                                               1.312450e-01
+## df1$roleNot Sure                                                                             2.528536e-01
+## df1$roleOwner / Author                                                                       4.200600e-01
+## df1$roleReviewer / Approver                                                                  5.921128e-01
+## df1$training_instructor_ledInstructor Led                                                    9.541369e-01
+## df1$training_web_basedWeb/Computer Based                                                     3.737953e-01
+## df1$training_readRead & Understood of Procedural Document(s)                                 3.186199e-01
+## df1$no_trainingI did not take training                                                       1.012181e-01
+## df1$training_effectivenessI did not take training                                            4.688310e-02
+## df1$training_effectivenessNot effective enough                                               1.586554e-01
+## df1$training_effectivenessVery effective                                                     4.541752e-08
+## df1$support_GnetGNet                                                                         9.745965e-01
+## df1$support_inapplicationIn-Application (GVault)                                             4.013163e-03
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc) 1.030097e-01
+## df1$support_SOPSOPs and Work Instructions                                                    6.017750e-01
+## df1$support_contactedContacted my Document Control or Training Group                         3.088095e-01
+## df1$support_ITIT Support / SPARC                                                             8.448912e-01
+## df1$complete_without_helpMost of the time                                                    3.949568e-04
+## df1$complete_without_helpNever                                                               4.195714e-01
+## df1$complete_without_helpSome of the time                                                    4.810755e-01
+## df1$easy_access_documentsYes                                                                 5.274724e-01
+## df1$Gvault_efficiencyDecreased                                                               2.782395e-01
+## df1$Gvault_efficiencyIncreased                                                               3.230284e-01
+## df1$Gvault_efficiencyNo noticeable difference                                                8.969693e-01
+## df1$Gvault_improvedNo                                                                        4.798950e-03
+## df1$Gvault_improvedYes                                                                       3.883099e-01
+## Satisfied|Slightly Unsatisfied                                                               3.477958e-02
+## Slightly Unsatisfied|Very Satisfied                                                          1.648468e-03
+## Very Satisfied|Very Unsatisfied                                                              5.403950e-09
+\end{verbatim}
+
+\hypertarget{odds-ratios-and-their-confidence-intervals}{%
+\paragraph{Odds Ratios and their Confidence
+Intervals}\label{odds-ratios-and-their-confidence-intervals}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ci <-}\StringTok{ }\KeywordTok{confint}\NormalTok{(m)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Waiting for profiling to be done...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{exp}\NormalTok{(}\KeywordTok{cbind}\NormalTok{(}\DataTypeTok{OR =} \KeywordTok{coef}\NormalTok{(m), ci))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                                                                                                      OR
+## df1$freq_useAt least once a week                                                              0.9405829
+## df1$freq_useDaily                                                                             0.7983974
+## df1$freq_useLess than once a month                                                            0.7421991
+## df1$roleDocument Control Group Member                                                         0.9652710
+## df1$roleDocument Steward for a functional area                                                2.3146308
+## df1$roleNot Sure                                                                              0.4912536
+## df1$roleOwner / Author                                                                        1.2618019
+## df1$roleReviewer / Approver                                                                   1.1607121
+## df1$training_instructor_ledInstructor Led                                                     0.9860106
+## df1$training_web_basedWeb/Computer Based                                                      0.8172856
+## df1$training_readRead & Understood of Procedural Document(s)                                  1.2627666
+## df1$no_trainingI did not take training                                                        0.1147575
+## df1$training_effectivenessI did not take training                                            14.3297466
+## df1$training_effectivenessNot effective enough                                                1.5203414
+## df1$training_effectivenessVery effective                                                      4.3489930
+## df1$support_GnetGNet                                                                          1.0070624
+## df1$support_inapplicationIn-Application (GVault)                                              1.9583478
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)  1.4187147
+## df1$support_SOPSOPs and Work Instructions                                                     1.1188606
+## df1$support_contactedContacted my Document Control or Training Group                          0.7986967
+## df1$support_ITIT Support / SPARC                                                              1.0640516
+## df1$complete_without_helpMost of the time                                                     0.4062385
+## df1$complete_without_helpNever                                                                1.6473308
+## df1$complete_without_helpSome of the time                                                     0.7700726
+## df1$easy_access_documentsYes                                                                  0.8498963
+## df1$Gvault_efficiencyDecreased                                                                2.5235926
+## df1$Gvault_efficiencyIncreased                                                                2.2564115
+## df1$Gvault_efficiencyNo noticeable difference                                                 1.1134193
+## df1$Gvault_improvedNo                                                                         6.6183304
+## df1$Gvault_improvedYes                                                                        1.7157216
+##                                                                                                    2.5 %
+## df1$freq_useAt least once a week                                                             0.463984624
+## df1$freq_useDaily                                                                            0.393674401
+## df1$freq_useLess than once a month                                                           0.266853560
+## df1$roleDocument Control Group Member                                                        0.298130157
+## df1$roleDocument Steward for a functional area                                               0.756901241
+## df1$roleNot Sure                                                                             0.131970798
+## df1$roleOwner / Author                                                                       0.717716313
+## df1$roleReviewer / Approver                                                                  0.673176065
+## df1$training_instructor_ledInstructor Led                                                    0.610563800
+## df1$training_web_basedWeb/Computer Based                                                     0.524022291
+## df1$training_readRead & Understood of Procedural Document(s)                                 0.800739629
+## df1$no_trainingI did not take training                                                       0.004596766
+## df1$training_effectivenessI did not take training                                            1.250406179
+## df1$training_effectivenessNot effective enough                                               0.843980236
+## df1$training_effectivenessVery effective                                                     2.572731017
+## df1$support_GnetGNet                                                                         0.650983679
+## df1$support_inapplicationIn-Application (GVault)                                             1.238240827
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc) 0.932364218
+## df1$support_SOPSOPs and Work Instructions                                                    0.733004716
+## df1$support_contactedContacted my Document Control or Training Group                         0.517337265
+## df1$support_ITIT Support / SPARC                                                             0.564939050
+## df1$complete_without_helpMost of the time                                                    0.246551259
+## df1$complete_without_helpNever                                                               0.473766898
+## df1$complete_without_helpSome of the time                                                    0.370922492
+## df1$easy_access_documentsYes                                                                 0.513532685
+## df1$Gvault_efficiencyDecreased                                                               0.479579095
+## df1$Gvault_efficiencyIncreased                                                               0.456763606
+## df1$Gvault_efficiencyNo noticeable difference                                                0.221095979
+## df1$Gvault_improvedNo                                                                        1.896190043
+## df1$Gvault_improvedYes                                                                       0.537459748
+##                                                                                                   97.5 %
+## df1$freq_useAt least once a week                                                               1.9416099
+## df1$freq_useDaily                                                                              1.6491686
+## df1$freq_useLess than once a month                                                             2.0030414
+## df1$roleDocument Control Group Member                                                          2.9884884
+## df1$roleDocument Steward for a functional area                                                 6.8122375
+## df1$roleNot Sure                                                                               1.5668129
+## df1$roleOwner / Author                                                                         2.2266164
+## df1$roleReviewer / Approver                                                                    2.0062932
+## df1$training_instructor_ledInstructor Led                                                      1.5969506
+## df1$training_web_basedWeb/Computer Based                                                       1.2766539
+## df1$training_readRead & Understood of Procedural Document(s)                                   2.0058319
+## df1$no_trainingI did not take training                                                         1.2460146
+## df1$training_effectivenessI did not take training                                            363.9223923
+## df1$training_effectivenessNot effective enough                                                 2.7125669
+## df1$training_effectivenessVery effective                                                       7.3915420
+## df1$support_GnetGNet                                                                           1.5498643
+## df1$support_inapplicationIn-Application (GVault)                                               3.0976786
+## df1$support_ref_docReference Document (User Manual, Reference Guide, Training Material, etc)   2.1638272
+## df1$support_SOPSOPs and Work Instructions                                                      1.7057883
+## df1$support_contactedContacted my Document Control or Training Group                           1.2308936
+## df1$support_ITIT Support / SPARC                                                               1.9673261
+## df1$complete_without_helpMost of the time                                                      0.6688372
+## df1$complete_without_helpNever                                                                 5.4780282
+## df1$complete_without_helpSome of the time                                                      1.5909998
+## df1$easy_access_documentsYes                                                                   1.4113909
+## df1$Gvault_efficiencyDecreased                                                                14.4853373
+## df1$Gvault_efficiencyIncreased                                                                12.3340562
+## df1$Gvault_efficiencyNo noticeable difference                                                  6.1067697
+## df1$Gvault_improvedNo                                                                         27.2439790
+## df1$Gvault_improvedYes                                                                         6.5299143
+\end{verbatim}
+
+\#\#\#\#Interpretation at a glance: The effect of one predictor on the
+odds/likelihood of satisfaction When Gvault is used atleast once a week
+versus atleast once a month, the odds of satisfaction being very
+satisfied are 0.9 greater than the odds of either ``satisfied'' ,
+``slightly unsatisfied'' or ``very unsatisfied'' combined. NOTE: The
+reference level selected was ``atleast once a month''
+
+When the training is very effective versus effective training, the odds
+of a user being very satisfied are 4.38 greater than the odds of being
+either ``satisfied'' , ``slightly unsatisfied'' or ``very unsatisfied''
+combined. NOTE: The reference level selected was ``effective''
+
+\hypertarget{summary}{%
+\subsubsection{Summary}\label{summary}}
+
+Most of the predictor variables were not statistically significant in
+predicting the level of satisfaction with the overall experience of
+GVault QDMS. Training effectiveness (p-value=0.04688), Support for In
+application(p-value=0.00401), complete work without(p-value=0.000395)
+help,and whether Gvault improved features(p-value=0.0.00479) were the
+variables that significantly affected satisfaction of a user.
+
+\end{document}

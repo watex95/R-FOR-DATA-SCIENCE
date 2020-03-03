@@ -1,0 +1,89 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="F7EFDBE1-0263-9F9F-CE90-4C359B523AAF" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="ENROLLMENT_DIM">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>ENROLLMENT_DIM</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="ENROLNUMBER" id="A8849CC4-B871-CFD2-B28D-D526E70C8965">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>ENROLLMENT_DIM</sourceObjSchema>
+<sourceObjName>ENROLNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="UNITOFFERINGNUMBER" id="2935BB99-6FD8-6AEC-888B-31C4A5FB046D">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>ENROLLMENT_DIM</sourceObjSchema>
+<sourceObjName>UNITOFFERINGNUMBER</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<dataTypePrecision>*</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<ownDataTypeParameters>,*,0</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="GRADE" id="7DFF308D-8DCD-C656-3CE0-E20A0780EA86">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>ENROLLMENT_DIM</sourceObjSchema>
+<sourceObjName>GRADE</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>50 BYTE</dataTypeSize>
+<ownDataTypeParameters>50 BYTE,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="B0791544-6028-AB23-CE59-FDD1F5EA5F28" name="PK_ENROLLMENT">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_ENROLLMENT</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A8849CC4-B871-CFD2-B28D-D526E70C8965"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0C1DC2D9-C2A0-B9E8-E8A2-BD4F9E9C1984" schemaObject="2496CEDE-DA0B-94F3-071B-A7EB110E685B" name="PK_ENROLLMENT">
+<sourceConnName>system</sourceConnName>
+<sourceObjSchema>SYSTEM</sourceObjSchema>
+<sourceObjName>PK_ENROLLMENT</sourceObjName>
+<createdBy>Administrator</createdBy>
+<createdTime>2020-02-28 08:41:16 UTC</createdTime>
+<ownerDesignName>Studen_performance</ownerDesignName>
+<indexState>Unique Plain Index</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="A8849CC4-B871-CFD2-B28D-D526E70C8965"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

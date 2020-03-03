@@ -1,0 +1,179 @@
+---
+title: "Homework 2"
+output: slidy_presentation
+---
+
+##### 1. Load the required packages and the cpus dataset from the MASS package
+```{r}
+library(MASS)
+library(tidyverse)
+library(caret)
+library(leaps)
+head(cpus)
+```
+
+##### 2. Use syct, mmin , mmax , cach , chmin, chmax as the predictors (independent variables) to predict performance (perf).
+From the model output we use the p-value to check the best predictors in the model, condition: (p-value < 0.05).
+```{r message=FALSE,warning=FALSE}
+my_model<-lm(perf~syct + mmin + mmax + cach + chmin + chmax, data = cpus, nvmax = 6)
+summary(my_model)
+```
+
+
+##### 3. Perform best subset selection in order to choose the best predictors from the above predictors. What is the best model obtained according to Cp, BIC, and adjusted R2?
+
+```{r message=FALSE,warning=FALSE}
+models <- regsubsets(perf~syct + mmin + mmax + cach + chmin + chmax,
+                     data = cpus, nvmax = 6)
+summary(models)
+res.sum <- summary(models)
+
+
+
+```
+
+Displays the CP values at each predictor number from 1-predictor to 6-predictor
+```{r message=FALSE,warning=FALSE}
+
+res.sum$cp
+
+```
+
+
+Displays the BIC values at each predictor number from 1-predictor to 6-predictor
+
+```{r message=FALSE,warning=FALSE}
+res.sum$bic
+
+```
+
+This shows the number of predictors that BIC, CP, ADJ.R2 support as best subset is the one with lowest BIC, CP, ADJ.R2 values.
+
+```{r message=FALSE,warning=FALSE}
+data.frame(
+  Adj.R2 = which.max(res.sum$adjr2),
+  CP = which.min(res.sum$cp),
+  BIC = which.min(res.sum$bic)
+)
+```
+
+- The function summary() reports the best set of variables for each model size. From the output, an asterisk specifies that a given variable is included in the corresponding model.
+- For example, it can be seen that the best 2-variables model contains only mmax and cach variables (perf ~ mmax + cach). The best three-variable model is (perf ~ mmax + cach + mmin), and so forth.
+- As shown above, adjusted R2,BIC and Cp criteria, tells us that the best model is the one with 5 predictor variables.
+- A natural question is: which of these best models should we finally choose for our predictive analytics?
+
+
+##### 4. Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained for each criteria.
+- The plots show that the BIC reduces as the number of parameters increase upto 5 then it becomes constant. The same goes for CP.
+
+```{r message=FALSE,warning=FALSE}
+plot(res.sum$bic, xlab="Parameter", ylab="BIC",main="BIC plot")
+plot(res.sum$cp, xlab="Parameter", ylab="CP",main = "CP plot")
+```
+
+##### 5. Repeat using forward stepwise selection and also using backwards stepwise selection.How does your answer compare to the best subset results?
+
+- nvmax: the number of variable in the model. For example nvmax = 2, specify the best 2-variables model
+- RMSE and MAE are two different metrics measuring the prediction error of each model. The lower the RMSE and MAE, the better the model.
+- Rsquared indicates the correlation between the observed outcome values and the values predicted by the model. The higher the R squared, the better the model.
+
+
+Fit the full model to show the performance before subset selection
+```{r message=FALSE,warning=FALSE}
+library(MASS)
+full.model <- lm(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus)
+full.model
+```
+
+###### Model information
+- Specify the tuning parameter nvmax, which corresponds to the maximum number of predictors to be incorporated in the model.
+- For example, you can vary nvmax from 1 to 5. In this case, the function starts by searching different best models of different size, up to the best 5-variables model.
+- That is, it searches the best 1-variable model, the best 2-variables model, …, the best 5-variables models.
+- As the data set contains only 6 predictors, we’ll vary nvmax from 1 to 6 resulting to the identification of the 6 best models with different sizes: the best 1-variable model, the best 2-variables model, …, the best 6-variables model.
+- We’ll use 10-fold cross-validation to estimate the average prediction error (RMSE) of each of the 6 models
+- The output of the final model has predictors selected based on the number of asterics , the more the better.
+
+###### Forward selection
+```{r message=FALSE,warning=FALSE}
+# Set seed for reproducibility
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+step.model <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapForward", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control
+)
+step.model$results
+
+```
+
+Here we show the number of predictors the best subset will have after forward selection
+```{r message=FALSE,warning=FALSE}
+step.model$bestTune
+```
+
+The final model after forward selection showing the importance of each predictor.
+```{r message=FALSE,warning=FALSE}
+summary(step.model$finalModel)
+```
+
+###### Backward selection
+```{r message=FALSE,warning=FALSE}
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+# Train the model
+step.model2 <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapBackward", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control)
+step.model2$results
+
+```
+
+
+Here we show the number of predictors the best subset will have after Backward selection. 
+```{r message=FALSE,warning=FALSE}
+step.model2$bestTune
+```
+
+The final model after after Backward selection showing the importance of each predictor.
+```{r message=FALSE,warning=FALSE}
+summary(step.model2$finalModel)
+
+```
+
+
+###### Stepwise selection
+```{r message=FALSE,warning=FALSE}
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+step.model3 <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapSeq", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control)
+step.model3$results
+
+```
+
+Here we show the number of predictors the best subset will have 
+```{r message=FALSE,warning=FALSE}
+step.model3$bestTune
+```
+
+The final model after stepwise selection showing the importance of each predictor.
+```{r message=FALSE,warning=FALSE}
+summary(step.model3$finalModel)
+```
+
+
+
+

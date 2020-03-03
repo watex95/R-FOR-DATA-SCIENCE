@@ -1,0 +1,180 @@
+---
+title: Predict the number of applications received using the other variables in the
+  College data set in library ISLR
+author: "student"
+date: "1/30/2020"
+output: slidy_presentation
+---
+
+(a) Split the data set into a training set and a test set using caret library and fit each of the following models using caret and ten fold cross validation.
+
+```{r}
+library(ISLR)
+library(glmnet)
+attach(College)
+x <- model.matrix(Apps~., College)[,-1]
+y <- College$Apps
+lambda <- 10^seq(10, -2, length = 100)
+
+
+# Train test split
+set.seed(489)
+train = sample(1:nrow(x), nrow(x)/2)
+test = (-train)
+ytest = y[test]
+
+```
+
+(b) Fit a linear model using ordinary least squares on the training set, and report the test mean squared error obtained.
+
+```{r}
+
+OLS_lm <- lm(Apps~., data = College, subset = train)
+OLS_lm
+
+#Find the best lambda from our list via cross-validation
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 0)
+cv.out
+
+#Best lambda
+bestlam <- cv.out$lambda.min
+bestlam
+
+#Make predictions
+OLS.pred <- predict(OLS_lm, newdata = College[test,])
+head(OLS.pred)
+
+#check Mean Squared Error
+mean((OLS.pred-ytest)^2)
+
+```
+
+(c) Fit a ridge regression model on the training set, with λ chosen by cross-validation. Report the test mean squared  error obtained. Report the value of λ used in the model
+
+```{r}
+
+ridge.mod <- glmnet(x[train,], y[train], alpha = 0, lambda = lambda)
+summary(ridge.mod)
+
+#Find the best lambda from our list via cross-validation
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 0)
+cv.out
+
+#Best lambda
+bestlam <- cv.out$lambda.min
+bestlam
+
+#make predictions
+ridge.pred <- predict(ridge.mod, s = bestlam, newx = x[test,])
+head(ridge.pred)
+
+#Mean squared error
+mean((ridge.pred-ytest)^2)
+```
+
+
+(d) Fit a lasso model on the training set, with fraction chosen by cross validation. Report the test mean squared error obtained, along with the number of non-zero coefficient estimates and the fraction.
+
+```{r}
+lasso.mod <- glmnet(x[train,], y[train], alpha = 1, lambda = lambda)
+summary(lasso.mod)
+
+lasso.pred <- predict(lasso.mod, s = bestlam, newx = x[test,])
+head(lasso.pred)
+
+mean((lasso.pred-ytest)^2)
+```
+
+
+(e) Fit a PCR model on the training set, with no. of principal components M chosen by cross-validation. Report the test mean squared error obtained, along with the value of M selected by cross-validation.
+```{r}
+set.seed(123)
+smp_size <- floor(0.75 * nrow(mtcars))
+train_ind <- sample(seq_len(nrow(College)), size = smp_size)
+train_p <- College[train_ind, ]
+test_p <- College[-train_ind,c(1,3:18) ]
+y_test=College[-train_ind,2]
+
+require(pls)
+pcr_model <- pcr(Apps~., data = train_p,scale =TRUE, validation = "CV")
+summary(pcr_model)
+
+pcr_pred <- predict(pcr_model, test_p, ncomp = 3)
+head(pcr_pred)
+mean((pcr_pred - y_test)^2)
+
+```
+
+
+(f) Fit a PLS model on the training set, with M chosen by cross validation. Report the test error obtained, along with the value of M selected by cross-validation.
+```{r}
+library(caret)
+# Compile cross-validation settings
+set.seed(100)
+myfolds <- createMultiFolds(train_p$Apps, k = 5, times = 10)
+control <- trainControl("repeatedcv", index = myfolds, selectionFunction = "oneSE")
+
+# Train PLS model
+mod1 <- train(Apps ~ ., data = train_p,
+              method = "pls",
+              metric = "RMSE",
+              tuneLength = 20,
+              trControl = control,
+              preProc = c("zv","center","scale"))
+
+summary(mod1)
+```
+
+This displays the metrics in the model including: ncom (number of predictors which is the value of M), root mean squared error, R-squared, mean absolute error etc.
+```{r}
+mod1$results
+```
+
+(g) Comment on the results obtained. Is there much difference among the test errors resulting from these five approaches?
+
+- There is a noticeable difference between OLS, Ridge, PCR and PLS regression in terms of mean squared error whereby Ridge regression had the lowest mean squared error followed by PLS, OLS,Lasso and then Principal Component Regression had the highest mean squared error.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

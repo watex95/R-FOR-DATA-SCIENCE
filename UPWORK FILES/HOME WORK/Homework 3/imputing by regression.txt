@@ -1,0 +1,46 @@
+
+variable with missing data: y
+
+#get the variable with the highest correlation to y
+cor(data, use="complete.obs) 
+
+#symnum: tuen the cor into symbolic
+symnum(cor(data, use="complete.obs) )
+
+
+#create an indicator variable
+
+Ind<-function(t)
+{
+x=dim(length(t))
+x[which(!is.na(t))=1
+x[which(is.na(t))=0
+return(x)
+
+}
+
+
+#create additional variable I
+data$I<-Ind(data$y)
+data
+
+#fit a simple linear between the y and x
+lm(y~x,data=data)
+summary(lm(y~x,data))
+
+#Impute missing value with the model output
+
+for(i in 1:nrow(data)
+{
+if(data$I[I]==0)
+{
+data$y[i]=Bo + B1 * data$x[i]
+}
+}
+
+data
+
+
+
+
+

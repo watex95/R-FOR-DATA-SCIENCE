@@ -1,0 +1,335 @@
+---
+title: "Subset_Selection_Jan30_HW1"
+author: "Hamed"
+date: "1/30/2020"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+### SUBSET SELECTION: Forward, Backward & Stepwise  selection methods using the "cpus" dataset
+
+##### 1. Load the required packages and the cpus dataset from the MASS package
+```{r}
+library(MASS)
+library(tidyverse)
+library(caret)
+library(leaps)
+head(cpus)
+```
+
+##### 2. Use syct, mmin , mmax , cach , chmin, chmax as the predictors (independent variables) to predict performance (perf).
+From the model output we use the p-value to check the best predictors in the model, condition: (p-value < 0.05).
+```{r}
+my_model<-lm(perf~syct + mmin + mmax + cach + chmin + chmax, data = cpus, nvmax = 6)
+summary(my_model)
+```
+
+
+##### 3. Perform best subset selection in order to choose the best predictors from the above predictors. What is the best model obtained according to Cp, BIC, and adjusted R2?
+
+```{r}
+models <- regsubsets(perf~syct + mmin + mmax + cach + chmin + chmax,
+                     data = cpus, nvmax = 6)
+summary(models)
+res.sum <- summary(models)
+
+
+
+```
+
+Displays the CP values at each predictor number from 1-predictor to 6-predictor
+```{r}
+
+res.sum$cp
+
+```
+
+
+Displays the BIC values at each predictor number from 1-predictor to 6-predictor
+
+```{r}
+res.sum$bic
+
+```
+
+This shows the number of predictors that BIC, CP, ADJ.R2 support as best subset is the one with lowest BIC, CP, ADJ.R2 values.
+
+```{r}
+data.frame(
+  Adj.R2 = which.max(res.sum$adjr2),
+  CP = which.min(res.sum$cp),
+  BIC = which.min(res.sum$bic)
+)
+```
+
+- The function summary() reports the best set of variables for each model size. From the output, an asterisk specifies that a given variable is included in the corresponding model.
+- For example, it can be seen that the best 2-variables model contains only mmax and cach variables (perf ~ mmax + cach). The best three-variable model is (perf ~ mmax + cach + mmin), and so forth.
+- As shown above, adjusted R2,BIC and Cp criteria, tells us that the best model is the one with 5 predictor variables.
+- A natural question is: which of these best models should we finally choose for our predictive analytics?
+
+
+##### 4. Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained for each criteria.
+- The plots show that the BIC reduces as the number of parameters increase upto 5 then it becomes constant. The same goes for CP.
+
+```{r}
+plot(res.sum$bic, xlab="Parameter", ylab="BIC",main="BIC plot")
+plot(res.sum$cp, xlab="Parameter", ylab="CP",main = "CP plot")
+```
+
+##### 5. Repeat using forward stepwise selection and also using backwards stepwise selection.How does your answer compare to the best subset results?
+
+- nvmax: the number of variable in the model. For example nvmax = 2, specify the best 2-variables model
+- RMSE and MAE are two different metrics measuring the prediction error of each model. The lower the RMSE and MAE, the better the model.
+- Rsquared indicates the correlation between the observed outcome values and the values predicted by the model. The higher the R squared, the better the model.
+
+
+Fit the full model to show the performance before subset selection
+```{r}
+library(MASS)
+full.model <- lm(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus)
+full.model
+```
+
+###### Model information
+- Specify the tuning parameter nvmax, which corresponds to the maximum number of predictors to be incorporated in the model.
+- For example, you can vary nvmax from 1 to 5. In this case, the function starts by searching different best models of different size, up to the best 5-variables model.
+- That is, it searches the best 1-variable model, the best 2-variables model, …, the best 5-variables models.
+- As the data set contains only 6 predictors, we’ll vary nvmax from 1 to 6 resulting to the identification of the 6 best models with different sizes: the best 1-variable model, the best 2-variables model, …, the best 6-variables model.
+- We’ll use 10-fold cross-validation to estimate the average prediction error (RMSE) of each of the 6 models
+- The output of the final model has predictors selected based on the number of asterics , the more the better.
+
+###### Forward selection
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+step.model <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapForward", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control
+)
+step.model$results
+
+```
+
+Here we show the number of predictors the best subset will have after forward selection
+```{r}
+step.model$bestTune
+```
+
+The final model after forward selection showing the importance of each predictor.
+```{r}
+summary(step.model$finalModel)
+```
+
+###### Backward selection
+```{r}
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+# Train the model
+step.model2 <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapBackward", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control)
+step.model2$results
+
+```
+
+
+Here we show the number of predictors the best subset will have after Backward selection. 
+```{r}
+step.model2$bestTune
+```
+
+The final model after after Backward selection showing the importance of each predictor.
+```{r}
+summary(step.model2$finalModel)
+
+```
+
+
+###### Stepwise selection
+```{r}
+set.seed(123)
+# Set up repeated k-fold cross-validation
+train.control <- trainControl(method = "cv", number = 10)
+# Train the model
+
+step.model3 <- train(perf ~syct + mmin + mmax + cach + chmin + chmax, data = cpus,
+                    method = "leapSeq", 
+                    tuneGrid = data.frame(nvmax = 1:6),
+                    trControl = train.control)
+step.model3$results
+
+```
+
+Here we show the number of predictors the best subset will have 
+```{r}
+step.model3$bestTune
+```
+
+The final model after stepwise selection showing the importance of each predictor.
+```{r}
+summary(step.model3$finalModel)
+```
+
+### REGRESSION METHODS: OLS, RIDGE, LASSO, PCR, & PLS USING "College" dataset
+
+#### Predict the number of applications received using the other variables in the College data set in library ISLR
+
+###### (a) Split the data set into a training set and a test set using caret library and fit each of the following models using caret and ten fold cross validation.
+
+```{r}
+library(ISLR)
+library(glmnet)
+attach(College)
+head(College)
+x <- model.matrix(Apps~., College)[,-1]
+y <- College$Apps
+lambda <- 10^seq(10, -2, length = 100)
+
+
+# Train test split
+set.seed(489)
+train = sample(1:nrow(x), nrow(x)/2)
+test = (-train)
+ytest = y[test]
+
+
+```
+
+###### (b) Fit a linear model using ordinary least squares on the training set, and report the test mean squared error obtained.
+
+```{r}
+
+OLS_lm <- lm(Apps~., data = College, subset = train)
+OLS_lm
+
+#Find the best lambda from our list via cross-validation
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 0)
+cv.out
+
+#Best lambda
+bestlam <- cv.out$lambda.min
+bestlam
+
+#Make predictions
+OLS.pred <- predict(OLS_lm, newdata = College[test,])
+head(OLS.pred)
+
+
+```
+
+- MEAN SQUARED ERROR FOR OLS
+```{r}
+#check Mean Squared Error
+mean((OLS.pred-ytest)^2)
+
+```
+
+
+###### (c) Fit a ridge regression model on the training set, with λ chosen by cross-validation. Report the test mean squared  error obtained. Report the value of λ used in the model
+
+```{r}
+
+ridge.mod <- glmnet(x[train,], y[train], alpha = 0, lambda = lambda)
+summary(ridge.mod)
+
+#Find the best lambda from our list via cross-validation
+cv.out <- cv.glmnet(x[train,], y[train], alpha = 0)
+cv.out
+
+#Best lambda
+bestlam <- cv.out$lambda.min
+bestlam
+
+#make predictions
+ridge.pred <- predict(ridge.mod, s = bestlam, newx = x[test,])
+head(ridge.pred)
+
+
+```
+
+- MEAN SQUARED ERROR FOR RIDGE REGSRESSION
+```{r}
+#Mean squared error
+mean((ridge.pred-ytest)^2)
+```
+
+###### (d) Fit a lasso model on the training set, with fraction chosen by cross validation. Report the test mean squared error obtained, along with the number of non-zero coefficient estimates and the fraction.
+
+```{r}
+lasso.mod <- glmnet(x[train,], y[train], alpha = 1, lambda = lambda)
+summary(lasso.mod)
+
+lasso.pred <- predict(lasso.mod, s = bestlam, newx = x[test,])
+head(lasso.pred)
+
+
+```
+
+- MEAN SQUARED ERROR FOR LASSO REGRESSION
+```{r}
+mean((lasso.pred-ytest)^2)
+```
+
+###### (e) Fit a PCR model on the training set, with no. of principal components M chosen by cross-validation. Report the test mean squared error obtained, along with the value of M selected by cross-validation.
+```{r}
+set.seed(123)
+smp_size <- floor(0.75 * nrow(mtcars))
+train_ind <- sample(seq_len(nrow(College)), size = smp_size)
+train_p <- College[train_ind, ]
+test_p <- College[-train_ind,c(1,3:18) ]
+y_test=College[-train_ind,2]
+
+require(pls)
+pcr_model <- pcr(Apps~., data = train_p,scale =TRUE, validation = "CV")
+summary(pcr_model)
+
+pcr_pred <- predict(pcr_model, test_p, ncomp = 3)
+head(pcr_pred)
+
+
+```
+
+- MEAN SQUARED ERROR FOR Principal component regression (PCR)
+
+```{r}
+mean((pcr_pred - y_test)^2)
+```
+
+
+###### (f) Fit a PLS model on the training set, with M chosen by cross validation. Report the test error obtained, along with the value of M selected by cross-validation.
+```{r}
+library(caret)
+# Compile cross-validation settings
+set.seed(100)
+myfolds <- createMultiFolds(train_p$Apps, k = 5, times = 10)
+control <- trainControl("repeatedcv", index = myfolds, selectionFunction = "oneSE")
+
+# Train PLS model
+mod1 <- train(Apps ~ ., data = train_p,
+              method = "pls",
+              metric = "RMSE",
+              tuneLength = 20,
+              trControl = control,
+              preProc = c("zv","center","scale"))
+
+summary(mod1)
+```
+
+The model results display the metrics in the model including: ncom (number of predictors in a subset,also is the value of M), root mean squared error (RMSE), R-squared, mean absolute error (MAE) etc. The lowest RMSE indicates the best subset size and inturn the best model.
+```{r}
+mod1$results
+```
+
+###### (g) Comment on the results obtained. Is there much difference among the test errors resulting from these five approaches?
+
+- There is a noticeable difference between OLS, Ridge, PCR and PLS regression in terms of mean squared error whereby Ridge regression had the lowest mean squared error followed by PLS, OLS,Lasso and then Principal Component Regression had the highest mean squared error.  
